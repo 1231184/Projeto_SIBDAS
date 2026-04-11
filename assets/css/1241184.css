@@ -1,9 +1,28 @@
-/* * Ficheiro de estilos pessoais
+/*
  * Aluno: 1231184
- * Projeto: MediCore Systems
+ * Projeto: MediCore Systems — Sistema Web de Apoio ao Inventário Hospitalar
  */
 
-/* Efeito de elevação nos cartões ao passar o rato (Hover) */
+/* ====================================================
+   SCROLL SUAVE E ANIMAÇÕES GERAIS
+   ==================================================== */
+html {
+    scroll-behavior: smooth;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* ====================================================
+   FRONT-OFFICE (Público) - Efeitos e Ajustes
+   ==================================================== */
+/* Efeito de elevação nos cartões das vantagens e liderança */
 .medicore-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
