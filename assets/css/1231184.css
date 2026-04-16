@@ -1,0 +1,145 @@
+/* ============================================================
+    ESTILOS BASE E CORES
+   ============================================================ */
+
+:root {
+    /* Cores da Marca baseadas no design do Replit */
+    --brand-color: hsl(185, 65%, 38%);
+    --brand-hover: hsl(185, 65%, 32%);
+
+    /* Cores do fundo da Hero Section */
+    --hero-bg-start: hsl(213, 32%, 13%);
+    --hero-bg-mid: hsl(213, 32%, 18%);
+    --hero-bg-end: hsl(185, 65%, 20%);
+}
+
+/* Fonte Global */
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   COMPONENTES PERSONALIZADOS
+   ============================================================ */
+
+/* Cor principal */
+.bg-brand {
+    background-color: var(--brand-color) !important;
+}
+
+.text-brand {
+    color: var(--brand-color) !important;
+}
+
+/* Hover dos links da Navbar */
+.nav-hover {
+    transition: color 0.2s ease-in-out;
+    font-size: 0.9rem;
+}
+
+.nav-hover:hover {
+    color: var(--brand-color) !important;
+}
+
+/* Botão Principal Personalizado */
+.btn-brand {
+    background-color: var(--brand-color);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+}
+
+.btn-brand:hover {
+    background-color: var(--brand-hover);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Botão Secundário Transparente (Ajustado) */
+.hover-white-btn {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.hover-white-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* ============================================================
+   HERO SECTION (Secção Principal)
+   ============================================================ */
+
+.hero-section {
+    background: linear-gradient(135deg, var(--hero-bg-start), var(--hero-bg-mid), var(--hero-bg-end));
+    overflow: hidden;
+}
+
+/* Novo Título Compacto */
+.hero-title {
+    font-size: 3rem; /* text-5xl do tailwind */
+    line-height: 1.1; /* leading-tight */
+    letter-spacing: -0.02em; /* tracking-tight */
+}
+
+/* Nova Badge Transparente */
+.badge-hero {
+    background-color: hsla(185, 65%, 38%, 0.2) !important; /* bg-primary/20 */
+    border: 1px solid hsla(185, 65%, 38%, 0.3) !important; /* border-primary/30 */
+}
+
+/* Bolas de cor desfocadas no fundo */
+.hero-bg-glow-1 {
+    width: 300px;
+    height: 300px;
+    background-color: var(--brand-color);
+    top: 10%;
+    left: 10%;
+    filter: blur(90px);
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.hero-bg-glow-2 {
+    width: 400px;
+    height: 400px;
+    background-color: #60a5fa;
+    bottom: -10%;
+    right: 5%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+/* Ajustes Mobile do Título */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.25rem; /* text-4xl para mobile */
+    }
+}
+
+/* ============================================================
+   SOBRE NÓS (Cores subtis e Hover)
+   ============================================================ */
+
+.bg-brand-subtle {
+    background-color: hsla(185, 65%, 38%, 0.1) !important;
+}
+
+.border-brand-subtle {
+    border: 1px solid hsla(185, 65%, 38%, 0.2) !important;
+}
+
+.card-hover-elevate {
+    transition: all 0.25s ease-in-out;
+}
+
+.card-hover-elevate:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}

@@ -4,44 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCore Systems - Institucional</title>
+    <title>MedStock Solutions - Gestão de Equipamentos</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/1231184.css">
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom sticky-top">
+    <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top py-3">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <i class="fa-solid fa-heart-pulse text-primary"></i>
-                MediCore<span class="text-primary fw-light"> Systems</span>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <div class="bg-brand rounded p-2 d-flex align-items-center justify-content-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                        <path d="M11 2v2"></path>
+                        <path d="M5 2v2"></path>
+                        <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
+                        <path d="M8 15a6 6 0 0 0 12 0v-3"></path>
+                        <circle cx="20" cy="10" r="2"></circle>
+                    </svg>
+                </div>
+                <span class="fw-bold text-dark fs-5 mb-0">MedStock <span
+                        class="text-secondary fw-normal fs-6 d-none d-sm-inline">Solutions</span></span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-2 gap-lg-4 text-center">
                     <li class="nav-item">
-                        <a class="nav-link active text-primary fw-medium" href="index.html">Início</a>
+                        <a class="nav-link text-dark fw-medium nav-hover" href="#sobre">Sobre Nós</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="produto.html">Produto</a>
+                        <a class="nav-link text-dark fw-medium nav-hover" href="#servicos">Serviços</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="sobre.html">Sobre Nós</a>
+                        <a class="nav-link text-dark fw-medium nav-hover" href="#funcionalidades">Funcionalidades</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contactos.html">Contactos</a>
+                        <a class="nav-link text-dark fw-medium nav-hover" href="#contacto">Contacto</a>
                     </li>
                 </ul>
-                <div class="d-flex">
-                    <a href="../private/dashboard.html" class="btn btn-primary">
-                        <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sessão
+                <div class="d-flex justify-content-center mt-3 mt-lg-0">
+                    <a href="../private/dashboard.html"
+                        class="btn btn-brand d-flex align-items-center gap-2 px-4 py-2 shadow-sm rounded-3">
+                        Área Reservada
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6"></path>
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -49,177 +68,205 @@
     </nav>
 
     <main>
-        <section class="py-5 text-center container">
-            <div class="row py-lg-5">
-                <div class="col-lg-8 col-md-8 mx-auto">
-                    <span
-                        class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill mb-3 px-3 py-2">
-                        <i class="fa-solid fa-bolt"></i> MediCore HMS v3.0 Disponível
-                    </span>
-                    <h1 class="fw-bolder display-4 mb-4">Precisão na Gestão de Equipamentos Clínicos</h1>
-                    <p class="lead text-muted mb-5">
-                        O sistema de informação hospitalar confiado por instituições de saúde de referência em toda a
-                        Europa. Controlo total sobre o ciclo de vida dos seus ativos médicos.
-                    </p>
-                    <p>
-                        <a href="../private/dashboard.html" class="btn btn-primary btn-lg my-2 px-4">
-                            <i class="fa-solid fa-right-to-bracket"></i> Aceder ao Sistema
-                        </a>
-                        <a href="produto.html" class="btn btn-outline-secondary btn-lg my-2 px-4">
-                            Explorar Funcionalidades
-                        </a>
-                    </p>
+        <section class="hero-section position-relative py-5">
+            <div class="hero-bg-glow-1 position-absolute rounded-circle"></div>
+            <div class="hero-bg-glow-2 position-absolute rounded-circle"></div>
+
+            <div class="container position-relative z-1 py-5 my-md-5">
+                <div class="row">
+                    <div class="col-lg-8 col-md-10">
+                        <span class="badge badge-hero px-3 py-2 rounded-pill mb-4 fw-normal text-white">
+                            Gestão de Equipamento Médico
+                        </span>
+
+                        <h1 class="hero-title fw-bold text-white mb-4">Gestão Inteligente de<br>Equipamento Médico</h1>
+                        
+                        <p class="lead text-light mb-5 fs-5" style="max-width: 600px; color: #cbd5e1 !important;">
+                            Plataforma integrada para inventário, manutenção e documentação de equipamento hospitalar.
+                            Desenvolvida para apoiar as equipas de engenharia biomédica em hospitais e clínicas de todo
+                            o país.
+                        </p>
+
+                        <div class="d-flex flex-column flex-sm-row gap-3">
+                            <a href="../private/dashboard.html"
+                                class="btn btn-brand btn-lg d-flex align-items-center justify-content-center gap-2 px-4 rounded-3 shadow">
+                                Aceder ao Sistema
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M5 12h14"></path>
+                                    <path d="m12 5 7 7-7 7"></path>
+                                </svg>
+                            </a>
+                            <a href="#servicos" class="btn hover-white-btn btn-lg px-4 rounded-3 d-inline-flex align-items-center justify-content-center">
+                                Saber Mais
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-5 bg-light">
+        <section class="bg-brand py-5">
             <div class="container">
-                <div class="text-center mb-5">
-                    <h2 class="fw-bold">Porque os hospitais escolhem a MediCore</h2>
-                    <p class="text-muted">Desenhado especificamente para as necessidades complexas da engenharia clínica
-                        e
-                        gestão de instalações de saúde modernas.</p>
-                </div>
-
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="card h-100 p-4 border-0 shadow-sm rounded-4 medicore-card">
-                            <div class="card-body">
-                                <i class="fa-solid fa-database text-primary fs-1 mb-4"></i>
-                                <h3 class="h5 fw-semibold">Inventário Centralizado</h3>
-                                <p class="text-muted mb-0">Registo exaustivo de todo o equipamento médico, desde o
-                                    número de
-                                    série ao histórico de manutenção e calibrações.</p>
-                            </div>
-                        </div>
+                <div class="row g-4 text-white text-center">
+                    <div class="col-6 col-md-3">
+                        <div class="fs-1 fw-bold">+200</div>
+                        <div class="fs-6 opacity-75 mt-1">Clientes Hospitalares</div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 p-4 border-0 shadow-sm rounded-4 medicore-card">
-                            <div class="card-body">
-                                <i class="fa-solid fa-shield-halved text-primary fs-1 mb-4"></i>
-                                <h3 class="h5 fw-semibold">Conformidade Regulatória</h3>
-                                <p class="text-muted mb-0">Garantia de que todos os equipamentos cumprem as normas de
-                                    segurança europeias, com alertas automáticos.</p>
-                            </div>
-                        </div>
+                    <div class="col-6 col-md-3">
+                        <div class="fs-1 fw-bold">+50 000</div>
+                        <div class="fs-6 opacity-75 mt-1">Equipamentos Geridos</div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 p-4 border-0 shadow-sm rounded-4 medicore-card">
-                            <div class="card-body">
-                                <i class="fa-solid fa-stethoscope text-primary fs-1 mb-4"></i>
-                                <h3 class="h5 fw-semibold">Foco no Paciente</h3>
-                                <p class="text-muted mb-0">Equipamento sempre disponível e funcional significa melhor
-                                    capacidade de resposta clínica e segurança para o doente.</p>
-                            </div>
-                        </div>
+                    <div class="col-6 col-md-3">
+                        <div class="fs-1 fw-bold">10+</div>
+                        <div class="fs-6 opacity-75 mt-1">Anos de Experiência</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="fs-1 fw-bold">99.9%</div>
+                        <div class="fs-6 opacity-75 mt-1">Disponibilidade</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-5">
-            <div class="container py-4">
-                <h2 class="fw-bold text-center mb-5">A Confiança das Grandes Instituições</h2>
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="card h-100 p-4 border rounded-4 shadow-sm">
-                            <div class="card-body">
-                                <i class="fa-solid fa-quote-left text-primary fs-2 mb-3 opacity-50"></i>
-                                <p class="fst-italic text-muted fs-5 mb-4">"A transição para o MediCore HMS revolucionou
-                                    a forma como o nosso departamento de engenharia clínica opera. A redução no tempo de
-                                    inatividade de equipamentos críticos foi na ordem dos 40%."</p>
-                                <div>
-                                    <p class="fw-bold mb-0">Dr. João Silva</p>
-                                    <p class="text-muted small mb-0">Diretor Clínico, Centro Hospitalar do Vale
-                                        (Fictício)</p>
+        <section id="sobre" class="py-5 bg-light">
+            <div class="container py-5">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <span
+                            class="badge bg-brand-subtle text-brand border-brand-subtle px-3 py-2 rounded-pill mb-3 fw-semibold">
+                            Sobre Nós
+                        </span>
+                        <h2 class="fw-bold mb-4 fs-2 text-dark">Sobre a MedStock Solutions</h2>
+                        <p class="text-muted mb-4 lh-lg">
+                            A MedStock Solutions é uma empresa portuguesa especializada no desenvolvimento de soluções
+                            de gestão para o setor da saúde. Com mais de 10 anos de experiência, apoiamos hospitais,
+                            clínicas e centros de saúde na modernização dos seus processos de gestão de equipamento
+                            médico.
+                        </p>
+                        <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
+                            <li class="d-flex align-items-center gap-3 text-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="text-brand flex-shrink-0">
+                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                                    <path d="m9 11 3 3L22 4"></path>
+                                </svg>
+                                <span>Certificação ISO 13485 para equipamento médico</span>
+                            </li>
+                            <li class="d-flex align-items-center gap-3 text-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="text-brand flex-shrink-0">
+                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                                    <path d="m9 11 3 3L22 4"></path>
+                                </svg>
+                                <span>Conformidade com RGPD e legislação portuguesa</span>
+                            </li>
+                            <li class="d-flex align-items-center gap-3 text-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="text-brand flex-shrink-0">
+                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                                    <path d="m9 11 3 3L22 4"></path>
+                                </svg>
+                                <span>Suporte técnico especializado 24/7</span>
+                            </li>
+                            <li class="d-flex align-items-center gap-3 text-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="text-brand flex-shrink-0">
+                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                                    <path d="m9 11 3 3L22 4"></path>
+                                </svg>
+                                <span>Formação incluída na implementação</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 card-hover-elevate">
+                                    <div class="card-body p-4">
+                                        <div class="bg-brand-subtle text-brand rounded-3 p-2 mb-3 d-inline-flex">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path
+                                                    d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <h5 class="fw-bold fs-6 mb-1 text-dark">Segurança</h5>
+                                        <p class="text-muted small mb-0">Dados protegidos e encriptados</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 card-hover-elevate">
+                                    <div class="card-body p-4">
+                                        <div class="bg-brand-subtle text-brand rounded-3 p-2 mb-3 d-inline-flex">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 6v6l4 2"></path>
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                            </svg>
+                                        </div>
+                                        <h5 class="fw-bold fs-6 mb-1 text-dark">Tempo Real</h5>
+                                        <p class="text-muted small mb-0">Informação atualizada instantaneamente</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 card-hover-elevate">
+                                    <div class="card-body p-4">
+                                        <div class="bg-brand-subtle text-brand rounded-3 p-2 mb-3 d-inline-flex">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M10 12h4"></path>
+                                                <path d="M10 8h4"></path>
+                                                <path d="M14 21v-3a2 2 0 0 0-4 0v3"></path>
+                                                <path
+                                                    d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                                                </path>
+                                                <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"></path>
+                                            </svg>
+                                        </div>
+                                        <h5 class="fw-bold fs-6 mb-1 text-dark">Multi-unidade</h5>
+                                        <p class="text-muted small mb-0">Gerencie vários hospitais</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm rounded-4 h-100 card-hover-elevate">
+                                    <div class="card-body p-4">
+                                        <div class="bg-brand-subtle text-brand rounded-3 p-2 mb-3 d-inline-flex">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path
+                                                    d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                        <h5 class="fw-bold fs-6 mb-1 text-dark">Qualidade</h5>
+                                        <p class="text-muted small mb-0">Soluções certificadas</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card h-100 p-4 border rounded-4 shadow-sm">
-                            <div class="card-body">
-                                <i class="fa-solid fa-quote-left text-primary fs-2 mb-3 opacity-50"></i>
-                                <p class="fst-italic text-muted fs-5 mb-4">"O rigor e a estrutura que o software da
-                                    MediCore nos proporciona são indispensáveis. Permitiu-nos passar com distinção em
-                                    todas as auditorias de qualidade recentes."</p>
-                                <div>
-                                    <p class="fw-bold mb-0">Eng. Maria Fernandes</p>
-                                    <p class="text-muted small mb-0">Responsável de Instalações, Hospital de Santa Lúcia
-                                        (Fictício)</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="py-5 bg-primary text-white text-center">
-            <div class="container py-4">
-                <h2 class="fw-bold mb-3">Quer saber mais sobre o MediCore HMS?</h2>
-                <p class="fs-5 text-white-50 mb-4">Entre em contacto com a nossa equipa e descubra como podemos
-                    transformar a gestão de equipamentos na sua instituição.</p>
-                <div class="d-flex justify-content-center gap-3 flex-wrap">
-                    <a href="contactos.html" class="btn btn-light btn-lg px-4 text-primary fw-bold">Contacte-nos</a>
-                    <a href="../private/dashboard.html" class="btn btn-outline-light btn-lg px-4 fw-bold">
-                        <i class="fa-solid fa-right-to-bracket"></i> Já é cliente? Entrar
-                    </a>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <footer class="bg-dark text-light py-5">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <a class="text-decoration-none text-white fs-4 fw-bold mb-3 d-block" href="index.html">
-                        <i class="fa-solid fa-heart-pulse text-primary"></i>
-                        MediCore<span class="text-primary fw-light"> Systems</span>
-                    </a>
-                    <p class="text-secondary small">Sistemas de informação hospitalar e gestão de equipamentos médicos
-                        de alta precisão.</p>
-                </div>
-                <div class="col-md-2">
-                    <h5 class="fw-bold text-white mb-3">Navegação</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="index.html" class="text-secondary text-decoration-none footer-link">Início</a></li>
-                        <li><a href="produto.html" class="text-secondary text-decoration-none footer-link">Produto</a>
-                        </li>
-                        <li><a href="sobre.html" class="text-secondary text-decoration-none footer-link">Sobre Nós</a>
-                        </li>
-                        <li><a href="contactos.html"
-                                class="text-secondary text-decoration-none footer-link">Contactos</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-2">
-                    <h5 class="fw-bold text-white mb-3">Legal</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-secondary text-decoration-none footer-link">Termos de Serviço</a>
-                        </li>
-                        <li><a href="#" class="text-secondary text-decoration-none footer-link">Política de
-                                Privacidade</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5 class="fw-bold text-white mb-3">Contactos</h5>
-                    <ul class="list-unstyled text-secondary small">
-                        <li class="mb-2"><i class="fa-solid fa-map-pin text-primary me-2"></i> Av. da República 105,
-                            1050-190 Lisboa</li>
-                        <li class="mb-2"><i class="fa-solid fa-phone text-primary me-2"></i> +351 210 000 000</li>
-                        <li><i class="fa-solid fa-envelope text-primary me-2"></i> contacto@medicoresystems.pt</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-top border-secondary mt-4 pt-4 text-center text-secondary small">
-                © 2026 MediCore Systems. Todos os direitos reservados. (Projeto Académico Fictício)
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/1231184.js"></script>
 </body>
 

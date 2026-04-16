@@ -1,34 +1,25 @@
-/*
- * Aluno: 1231184
- * Projeto: MediCore Systems
- */
+/* ============================================================
+    FRONTEND
+   ============================================================ */
 
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // 1. ANIMAÇÕES AO FAZER SCROLL (Intersection Observer)
-    // Faz com que as secções e cartões surjam suavemente ao descer a página
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.15
-    };
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("MedStock Frontend inicializado com sucesso.");
 
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Remove a invisibilidade forçada para a animação do CSS poder atuar
-                entry.target.style.opacity = ''; 
-                entry.target.classList.add('animate-fade-in-up');
-                observer.unobserve(entry.target); // Anima apenas uma vez
+    // Efeito para adicionar sombra extra à Navbar quando se faz scroll
+    const navbar = document.querySelector('.navbar');
+
+    if (navbar) {
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow');
+                navbar.classList.remove('shadow-sm');
+            } else {
+                navbar.classList.remove('shadow');
+                navbar.classList.add('shadow-sm');
             }
         });
-    }, observerOptions);
+    }
 
-    // Seleciona todos os cartões e títulos principais do front-office para animar
-    const animatableElements = document.querySelectorAll('.medicore-card, section h2');
-    animatableElements.forEach(el => {
-        el.style.opacity = '0'; // Esconde inicialmente
-        observer.observe(el);
-    });
-
+    // Código futuro para validação de formulários, tooltips ou outras lógicas
+    // da "área pública" será colocado aqui.
 });
