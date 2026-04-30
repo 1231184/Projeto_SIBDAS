@@ -1,4 +1,22 @@
 /* ============================================================
+    FONTES LOCAIS (MODO OFFLINE)
+   ============================================================ */
+
+/* Fonte Inter para o Frontend */
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/Inter.ttf') format('truetype');
+    font-weight: 100 900;
+}
+
+/* Fonte Titillium Web para o Backend (conforme Ficha 08) */
+@font-face {
+    font-family: 'Titillium Web';
+    src: url('../fonts/TitilliumWeb-Regular.ttf') format('truetype');
+    font-weight: normal;
+}
+
+/* ============================================================
     ESTILOS BASE E CORES
    ============================================================ */
 
@@ -13,7 +31,7 @@
     --hero-bg-end: hsl(185, 65%, 20%);
 }
 
-/* Fonte Global */
+/* Aplicação da fonte e limpeza básica */
 body {
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -35,7 +53,7 @@ body {
 /* Hover dos links da Navbar */
 .nav-hover {
     transition: color 0.2s ease-in-out;
-    font-size: 0.9rem;
+    font-size: 1.0rem;
 }
 
 .nav-hover:hover {
@@ -77,20 +95,24 @@ body {
 
 .hero-section {
     background: linear-gradient(135deg, var(--hero-bg-start), var(--hero-bg-mid), var(--hero-bg-end));
-    overflow: hidden;
 }
 
 /* Novo Título Compacto */
 .hero-title {
-    font-size: 3rem; /* text-5xl do tailwind */
-    line-height: 1.1; /* leading-tight */
-    letter-spacing: -0.02em; /* tracking-tight */
+    font-size: 3rem;
+    /* text-5xl do tailwind */
+    line-height: 1.1;
+    /* leading-tight */
+    letter-spacing: -0.02em;
+    /* tracking-tight */
 }
 
 /* Nova Badge Transparente */
 .badge-hero {
-    background-color: hsla(185, 65%, 38%, 0.2) !important; /* bg-primary/20 */
-    border: 1px solid hsla(185, 65%, 38%, 0.3) !important; /* border-primary/30 */
+    background-color: hsla(185, 65%, 38%, 0.2) !important;
+    /* bg-primary/20 */
+    border: 1px solid hsla(185, 65%, 38%, 0.3) !important;
+    /* border-primary/30 */
 }
 
 /* Bolas de cor desfocadas no fundo */
@@ -103,6 +125,7 @@ body {
     filter: blur(90px);
     opacity: 0.15;
     pointer-events: none;
+    z-index: 0;
 }
 
 .hero-bg-glow-2 {
@@ -114,12 +137,14 @@ body {
     filter: blur(100px);
     opacity: 0.15;
     pointer-events: none;
+    z-index: 0;
 }
 
 /* Ajustes Mobile do Título */
 @media (max-width: 768px) {
     .hero-title {
-        font-size: 2.25rem; /* text-4xl para mobile */
+        font-size: 2.25rem;
+        /* text-4xl para mobile */
     }
 }
 
@@ -142,4 +167,20 @@ body {
 .card-hover-elevate:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Navbar transparente ao fazer scroll */
+.navbar {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Compensar altura da navbar nas âncoras */
+section[id] {
+    scroll-margin-top: 100px;
 }
