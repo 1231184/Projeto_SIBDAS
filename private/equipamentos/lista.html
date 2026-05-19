@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedStock — Equipamentos</title>
+
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/1231184.css">
+</head>
+
+<body class="d-flex vh-100 overflow-hidden bg-backend">
+
+    <aside class="sidebar-backend d-none d-md-flex flex-column flex-shrink-0 h-100" style="width: 256px;">
+        <div class="p-4 sidebar-border-light border-bottom">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-stethoscope fs-4 text-brand"></i>
+                <h1 class="fs-5 fw-bold text-white mb-0" style="letter-spacing: -0.02em;">MedStock</h1>
+            </div>
+            <p class="text-secondary small mb-0 mt-1" style="font-size: 0.75rem;">Gestão Hospitalar</p>
+        </div>
+
+        <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
+            <ul class="nav flex-column gap-1">
+                <li class="nav-item">
+                    <a href="../dashboard.html" class="sidebar-item d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-table-cells-large"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="lista.html" class="sidebar-item active d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        <span>Equipamentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../localizacoes/lista.html" class="sidebar-item d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-map-pin"></i>
+                        <span>Localizações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../fornecedores/lista.html" class="sidebar-item d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-truck"></i>
+                        <span>Fornecedores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../documentacao/lista.html" class="sidebar-item d-flex align-items-center gap-2">
+                        <i class="fa-regular fa-file-lines"></i>
+                        <span>Documentação</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../garantias/lista.html" class="sidebar-item d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Garantias</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../alertas/lista.html" class="sidebar-item d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>Alertas</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="p-4 sidebar-border-light border-top">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold bg-brand-subtle text-brand"
+                    style="width: 32px; height: 32px;">A</div>
+                <div class="d-flex flex-column overflow-hidden">
+                    <span class="text-white text-truncate small fw-medium">Administrador</span>
+                    <span class="text-secondary text-truncate" style="font-size: 0.7rem;">admin</span>
+                </div>
+            </div>
+            <a href="../../index.html"
+                class="btn btn-outline-secondary w-100 text-start border-0 text-secondary d-flex align-items-center gap-2 shadow-none hover-white-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Terminar Sessão
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-grow-1 overflow-auto p-4 p-md-5">
+
+        <header class="d-md-none d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
+                <h1 class="h5 fw-bold mb-0 text-dark">MedStock</h1>
+            </div>
+            <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
+        </header>
+
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+            <div>
+                <h1 class="h3 fw-bold text-dark mb-1">Equipamentos</h1>
+                <p class="text-muted small mb-0">12 equipamentos registados</p>
+            </div>
+            <a href="novo.html" class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-plus"></i> Novo Equipamento
+            </a>
+        </div>
+
+        <div class="card dash-card mb-4">
+            <div class="card-header bg-white border-bottom pt-4 pb-3 px-4" style="border-color: #e2e8f0 !important;">
+                <h6 class="fw-semibold text-muted mb-0 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-filter"></i> Pesquisa e Filtros
+                </h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3">
+                    <div class="col-md-12 col-lg-4">
+                        <div class="input-group search-group shadow-sm">
+                            <span class="input-group-text text-muted ps-3 pe-2">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input type="text" class="form-control"
+                                placeholder="Código, designação, marca, modelo, série...">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2">
+                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
+                            <option selected>Estado</option>
+                            <option value="1">Ativo</option>
+                            <option value="2">Inativo</option>
+                            <option value="3">Em manutenção</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2">
+                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
+                            <option selected>Categoria</option>
+                            <option value="1">Ventilação</option>
+                            <option value="2">Monitorização</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2">
+                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
+                            <option selected>Criticidade</option>
+                            <option value="1">Alta</option>
+                            <option value="2">Média</option>
+                            <option value="3">Suporte de Vida</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2">
+                        <button class="btn btn-brand w-100 shadow-sm">Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card dash-card overflow-hidden">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-3 border-0" style="width: 120px;">Código</th>
+                                <th class="px-4 py-3 border-0">Designação</th>
+                                <th class="px-4 py-3 border-0">Categoria</th>
+                                <th class="px-4 py-3 border-0">Marca / Modelo</th>
+                                <th class="px-4 py-3 border-0">Localização</th>
+                                <th class="px-4 py-3 border-0">Estado</th>
+                                <th class="px-4 py-3 border-0">Criticidade</th>
+                                <th class="px-4 py-3 border-0 text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="px-4 py-3 text-muted small font-monospace">EQ-2024-001</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Monitor Multiparamétrico de Sinais Vitais
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">SN-PH-2024-001</div>
+                                </td>
+                                <td class="px-4 py-3 small text-dark">Monitorização</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Philips</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">IntelliVue MX700</div>
+                                </td>
+                                <td class="px-4 py-3 small text-muted">UCI - Edifício Principal</td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-success">Ativo</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-warning">Alta</span>
+                                </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <a href="detalhes.html" class="btn-action" title="Ver Detalhes"><i
+                                                class="fa-regular fa-eye"></i></a>
+                                        <a href="editar.html" class="btn-action" title="Editar"><i
+                                                class="fa-solid fa-pencil"></i></a>
+                                        <button class="btn-action text-danger" title="Remover"><i
+                                                class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="px-4 py-3 text-muted small font-monospace">EQ-2024-002</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Ventilador Pulmonar de Alta Performance</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">SN-DR-2024-002</div>
+                                </td>
+                                <td class="px-4 py-3 small text-dark">Ventilação</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Dräger</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Evita Infinity V500</div>
+                                </td>
+                                <td class="px-4 py-3 small text-muted">UCI - Edifício Principal</td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-success">Ativo</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-danger">Suporte de vida</span>
+                                </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <a href="detalhes.html" class="btn-action" title="Ver Detalhes"><i
+                                                class="fa-regular fa-eye"></i></a>
+                                        <a href="editar.html" class="btn-action" title="Editar"><i
+                                                class="fa-solid fa-pencil"></i></a>
+                                        <button class="btn-action text-danger" title="Remover"><i
+                                                class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="px-4 py-3 text-muted small font-monospace">EQ-2024-005</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Tomógrafo Computorizado 64 cortes</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">SN-SI-2024-005</div>
+                                </td>
+                                <td class="px-4 py-3 small text-dark">Diagnóstico por Imagem</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Siemens</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">SOMATOM Definition</div>
+                                </td>
+                                <td class="px-4 py-3 small text-muted">Radiologia - Edifício B</td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-warning">Em manutenção</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-warning">Alta</span>
+                                </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <a href="detalhes.html" class="btn-action" title="Ver Detalhes"><i
+                                                class="fa-regular fa-eye"></i></a>
+                                        <a href="editar.html" class="btn-action" title="Editar"><i
+                                                class="fa-solid fa-pencil"></i></a>
+                                        <button class="btn-action text-danger" title="Remover"><i
+                                                class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/1231184.js"></script>
+</body>
+
+</html>

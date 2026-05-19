@@ -51,7 +51,8 @@
     </nav>
 
     <main>
-        <section class="hero-section position-relative py-5">
+        <section class="hero-section position-relative"
+            style="padding-top: 100px; padding-bottom: 120px; background-image: linear-gradient(rgba(5, 15, 30, 0.82), rgba(5, 15, 30, 0.88)), url('../assets/img/fundo.png');">
             <div class="hero-bg-glow-1 position-absolute rounded-circle"></div>
             <div class="hero-bg-glow-2 position-absolute rounded-circle"></div>
 
@@ -62,23 +63,11 @@
                         <h1 class="hero-title fw-bold text-white mb-4">Gestão Inteligente de<br>Equipamentos Médicos
                         </h1>
 
-                        <p class="lead text-light mb-5 fs-5" style="max-width: 600px; color: #cbd5e1 !important;">
+                        <p class="lead text-light mb-0 fs-5" style="max-width: 600px; color: #cbd5e1 !important;">
                             Plataforma integrada para inventário, manutenção e documentação de equipamento hospitalar.
                             Desenvolvida para apoiar as equipas de engenharia biomédica em hospitais e clínicas de todo
                             o país.
                         </p>
-
-                        <div class="d-flex flex-column flex-sm-row gap-3">
-                            <a href="../private/dashboard.html"
-                                class="btn btn-brand btn-lg d-flex align-items-center justify-content-center gap-2 px-4 rounded-3 shadow">
-                                Aceder ao Sistema
-                                <i class="fa-solid fa-arrow-right" style="font-size: 0.9rem;"></i>
-                            </a>
-                            <a href="#servicos"
-                                class="btn hover-white-btn btn-lg px-4 rounded-3 d-inline-flex align-items-center justify-content-center">
-                                Saber Mais
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -120,19 +109,19 @@
                         </p>
                         <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
                             <li class="d-flex align-items-center gap-3 text-secondary">
-                                <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                                <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                                 <span>Certificação ISO 13485 para equipamento médico</span>
                             </li>
                             <li class="d-flex align-items-center gap-3 text-secondary">
-                                <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                                <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                                 <span>Conformidade com RGPD e legislação portuguesa</span>
                             </li>
                             <li class="d-flex align-items-center gap-3 text-secondary">
-                                <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                                <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                                 <span>Suporte técnico especializado 24/7</span>
                             </li>
                             <li class="d-flex align-items-center gap-3 text-secondary">
-                                <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                                <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                                 <span>Formação incluída na implementação</span>
                             </li>
                         </ul>
@@ -157,8 +146,9 @@
                                         <div class="bg-brand-subtle text-brand rounded-3 p-2 mb-3 d-inline-flex">
                                             <i class="fa-solid fa-clock fs-5 px-1"></i>
                                         </div>
-                                        <h5 class="fw-bold fs-6 mb-1 text-dark">Tempo Real</h5>
-                                        <p class="text-muted small mb-0">Informação atualizada instantaneamente</p>
+                                        <h5 class="fw-bold fs-6 mb-1 text-dark">Rastreabilidade</h5>
+                                        <p class="text-muted small mb-0">Consulta rápida do estado e localização de cada
+                                            equipamento</p>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +196,7 @@
                         <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
                             <div class="card-body p-4">
                                 <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-stethoscope fs-4"></i>
+                                    <i class="fa-solid fa-clipboard-list fs-4"></i>
                                 </div>
                                 <h5 class="fw-bold text-dark mb-2">Inventário Completo</h5>
                                 <p class="text-muted small mb-0 lh-lg">Registo detalhado de todos os equipamentos com
@@ -219,7 +209,7 @@
                         <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
                             <div class="card-body p-4">
                                 <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-regular fa-file-lines fs-4"></i>
+                                    <i class="fa-solid fa-folder-open fs-4"></i>
                                 </div>
                                 <h5 class="fw-bold text-dark mb-2">Gestão Documental</h5>
                                 <p class="text-muted small mb-0 lh-lg">Centralização de manuais, certificados de
@@ -232,7 +222,7 @@
                         <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
                             <div class="card-body p-4">
                                 <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-shield-halved fs-4"></i>
+                                    <i class="fa-solid fa-file-contract fs-4"></i>
                                 </div>
                                 <h5 class="fw-bold text-dark mb-2">Garantias e Contratos</h5>
                                 <p class="text-muted small mb-0 lh-lg">Acompanhamento de garantias e contratos de
@@ -245,11 +235,11 @@
                         <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
                             <div class="card-body p-4">
                                 <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-location-dot fs-4"></i>
+                                    <i class="fa-solid fa-map-pin fs-4"></i>
                                 </div>
                                 <h5 class="fw-bold text-dark mb-2">Localização por Serviço</h5>
-                                <p class="text-muted small mb-0 lh-lg">Gestão de localizações por edifício, piso e
-                                    serviço com rastreamento em tempo real.</p>
+                                <p class="text-muted small mb-0 lh-lg">Consulta imediata da localização atual de cada
+                                    equipamento, organizada por edifício, piso, serviço e sala.</p>
                             </div>
                         </div>
                     </div>
@@ -258,7 +248,7 @@
                         <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
                             <div class="card-body p-4">
                                 <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-chart-column fs-4"></i>
+                                    <i class="fa-solid fa-chart-pie fs-4"></i>
                                 </div>
                                 <h5 class="fw-bold text-dark mb-2">Relatórios e Dashboard</h5>
                                 <p class="text-muted small mb-0 lh-lg">Painéis de controlo com indicadores chave,
@@ -271,7 +261,7 @@
                         <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
                             <div class="card-body p-4">
                                 <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-users fs-4"></i>
+                                    <i class="fa-solid fa-truck-medical fs-4"></i>
                                 </div>
                                 <h5 class="fw-bold text-dark mb-2">Gestão de Fornecedores</h5>
                                 <p class="text-muted small mb-0 lh-lg">Registo de fabricantes, distribuidores e
@@ -287,10 +277,6 @@
             <div class="container-fluid py-5 px-4 px-lg-5" style="max-width: 1280px; margin: 0 auto;">
 
                 <div class="text-center mb-5">
-                    <span
-                        class="badge bg-brand-subtle text-brand border-brand-subtle px-3 py-2 rounded-pill mb-3 fw-semibold">
-                        Funcionalidades
-                    </span>
                     <h2 class="fw-bold mb-3 fs-2 text-dark">Tecnologia ao serviço da saúde</h2>
                     <p class="text-muted" style="max-width: 600px; margin: 0 auto;">
                         Desenvolvido especificamente para responder às exigências da engenharia biomédica hospitalar
@@ -302,7 +288,7 @@
                     <div class="col-sm-6 col-lg-3">
                         <div
                             class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                             <span class="text-secondary small fw-medium">Pesquisa avançada por múltiplos
                                 critérios</span>
                         </div>
@@ -311,7 +297,7 @@
                     <div class="col-sm-6 col-lg-3">
                         <div
                             class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                             <span class="text-secondary small fw-medium">Alertas automáticos de garantias e
                                 documentos</span>
                         </div>
@@ -320,7 +306,7 @@
                     <div class="col-sm-6 col-lg-3">
                         <div
                             class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                             <span class="text-secondary small fw-medium">Controlo de acesso com autenticação
                                 segura</span>
                         </div>
@@ -329,7 +315,7 @@
                     <div class="col-sm-6 col-lg-3">
                         <div
                             class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                             <span class="text-secondary small fw-medium">Rastreamento por número de série</span>
                         </div>
                     </div>
@@ -337,7 +323,7 @@
                     <div class="col-sm-6 col-lg-3">
                         <div
                             class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                             <span class="text-secondary small fw-medium">Classificação por criticidade clínica</span>
                         </div>
                     </div>
@@ -345,15 +331,18 @@
                     <div class="col-sm-6 col-lg-3">
                         <div
                             class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                            <span class="text-secondary small fw-medium">Histórico completo de cada equipamento</span>
+                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                            <span class="text-secondary small fw-medium">Registo do estado atual e evolução de cada
+                                equipamento ao longo do tempo.
+
+                            </span>
                         </div>
                     </div>
                     <!-- Item 7 -->
                     <div class="col-sm-6 col-lg-3">
                         <div
                             class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                             <span class="text-secondary small fw-medium">Associação de fornecedores por
                                 equipamento</span>
                         </div>
@@ -362,11 +351,133 @@
                     <div class="col-sm-6 col-lg-3">
                         <div
                             class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-solid fa-circle-check text-brand fs-5 flex-shrink-0"></i>
+                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
                             <span class="text-secondary small fw-medium">Interface responsiva para mobile e
                                 desktop</span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="py-5 bg-white">
+            <div class="container py-5">
+
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold mb-3 fs-1 text-dark">Fale Connosco</h2>
+                    <p class="text-muted fs-5" style="max-width: 650px; margin: 0 auto;">
+                        Estamos prontos para apresentar a solução MedStock e discutir as necessidades
+                        tecnológicas da sua instituição.
+                    </p>
+                </div>
+
+                <div class="row g-5 align-items-start">
+
+                    <!-- Coluna esquerda -->
+                    <div class="col-lg-5">
+                        <h5 class="fw-bold text-dark mb-4 fs-4">Informação de Contacto</h5>
+                        <hr class="mb-4">
+
+                        <div class="d-flex flex-column gap-4 mb-5">
+                            <div class="d-flex gap-3">
+                                <i class="fa-solid fa-location-dot text-brand fs-5 flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <div class="fw-semibold text-dark mb-1">Sede</div>
+                                    <div class="text-muted">Av. da República, 105<br>1050-190 Lisboa<br>Portugal</div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-3">
+                                <i class="fa-solid fa-phone text-brand fs-5 flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <div class="fw-semibold text-dark mb-1">Telefone</div>
+                                    <div class="text-muted">+351 210 000 000</div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-3">
+                                <i class="fa-solid fa-envelope text-brand fs-5 flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <div class="fw-semibold text-dark mb-1">Email</div>
+                                    <div class="text-muted">
+                                        contacto@medstocksolutions.pt<br>suporte@medstocksolutions.pt</div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-3">
+                                <i class="fa-solid fa-clock text-brand fs-5 flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <div class="fw-semibold text-dark mb-1">Horário de Atendimento</div>
+                                    <div class="text-muted">
+                                        Segunda a Sexta: 09h00 – 18h00<br>
+                                        Suporte técnico: 24h/7
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Redes Sociais -->
+                        <div>
+                            <div class="fw-semibold text-dark mb-3">Siga-nos</div>
+                            <div class="d-flex gap-3">
+                                <a href="#"
+                                    class="bg-brand-subtle text-brand rounded-3 p-2 d-inline-flex align-items-center justify-content-center text-decoration-none card-hover-elevate"
+                                    style="width: 40px; height: 40px;">
+                                    <i class="fa-brands fa-linkedin-in"></i>
+                                </a>
+                                <a href="#"
+                                    class="bg-brand-subtle text-brand rounded-3 p-2 d-inline-flex align-items-center justify-content-center text-decoration-none card-hover-elevate"
+                                    style="width: 40px; height: 40px;">
+                                    <i class="fa-brands fa-x-twitter"></i>
+                                </a>
+                                <a href="#"
+                                    class="bg-brand-subtle text-brand rounded-3 p-2 d-inline-flex align-items-center justify-content-center text-decoration-none card-hover-elevate"
+                                    style="width: 40px; height: 40px;">
+                                    <i class="fa-brands fa-facebook-f"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna direita — Formulário -->
+                    <div class="col-lg-7">
+                        <div class="card border border-light shadow-sm rounded-4 p-4 p-md-5">
+                            <h5 class="fw-bold text-dark mb-4 fs-4">Pedido de Informações</h5>
+
+                            <div class="d-flex flex-column gap-3">
+                                <div>
+                                    <label class="form-label fw-medium text-dark">Nome Completo <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg rounded-3"
+                                        placeholder="Ex: João Silva">
+                                </div>
+                                <div>
+                                    <label class="form-label fw-medium text-dark">Email Profissional <span
+                                            class="text-danger">*</span></label>
+                                    <input type="email" class="form-control form-control-lg rounded-3"
+                                        placeholder="joao.silva@hospital.pt">
+                                </div>
+                                <div>
+                                    <label class="form-label fw-medium text-dark">Instituição <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg rounded-3"
+                                        placeholder="Nome do Hospital ou Clínica">
+                                </div>
+                                <div>
+                                    <label class="form-label fw-medium text-dark">Mensagem (Opcional)</label>
+                                    <textarea class="form-control rounded-3" rows="4"
+                                        placeholder="Conte-nos brevemente as principais dificuldades atuais na gestão dos vossos equipamentos."></textarea>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-brand w-100 py-3 rounded-3 fw-semibold fs-6">
+                                        Enviar Pedido
+                                    </button>
+                                </div>
+                                <p class="text-muted small text-center mb-0">
+                                    <i class="fa-solid fa-lock me-1"></i>
+                                    Os seus dados serão tratados de acordo com a nossa política de privacidade e o RGPD.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
