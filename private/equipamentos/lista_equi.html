@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedStock — Equipamentos</title>
+
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/1231184.css">
+</head>
+
+<body class="d-flex vh-100 overflow-hidden bg-backend">
+
+    <aside class="sidebar-backend d-none d-md-flex flex-column flex-shrink-0 h-100" style="width: 256px;">
+        <div class="p-4 sidebar-border-light border-bottom">
+            <div class="d-flex align-items-center gap-2">
+                <img src="../../assets/img/logotipo.png" alt="MedStock Logo" style="height: 55px; width: auto;">
+            </div>
+        </div>
+
+        <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
+            <ul class="nav flex-column gap-1">
+                <li class="nav-item">
+                    <a href="../dashboard.html" class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                            <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                        </svg>
+                        <span class="fw-medium">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="lista_equi.html"
+                        class="nav-link sidebar-item active d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 2v2"></path>
+                            <path d="M5 2v2"></path>
+                            <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
+                            <path d="M8 15a6 6 0 0 0 12 0v-3"></path>
+                            <circle cx="20" cy="10" r="2"></circle>
+                        </svg>
+                        <span class="fw-medium">Equipamentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../localizacoes/lista_loc.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+                            </path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span class="fw-medium">Localizações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../fornecedores/lista_fornecedores.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path>
+                            <path d="M15 18H9"></path>
+                            <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14">
+                            </path>
+                            <circle cx="17" cy="18" r="2"></circle>
+                            <circle cx="7" cy="18" r="2"></circle>
+                        </svg>
+                        <span class="fw-medium">Fornecedores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../documentacao/lista.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                            <path d="M10 9H8"></path>
+                            <path d="M16 13H8"></path>
+                            <path d="M16 17H8"></path>
+                        </svg>
+                        <span class="fw-medium">Documentação</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../garantias/lista.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                            </path>
+                            <path d="M12 8v4"></path>
+                            <path d="M12 16h.01"></path>
+                        </svg>
+                        <span class="fw-medium">Garantias</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../alertas/lista.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
+                            <path d="M12 9v4"></path>
+                            <path d="M12 17h.01"></path>
+                        </svg>
+                        <span class="fw-medium">Alertas</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="p-4 sidebar-border-light border-top">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold bg-brand-subtle text-brand"
+                    style="width: 40px; height: 40px; font-size: 1.1rem;">A</div>
+                <div class="d-flex flex-column overflow-hidden">
+                    <span class="text-white text-truncate fs-6 fw-semibold">Administrador</span>
+                    <span class="text-secondary text-truncate" style="font-size: 0.85rem;">admin</span>
+                </div>
+            </div>
+            <a href="../../public/index.html"
+                class="btn btn-outline-secondary w-100 text-start border-0 text-secondary d-flex align-items-center gap-2 fs-6 shadow-none hover-white-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Terminar Sessão
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-grow-1 overflow-auto p-4 p-md-5">
+
+        <header class="d-md-none d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
+                <h1 class="h5 fw-bold mb-0 text-dark">MedStock</h1>
+            </div>
+            <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
+        </header>
+
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+            <div>
+                <h1 class="h3 fw-bold text-dark mb-1">Equipamentos</h1>
+                <p class="text-muted small mb-0">3 equipamentos registados</p>
+            </div>
+            <a href="novo.html" class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-plus"></i> Novo Equipamento
+            </a>
+        </div>
+
+        <div class="card dash-card mb-4">
+            <div class="card-header bg-white border-bottom pt-4 pb-3 px-4" style="border-color: #e2e8f0 !important;">
+                <h6 class="fw-semibold text-muted mb-0 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-filter"></i> Pesquisa e Filtros
+                </h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3">
+                    <div class="col-md-12 col-lg-4">
+                        <div class="input-group search-group shadow-sm">
+                            <span class="input-group-text text-muted ps-3 pe-2">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input type="text" class="form-control"
+                                placeholder="Código, designação, marca, modelo, série...">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2">
+                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
+                            <option selected>Estado</option>
+                            <option value="1">Ativo</option>
+                            <option value="2">Inativo</option>
+                            <option value="3">Em manutenção</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2">
+                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
+                            <option selected>Categoria</option>
+                            <option value="1">Ventilação</option>
+                            <option value="2">Monitorização</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2">
+                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
+                            <option selected>Criticidade</option>
+                            <option value="1">Alta</option>
+                            <option value="2">Média</option>
+                            <option value="3">Suporte de Vida</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-2">
+                        <button class="btn btn-brand w-100 shadow-sm">Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card dash-card overflow-hidden">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-3 border-0" style="width: 120px;">Código</th>
+                                <th class="px-4 py-3 border-0">Designação</th>
+                                <th class="px-4 py-3 border-0">Categoria</th>
+                                <th class="px-4 py-3 border-0">Marca / Modelo</th>
+                                <th class="px-4 py-3 border-0">Localização</th>
+                                <th class="px-4 py-3 border-0">Estado</th>
+                                <th class="px-4 py-3 border-0">Criticidade</th>
+                                <th class="px-4 py-3 border-0 text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="px-4 py-3 text-muted small custom-monospace">EQ-2024-001</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Monitor Multiparamétrico de Sinais Vitais
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">SN-PH-2024-001</div>
+                                </td>
+                                <td class="px-4 py-3 small text-dark">Monitorização</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Philips</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">IntelliVue MX700</div>
+                                </td>
+                                <td class="px-4 py-3 small text-muted">UCI - Edifício Principal</td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-success">Ativo</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-warning">Alta</span>
+                                </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <button class="btn-action" title="Ver Detalhes" data-bs-toggle="modal"
+                                            data-bs-target="#modalDetalhes"><i class="fa-regular fa-eye"></i></button>
+                                        <button class="btn-action" title="Editar" data-bs-toggle="modal"
+                                            data-bs-target="#modalEditar">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </button>
+                                        <button class="btn-action text-danger" title="Remover" data-bs-toggle="modal"
+                                            data-bs-target="#modalRemover"><i
+                                                class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="px-4 py-3 text-muted small custom-monospace">EQ-2024-002</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Ventilador Pulmonar de Alta Performance</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">SN-DR-2024-002</div>
+                                </td>
+                                <td class="px-4 py-3 small text-dark">Ventilação</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Dräger</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">Evita Infinity V500</div>
+                                </td>
+                                <td class="px-4 py-3 small text-muted">UCI - Edifício Principal</td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-success">Ativo</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-danger">Suporte de vida</span>
+                                </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <button class="btn-action" title="Ver Detalhes" data-bs-toggle="modal"
+                                            data-bs-target="#modalDetalhes"><i class="fa-regular fa-eye"></i></button>
+                                        <button class="btn-action" title="Editar" data-bs-toggle="modal"
+                                            data-bs-target="#modalEditar">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </button>
+                                        <button class="btn-action text-danger" title="Remover" data-bs-toggle="modal"
+                                            data-bs-target="#modalRemover"><i
+                                                class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="px-4 py-3 text-muted small custom-monospace">EQ-2024-005</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Tomógrafo Computorizado 64 cortes</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">SN-SI-2024-005</div>
+                                </td>
+                                <td class="px-4 py-3 small text-dark">Diagnóstico por Imagem</td>
+                                <td class="px-4 py-3">
+                                    <div class="fw-medium text-dark small">Siemens</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">SOMATOM Definition</div>
+                                </td>
+                                <td class="px-4 py-3 small text-muted">Radiologia - Edifício B</td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-warning">Em manutenção</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="badge badge-soft-warning">Alta</span>
+                                </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <button class="btn-action" title="Ver Detalhes" data-bs-toggle="modal"
+                                            data-bs-target="#modalDetalhes"><i class="fa-regular fa-eye"></i></button>
+                                        <button class="btn-action" title="Editar" data-bs-toggle="modal"
+                                            data-bs-target="#modalEditar">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </button>
+                                        <button class="btn-action text-danger" title="Remover" data-bs-toggle="modal"
+                                            data-bs-target="#modalRemover"><i
+                                                class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Detalhes Equipamento -->
+    <div class="modal fade" id="modalDetalhes" tabindex="-1" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
+
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg bg-backend">
+
+                <!-- Header -->
+                <div class="modal-header border-bottom px-4 py-3">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                            <h5 class="modal-title fw-bold text-dark mb-0" id="modalDetalhesLabel">
+                                Monitor Multiparamétrico de Sinais Vitais
+                            </h5>
+
+                            <span class="badge badge-soft-success">
+                                Ativo
+                            </span>
+
+                            <span class="badge badge-soft-warning">
+                                Alta
+                            </span>
+                        </div>
+
+                        <p class="text-muted custom-monospace small mb-0">
+                            EQ-2024-001
+                        </p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn-action-custom py-2 px-3" data-bs-toggle="modal" data-bs-target="#modalEditar"
+                            data-bs-dismiss="modal">
+                            <i class="fa-solid fa-pencil me-2"></i>
+                            Editar
+                        </button>
+                        <button class="btn-action-custom btn-action-danger" data-bs-toggle="modal"
+                            data-bs-target="#modalRemover">
+                            <i class="fa-solid fa-trash-can me-2"></i>
+                            Remover
+                        </button>
+                        <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Fechar">
+                        </button>
+                    </div>
+                </div>
+                <!-- Body -->
+                <div class="modal-body p-4">
+                    <div class="d-flex flex-column gap-4" style="max-width: 1024px; margin: 0 auto;">
+                        <!-- Identificação + Aquisição -->
+                        <div class="row g-4">
+                            <!-- Identificação -->
+                            <div class="col-12 col-md-6">
+                                <div class="card dash-card h-100">
+                                    <div class="card-header border-0 bg-transparent pt-4 px-4 pb-3">
+                                        <h6 class="card-title-custom">
+                                            Identificação
+                                        </h6>
+                                    </div>
+                                    <div class="card-body px-4 pb-4 pt-0">
+                                        <div class="row row-cols-2 g-4">
+                                            <div class="col">
+                                                <p class="detail-label">Categoria</p>
+                                                <p class="detail-value">Monitorização</p>
+                                            </div>
+
+                                            <div class="col">
+                                                <p class="detail-label">Marca</p>
+                                                <p class="detail-value">Philips</p>
+                                            </div>
+
+                                            <div class="col">
+                                                <p class="detail-label">Modelo</p>
+                                                <p class="detail-value">IntelliVue MX700</p>
+                                            </div>
+
+                                            <div class="col">
+                                                <p class="detail-label">Número de Série</p>
+                                                <p class="detail-value custom-monospace" style="font-size: 0.75rem;">
+                                                    SN-PH-2024-001
+                                                </p>
+                                            </div>
+
+                                            <div class="col">
+                                                <p class="detail-label">Fabricante</p>
+                                                <p class="detail-value">Philips Healthcare</p>
+                                            </div>
+
+                                            <div class="col">
+                                                <p class="detail-label">Ano de Fabrico</p>
+                                                <p class="detail-value">2023</p>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Aquisição -->
+                            <div class="col-12 col-md-6">
+                                <div class="card dash-card h-100">
+
+                                    <div class="card-header border-0 bg-transparent pt-4 px-4 pb-3">
+                                        <h6 class="card-title-custom">
+                                            Aquisição
+                                        </h6>
+                                    </div>
+
+                                    <div class="card-body px-4 pb-4 pt-0">
+                                        <div class="row row-cols-2 g-4">
+                                            <div class="col">
+                                                <p class="detail-label">Tipo de Entrada</p>
+                                                <p class="detail-value">Compra</p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="detail-label">Data de Aquisição</p>
+                                                <p class="detail-value">15/01/2024</p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="detail-label">Custo de Aquisição</p>
+                                                <p class="detail-value">18 500,00 €</p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="detail-label">Documentos</p>
+                                                <p class="detail-value d-flex align-items-center gap-1">
+                                                    <i class="fa-solid fa-file-lines text-muted"></i>
+                                                    3
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Localização -->
+                        <div class="card dash-card">
+                            <div
+                                class="card-header border-0 bg-transparent pt-4 px-4 pb-3 d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-map-pin text-muted" style="font-size: 1rem;"></i>
+                                <h6 class="card-title-custom mb-0">
+                                    Localização Atual
+                                </h6>
+                            </div>
+                            <div class="card-body px-4 pb-4 pt-0">
+                                <div class="row row-cols-2 row-cols-md-4 g-4">
+                                    <div class="col">
+                                        <p class="detail-label">Edifício</p>
+
+                                        <p class="detail-value d-flex align-items-center gap-1">
+                                            <i class="fa-regular fa-building text-muted"></i>
+                                            Edifício Principal
+                                        </p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="detail-label">Piso</p>
+                                        <p class="detail-value">1</p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="detail-label">Serviço</p>
+                                        <p class="detail-value">UCI</p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="detail-label">Sala</p>
+                                        <p class="detail-value">Unidade A</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fornecedores -->
+                        <div class="card dash-card">
+
+                            <div
+                                class="card-header border-0 bg-transparent pt-4 px-4 pb-3 d-flex align-items-center gap-2">
+
+                                <i class="fa-solid fa-users text-muted" style="font-size: 1rem;"></i>
+
+                                <h6 class="card-title-custom mb-0">
+                                    Fornecedores (2)
+                                </h6>
+
+                            </div>
+
+                            <div class="card-body px-4 pb-4 pt-0">
+
+                                <div class="d-flex flex-column gap-2">
+
+                                    <a href="#" class="text-decoration-none text-dark">
+
+                                        <div class="list-box d-flex justify-content-between align-items-center">
+
+                                            <div>
+                                                <p class="detail-value fw-medium">
+                                                    Philips Healthcare
+                                                </p>
+
+                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                    Distribuidor-Fornecedor Comercial
+                                                </p>
+                                            </div>
+
+                                            <div class="text-end d-none d-sm-block">
+
+                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                    +351 210 000 002
+                                                </p>
+
+                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                    contacto@philips-saude.pt
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="text-decoration-none text-dark">
+                                        <div class="list-box d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <p class="detail-value fw-medium">
+                                                    MedServ - Assistência Técnica
+                                                </p>
+                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                    Empresa de Assistência Técnica
+                                                </p>
+                                            </div>
+                                            <div class="text-end d-none d-sm-block">
+                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                    +351 210 000 004
+                                                </p>
+
+                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                    suporte@medserv.pt
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Garantias -->
+                        <div class="card dash-card">
+                            <div
+                                class="card-header border-0 bg-transparent pt-4 px-4 pb-3 d-flex align-items-center gap-2">
+                                <i class="fa-solid fa-shield-check text-muted" style="font-size: 1rem;"></i>
+                                <h6 class="card-title-custom mb-0">
+                                    Garantias e Contratos (1)
+                                </h6>
+                            </div>
+                            <div class="card-body px-4 pb-4 pt-0">
+                                <div class="list-box list-box-light border-0 mb-3">
+                                    <div class="row row-cols-2 row-cols-md-4 g-3">
+                                        <div class="col">
+                                            <p class="detail-label">Início</p>
+                                            <p class="detail-value">15/01/2024</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="detail-label">Fim</p>
+                                            <p class="detail-value">15/01/2027</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="detail-label">Contrato Manutenção</p>
+                                            <p class="detail-value">Sim</p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="detail-label">Tipo</p>
+                                            <p class="detail-value">Full Service</p>
+                                        </div>
+                                        <div class="col mt-2">
+                                            <p class="detail-label">
+                                                Entidade Responsável
+                                            </p>
+                                            <p class="detail-value">
+                                                Philips Healthcare
+                                            </p>
+                                        </div>
+                                        <div class="col mt-2">
+                                            <p class="detail-label">Periodicidade</p>
+                                            <p class="detail-value">Anual</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Documentação -->
+                        <div class="card dash-card">
+                            <div
+                                class="card-header border-0 bg-transparent pt-4 px-4 pb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fa-regular fa-file-lines text-muted" style="font-size: 1rem;"></i>
+                                    <h6 class="card-title-custom mb-0">
+                                        Documentação (3)
+                                    </h6>
+                                </div>
+                                <a href="../documentacao/lista.html" class="btn-action-custom py-1 px-3">
+                                    Gerir documentos
+                                </a>
+                            </div>
+                            <div class="card-body px-4 pb-4 pt-0">
+                                <div class="d-flex flex-column gap-2">
+                                    <div
+                                        class="list-box list-box-light d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="detail-value fw-medium">
+                                                IntelliVue MX700 - Manual do Utilizador
+                                            </p>
+                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                Manual de Utilizador — 01/01/2023
+                                            </p>
+                                        </div>
+                                        <div class="text-end">
+                                            <p class="text-muted custom-monospace small mb-0"
+                                                style="font-size: 0.75rem;">
+                                                intellivue_mx700_manual_pt.pdf
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="list-box d-flex justify-content-between align-items-center"
+                                        style="background-color: rgba(254, 242, 242, 0.5); border-color: rgba(254, 202, 202, 0.5);">
+
+                                        <div>
+                                            <p class="detail-value fw-medium">
+                                                Certificado de Calibração - Monitor MX700
+                                            </p>
+                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                Certificado de Calibração — 01/06/2024
+                                            </p>
+                                        </div>
+                                        <div class="text-end">
+                                            <p class="text-danger fw-medium small mb-0" style="font-size: 0.75rem;">
+                                                Validade: 01/06/2025 (Expirado)
+                                            </p>
+                                            <p class="text-muted custom-monospace small mb-0"
+                                                style="font-size: 0.75rem;">
+                                                calib_monitor_mx700_2024.pdf
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="list-box list-box-light d-flex justify-content-between align-items-center">
+
+                                        <div>
+                                            <p class="detail-value fw-medium">
+                                                Contrato Full Service Philips 2024-2027
+                                            </p>
+
+                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                Contrato de Manutenção — 15/01/2024
+                                            </p>
+                                        </div>
+
+                                        <div class="text-end">
+
+                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                Validade: 15/01/2027
+                                            </p>
+
+                                            <p class="text-muted custom-monospace small mb-0"
+                                                style="font-size: 0.75rem;">
+                                                contrato_philips_2024.pdf
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Observações -->
+                        <div class="card dash-card">
+                            <div class="card-header border-0 bg-transparent pt-4 px-4 pb-3">
+                                <h6 class="card-title-custom">
+                                    Observações
+                                </h6>
+                            </div>
+                            <div class="card-body px-4 pb-4 pt-0">
+                                <p class="detail-value text-muted" style="font-size: 0.875rem;">
+                                    Monitor de UCI com 12 derivações ECG
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="d-flex gap-4 text-muted mt-2 flex-wrap" style="font-size: 0.75rem;">
+
+                            <span>
+                                Criado: 16/04/2026
+                            </span>
+
+                            <span>
+                                Atualizado: 16/04/2026
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Equipamento -->
+    <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header border-bottom px-4 py-3">
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="modalEditarLabel">Editar Equipamento</h5>
+                        <p class="text-muted small mb-0 mt-1">Atualize a informação do equipamento</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <form id="formEditar" action="#" method="POST">
+
+                        <div class="card dash-card mb-4">
+                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
+                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Identificação</h5>
+                            </div>
+                            <div class="card-body p-4 pt-2">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="internalCode" class="form-label small fw-medium mb-1">Código Interno
+                                            *</label>
+                                        <input type="text" id="internalCode" name="internalCode"
+                                            class="form-control shadow-sm" value="EQ-2024-001" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="name" class="form-label small fw-medium mb-1">Designação *</label>
+                                        <input type="text" id="name" name="name" class="form-control shadow-sm"
+                                            value="Monitor Multiparamétrico" required>
+                                    </div>
+                                    <div class="col-md-6 position-relative">
+                                        <label class="form-label small fw-medium mb-1">Categoria *</label>
+                                        <div class="dropdown">
+                                            <button
+                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
+                                                <span>Monitorização</span>
+                                            </button>
+                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                <li><a class="dropdown-item py-2" href="#">Monitorização</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Ventilação</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Infusão</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Cardiologia</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Diagnóstico por Imagem</a>
+                                                </li>
+                                                <li><a class="dropdown-item py-2" href="#">Laboratório</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Bloco Operatório</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Pediatria</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Esterilização</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Pneumologia</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Outro</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="serialNumber" class="form-label small fw-medium mb-1">Número de
+                                            Série *</label>
+                                        <input type="text" id="serialNumber" name="serialNumber"
+                                            class="form-control shadow-sm" value="SN-12345" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card dash-card mb-4">
+                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
+                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Fabricante e Modelo</h5>
+                            </div>
+                            <div class="card-body p-4 pt-2">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="brand" class="form-label small fw-medium mb-1">Marca *</label>
+                                        <input type="text" id="brand" name="brand" class="form-control shadow-sm"
+                                            value="Philips" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="model" class="form-label small fw-medium mb-1">Modelo *</label>
+                                        <input type="text" id="model" name="model" class="form-control shadow-sm"
+                                            value="IntelliVue MX700" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="manufacturer" class="form-label small fw-medium mb-1">Fabricante
+                                            *</label>
+                                        <input type="text" id="manufacturer" name="manufacturer"
+                                            class="form-control shadow-sm" value="Philips Healthcare" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="manufacturingYear" class="form-label small fw-medium mb-1">Ano de
+                                            Fabrico</label>
+                                        <input type="number" id="manufacturingYear" name="manufacturingYear"
+                                            class="form-control shadow-sm" value="2024">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card dash-card mb-4">
+                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
+                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Aquisição e Classificação</h5>
+                            </div>
+                            <div class="card-body p-4 pt-2">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="acquisitionDate" class="form-label small fw-medium mb-1">Data de
+                                            Aquisição</label>
+                                        <input type="date" id="acquisitionDate" name="acquisitionDate"
+                                            class="form-control shadow-sm" value="2024-01-01">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="acquisitionCost" class="form-label small fw-medium mb-1">Custo de
+                                            Aquisição (EUR)</label>
+                                        <input type="number" id="acquisitionCost" name="acquisitionCost"
+                                            class="form-control shadow-sm" value="5000.00">
+                                    </div>
+                                    <div class="col-md-6 position-relative">
+                                        <label class="form-label small fw-medium mb-1">Tipo de Entrada *</label>
+                                        <div class="dropdown">
+                                            <button
+                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
+                                                <span>Compra</span>
+                                            </button>
+                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                <li><a class="dropdown-item py-2" href="#">Compra</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Doação</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Aluguer</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Empréstimo</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 position-relative">
+                                        <label class="form-label small fw-medium mb-1">Estado Atual *</label>
+                                        <div class="dropdown">
+                                            <button
+                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
+                                                <span>Ativo</span>
+                                            </button>
+                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                <li><a class="dropdown-item py-2" href="#">Ativo</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Em manutenção</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Inativo</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Em calibração</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Em quarentena</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Abatido</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 position-relative">
+                                        <label class="form-label small fw-medium mb-1">Criticidade Clínica *</label>
+                                        <div class="dropdown">
+                                            <button
+                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
+                                                <span>Baixa</span>
+                                            </button>
+                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                <li><a class="dropdown-item py-2" href="#">Baixa</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Média</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Alta</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Suporte de vida</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 position-relative">
+                                        <label class="form-label small fw-medium mb-1">Localização</label>
+                                        <div class="dropdown">
+                                            <button
+                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
+                                                <span>Sem localização</span>
+                                            </button>
+                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                <li><a class="dropdown-item py-2" href="#">Bloco Operatório — Edifício
+                                                        Principal (2º)</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Cardiologia — Edifício
+                                                        Principal (3º)</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Laboratório — Edifício C
+                                                        (0º)</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Pediatria — Edifício B
+                                                        (1º)</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Pneumologia — Edifício
+                                                        Principal (2º)</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Radiologia — Edifício B
+                                                        (0º)</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">UCI — Edifício Principal
+                                                        (1º)</a></li>
+                                                <li><a class="dropdown-item py-2" href="#">Urgência — Edifício Principal
+                                                        (0º)</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card dash-card mb-4">
+                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
+                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Fornecedores Associados</h5>
+                            </div>
+                            <div class="card-body p-4 pt-2">
+                                <div class="d-flex align-items-center gap-3 p-3 rounded border">
+                                    <input class="form-check-input m-0" type="checkbox" checked>
+                                    <div>
+                                        <p class="fw-semibold small mb-0">Dräger Portugal</p>
+                                        <p class="text-muted small mb-0">Fabricante</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card dash-card mb-2">
+                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
+                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Observações</h5>
+                            </div>
+                            <div class="card-body p-4 pt-2">
+                                <textarea name="observations" class="form-control shadow-sm" rows="3"
+                                    placeholder="Notas adicionais..."></textarea>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="modal-footer px-4 py-3 border-top">
+                    <a href="#" class="btn btn-light border px-4" data-bs-dismiss="modal">Cancelar</a>
+                    <button type="submit" form="formEditar"
+                        class="btn btn-brand d-inline-flex align-items-center gap-2 px-4 shadow-sm">
+                        <i class="fa-solid fa-save"></i> Guardar Alterações
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Remover Equipamento -->
+    <div class="modal fade" id="modalRemover" tabindex="-1" aria-labelledby="modalRemoverLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+
+                <!-- Header -->
+                <div class="modal-header border-0 px-4 pt-4 pb-0">
+
+                    <h5 class="modal-title fw-bold text-dark" id="modalRemoverLabel">
+
+                        Remover equipamento?
+
+                    </h5>
+
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Fechar">
+                    </button>
+
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body px-4 pt-3 pb-4">
+
+                    <p class="text-muted mb-0" style="font-size: 1.05rem; line-height: 1.6;">
+
+                        Esta ação irá remover permanentemente
+                        <span class="fw-semibold text-dark">
+                            "Monitor Multiparamétrico de Sinais Vitais"
+                        </span>
+                        (<span class="custom-monospace">EQ-2024-001</span>)
+                        do inventário, incluindo todos os documentos e
+                        garantias associados.
+                    </p>
+                </div>
+                <!-- Footer -->
+                <div class="modal-footer border-0 px-4 pb-4 pt-0">
+                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger px-4">
+                        Remover
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/1231184.js"></script>
+
+</body>
+
+</html>

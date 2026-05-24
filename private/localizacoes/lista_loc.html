@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedStock — Equipamentos</title>
+
+    <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/1231184.css">
+</head>
+
+<body class="d-flex vh-100 overflow-hidden bg-backend">
+
+    <aside class="sidebar-backend d-none d-md-flex flex-column flex-shrink-0 h-100" style="width: 256px;">
+        <div class="p-4 sidebar-border-light border-bottom">
+            <div class="d-flex align-items-center gap-2">
+                <img src="../../assets/img/logotipo.png" alt="MedStock Logo" style="height: 55px; width: auto;">
+            </div>
+        </div>
+
+        <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
+            <ul class="nav flex-column gap-1">
+                <li class="nav-item">
+                    <a href="../dashboard.html" class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                            <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                        </svg>
+                        <span class="fw-medium">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../equipamentos/lista_equi.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 2v2"></path>
+                            <path d="M5 2v2"></path>
+                            <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path>
+                            <path d="M8 15a6 6 0 0 0 12 0v-3"></path>
+                            <circle cx="20" cy="10" r="2"></circle>
+                        </svg>
+                        <span class="fw-medium">Equipamentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../localizacoes/lista_loc.html"
+                        class="nav-link sidebar-item active d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+                            </path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span class="fw-medium">Localizações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../fornecedores/lista_fornecedores.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path>
+                            <path d="M15 18H9"></path>
+                            <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14">
+                            </path>
+                            <circle cx="17" cy="18" r="2"></circle>
+                            <circle cx="7" cy="18" r="2"></circle>
+                        </svg>
+                        <span class="fw-medium">Fornecedores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../documentacao/lista.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                            <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                            <path d="M10 9H8"></path>
+                            <path d="M16 13H8"></path>
+                            <path d="M16 17H8"></path>
+                        </svg>
+                        <span class="fw-medium">Documentação</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../garantias/lista.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                            </path>
+                            <path d="M12 8v4"></path>
+                            <path d="M12 16h.01"></path>
+                        </svg>
+                        <span class="fw-medium">Garantias</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="../alertas/lista.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
+                            <path d="M12 9v4"></path>
+                            <path d="M12 17h.01"></path>
+                        </svg>
+                        <span class="fw-medium">Alertas</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="p-4 sidebar-border-light border-top">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold bg-brand-subtle text-brand"
+                    style="width: 40px; height: 40px; font-size: 1.1rem;">A</div>
+                <div class="d-flex flex-column overflow-hidden">
+                    <span class="text-white text-truncate fs-6 fw-semibold">Administrador</span>
+                    <span class="text-secondary text-truncate" style="font-size: 0.85rem;">admin</span>
+                </div>
+            </div>
+            <a href="../../public/index.html"
+                class="btn btn-outline-secondary w-100 text-start border-0 text-secondary d-flex align-items-center gap-2 fs-6 shadow-none hover-white-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Terminar Sessão
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-4 p-md-4 ps-md-5">
+
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+            <div>
+                <h1 class="h3 fw-bold text-dark mb-1">Localizações</h1>
+                <p class="text-muted small mb-0">8 localizações registadas</p>
+            </div>
+            <button class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal"
+                data-bs-target="#modalNovaLocalizacao">
+                <i class="fa-solid fa-plus"></i> Nova Localização
+            </button>
+        </div>
+
+        <div class="dash-card">
+            <div class="table-responsive">
+                <table class="table table-custom mb-0">
+                    <thead>
+                        <tr class="table-header-row">
+                            <th class="px-2 py-3 border-0">Serviço / Departamento</th>
+                            <th class="px-2 py-3 border-0">Edifício</th>
+                            <th class="px-2 py-3 border-0 text-center" style="width: 8rem;">Piso</th>
+                            <th class="px-2 py-3 border-0">Sala</th>
+                            <th class="px-1 py-3 border-0 text-center">Equipamentos</th>
+                            <th class="px-2 py-3 border-0 text-end" style="width: 7rem;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-2 py-3 fw-medium">Bloco Operatório</td>
+                            <td class="px-2 py-3 text-muted small">Edifício Principal</td>
+                            <td class="px-2 py-3 text-muted small text-center">2</td>
+                            <td class="px-2 py-3 text-muted small">BO1</td>
+                            <td class="px-1 py-3 text-center fw-medium">3</td>
+                            <td class="px-2 py-3 text-end">
+                                <div class="d-flex align-items-center justify-content-end gap-1">
+                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarLocalizacao"><i
+                                            class="fas fa-pencil fa-sm"></i></button>
+                                    <button class="btn-action text-danger border-0 bg-transparent"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverLocalizacao"><i
+                                            class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-2 py-3 fw-medium">Cardiologia</td>
+                            <td class="px-2 py-3 text-muted small">Edifício Principal</td>
+                            <td class="px-2 py-3 text-muted small text-center">3</td>
+                            <td class="px-1 py-3 text-muted small">Gabinete 301</td>
+                            <td class="px-1 py-3 text-center fw-medium">0</td>
+                            <td class="px-2 py-3 text-end">
+                                <div class="d-flex align-items-center justify-content-end gap-1">
+                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarLocalizacao"><i
+                                            class="fas fa-pencil fa-sm"></i></button>
+                                    <button class="btn-action text-danger border-0 bg-transparent"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverLocalizacao"><i
+                                            class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-2 py-3 fw-medium">Laboratório</td>
+                            <td class="px-2 py-3 text-muted small">Edifício C</td>
+                            <td class="px-2 py-3 text-muted small text-center">0</td>
+                            <td class="px-1 py-3 text-muted small">Lab Central</td>
+                            <td class="px-1 py-3 text-center fw-medium">1</td>
+                            <td class="px-2 py-3 text-end">
+                                <div class="d-flex align-items-center justify-content-end gap-1">
+                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarLocalizacao"><i
+                                            class="fas fa-pencil fa-sm"></i></button>
+                                    <button class="btn-action text-danger border-0 bg-transparent"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverLocalizacao"><i
+                                            class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-2 py-3 fw-medium">Pediatria</td>
+                            <td class="px-2 py-3 text-muted small">Edifício B</td>
+                            <td class="px-2 py-3 text-muted small text-center">1</td>
+                            <td class="px-1 py-3 text-muted small">Enfermaria 1</td>
+                            <td class="px-1 py-3 text-center fw-medium">1</td>
+                            <td class="px-2 py-3 text-end">
+                                <div class="d-flex align-items-center justify-content-end gap-1">
+                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarLocalizacao"><i
+                                            class="fas fa-pencil fa-sm"></i></button>
+                                    <button class="btn-action text-danger border-0 bg-transparent"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverLocalizacao"><i
+                                            class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-2 py-3 fw-medium">Pneumologia</td>
+                            <td class="px-2 py-3 text-muted small">Edifício Principal</td>
+                            <td class="px-2 py-3 text-muted small text-center">2</td>
+                            <td class="px-1 py-3 text-muted small">Gabinete 201</td>
+                            <td class="px-1 py-3 text-center fw-medium">0</td>
+                            <td class="px-2 py-3 text-end">
+                                <div class="d-flex align-items-center justify-content-end gap-1">
+                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarLocalizacao"><i
+                                            class="fas fa-pencil fa-sm"></i></button>
+                                    <button class="btn-action text-danger border-0 bg-transparent"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverLocalizacao"><i
+                                            class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-2 py-3 fw-medium">Radiologia</td>
+                            <td class="px-2 py-3 text-muted small">Edifício B</td>
+                            <td class="px-2 py-3 text-muted small text-center">0</td>
+                            <td class="px-1 py-3 text-muted small">Sala de Exames</td>
+                            <td class="px-1 py-3 text-center fw-medium">1</td>
+                            <td class="px-2 py-3 text-end">
+                                <div class="d-flex align-items-center justify-content-end gap-1">
+                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarLocalizacao"><i
+                                            class="fas fa-pencil fa-sm"></i></button>
+                                    <button class="btn-action text-danger border-0 bg-transparent"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverLocalizacao"><i
+                                            class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-2 py-3 fw-medium">UCI</td>
+                            <td class="px-2 py-3 text-muted small">Edifício Principal</td>
+                            <td class="px-2 py-3 text-muted small text-center">1</td>
+                            <td class="px-1 py-3 text-muted small">Unidade A</td>
+                            <td class="px-1 py-3 text-center fw-medium">2</td>
+                            <td class="px-2 py-3 text-end">
+                                <div class="d-flex align-items-center justify-content-end gap-1">
+                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarLocalizacao"><i
+                                            class="fas fa-pencil fa-sm"></i></button>
+                                    <button class="btn-action text-danger border-0 bg-transparent"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverLocalizacao"><i
+                                            class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-2 py-3 fw-medium">Urgência</td>
+                            <td class="px-2 py-3 text-muted small">Edifício Principal</td>
+                            <td class="px-2 py-3 text-muted small text-center">0</td>
+                            <td class="px-1 py-3 text-muted small">Sala 1</td>
+                            <td class="px-1 py-3 text-center fw-medium">4</td>
+                            <td class="px-2 py-3 text-end">
+                                <div class="d-flex align-items-center justify-content-end gap-1">
+                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarLocalizacao"><i
+                                            class="fas fa-pencil fa-sm"></i></button>
+                                    <button class="btn-action text-danger border-0 bg-transparent"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverLocalizacao"><i
+                                            class="fa-regular fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Nova Localização -->
+    <div class="modal fade" id="modalNovaLocalizacao" tabindex="-1" aria-labelledby="modalNovaLocalizacaoLabel"
+        aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+
+                <div class="modal-header border-0 px-4 pt-4 pb-2">
+
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-brand fs-4"></i>
+
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="modalNovaLocalizacaoLabel">
+
+                            Nova Localização
+
+                        </h5>
+                    </div>
+
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Fechar">
+                    </button>
+
+                </div>
+
+                <div class="modal-body px-4 pt-2 pb-4">
+
+                    <form id="formNovaLocalizacao">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">
+                                Serviço / Departamento *
+                            </label>
+
+                            <input type="text" class="form-control shadow-sm" placeholder="Urgência">
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">
+                                    Edifício *
+                                </label>
+
+                                <input type="text" class="form-control shadow-sm" placeholder="Edifício Principal">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">
+                                    Piso
+                                </label>
+
+                                <input type="number" class="form-control shadow-sm" placeholder="0">
+                            </div>
+
+                        </div>
+
+                        <div class="mt-3">
+                            <label class="form-label fw-medium">
+                                Sala / Gabinete
+                            </label>
+
+                            <input type="text" class="form-control shadow-sm" placeholder="Sala 1">
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="modal-footer border-0 px-4 pb-4 pt-0">
+
+                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">
+
+                        Cancelar
+
+                    </button>
+
+                    <button type="submit" form="formNovaLocalizacao" class="btn btn-brand px-4">
+
+                        Criar Localização
+
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Localização -->
+    <div class="modal fade" id="modalEditarLocalizacao" tabindex="-1" aria-labelledby="modalEditarLocalizacaoLabel"
+        aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+
+                <div class="modal-header border-0 px-4 pt-4 pb-2">
+
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-brand fs-4"></i>
+
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="modalEditarLocalizacaoLabel">
+
+                            Editar Localização
+
+                        </h5>
+                    </div>
+
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Fechar">
+                    </button>
+
+                </div>
+
+                <div class="modal-body px-4 pt-2 pb-4">
+
+                    <form id="formEditarLocalizacao">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">
+                                Serviço / Departamento *
+                            </label>
+
+                            <input type="text" class="form-control shadow-sm" value="Bloco Operatório">
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">
+                                    Edifício *
+                                </label>
+
+                                <input type="text" class="form-control shadow-sm" value="Edifício Principal">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">
+                                    Piso
+                                </label>
+
+                                <input type="number" class="form-control shadow-sm" value="2">
+                            </div>
+
+                        </div>
+
+                        <div class="mt-3">
+                            <label class="form-label fw-medium">
+                                Sala / Gabinete
+                            </label>
+
+                            <input type="text" class="form-control shadow-sm" value="BO1">
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="modal-footer border-0 px-4 pb-4 pt-0">
+
+                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">
+
+                        Cancelar
+
+                    </button>
+
+                    <button type="submit" form="formEditarLocalizacao" class="btn btn-brand px-4">
+
+                        Guardar Alterações
+
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Remover Localização -->
+    <div class="modal fade" id="modalRemoverLocalizacao" tabindex="-1" aria-labelledby="modalRemoverLocalizacaoLabel"
+        aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+
+                <div class="modal-header border-0 px-4 pt-4 pb-0">
+
+                    <h5 class="modal-title fw-bold text-dark" id="modalRemoverLocalizacaoLabel">
+
+                        Remover localização?
+
+                    </h5>
+
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Fechar">
+                    </button>
+
+                </div>
+
+                <div class="modal-body px-4 pt-3 pb-4">
+
+                    <p class="text-muted mb-0" style="font-size: 1.05rem; line-height: 1.6;">
+
+                        Vai remover
+                        <span class="fw-semibold text-dark">
+                            "Bloco Operatório"
+                        </span>
+
+                        (Edifício Principal).
+                        Esta operação não é possível se existirem
+                        equipamentos associados.
+                    </p>
+                </div>
+                <div class="modal-footer border-0 px-4 pb-4 pt-0">
+                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger px-4">
+                        Remover
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/1231184.js"></script>
+
+</body>
+
+</html>

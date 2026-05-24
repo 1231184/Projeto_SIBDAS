@@ -9,6 +9,14 @@
     font-weight: 100 900;
 }
 
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/Inter-Bold.ttf') format('truetype'); /* Certifica-te que tens este ficheiro */
+    font-weight: 700; /* Bold */
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Fonte Titillium Web para o Backend (conforme Ficha 08) */
 @font-face {
     font-family: 'Titillium Web';
@@ -17,7 +25,7 @@
 }
 
 /* ============================================================
-    ESTILOS BASE E CORES
+     ROOT / VARIÁVEIS
    ============================================================ */
 
 :root {
@@ -31,14 +39,16 @@
     --hero-bg-end: hsl(185, 65%, 20%);
 }
 
-/* Aplicação da fonte e limpeza básica */
+/* ============================================================
+   ESTILOS BASE
+============================================================ */
 body {
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
 }
 
 /* ============================================================
-   COMPONENTES PERSONALIZADOS
+   COMPONENTES GLOBAIS
    ============================================================ */
 
 /* Cor principal */
@@ -66,7 +76,7 @@ body {
     color: white;
     border: none;
     transition: all 0.3s ease;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
 }
 
 .btn-brand:hover {
@@ -89,8 +99,44 @@ body {
     color: white;
 }
 
+.card-hover-elevate {
+    transition: all 0.25s ease-in-out;
+}
+
+.card-hover-elevate:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.bg-brand-subtle {
+    background-color: hsla(185, 65%, 38%, 0.1) !important;
+}
+
+.border-brand-subtle {
+    border: 1px solid hsla(185, 65%, 38%, 0.2) !important;
+}
+
 /* ============================================================
-   HERO SECTION (Secção Principal)
+   FRONTEND
+============================================================ */
+/* Navbar transparente ao fazer scroll */
+.navbar {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Compensar altura da navbar nas âncoras */
+section[id] {
+    scroll-margin-top: 100px;
+}
+
+/* ============================================================
+   HERO SECTION
    ============================================================ */
 
 .hero-section {
@@ -145,13 +191,6 @@ body {
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
 }
 
-/* Ajustes Mobile do Título */
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 1.8rem;
-    }
-}
-
 /* Texto secundário mais premium */
 .hero-section .lead {
     color: rgba(255, 255, 255, 0.78) !important;
@@ -164,43 +203,101 @@ body {
 }
 
 /* ============================================================
-   SOBRE NÓS (Cores subtis e Hover)
+   BACKEND
+============================================================ */
+
+/* Fundo da área de conteúdo do backend */
+.bg-backend {
+    background-color: #f8fafc;
+}
+
+.dash-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem; /* Cantos arredondados iguais ao Replit */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Títulos dos Cartões */
+.card-title-custom {
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 600;
+    color: #64748b; /* text-muted-foreground */
+    text-transform: uppercase;
+    letter-spacing: 0.025em; /* tracking-wide */
+    margin: 0;
+}
+
+/* Substituto Bootstrap para flex-1 */
+.flex-1 {
+    flex: 1 1 0%;
+    min-width: 0;
+}
+
+/* ============================================================
+   SIDEBAR
    ============================================================ */
 
-.bg-brand-subtle {
-    background-color: hsla(185, 65%, 38%, 0.1) !important;
+.sidebar-backend {
+    background-color: hsl(213, 32%, 16%);
+    border-right: 1px solid hsl(213, 25%, 22%);
 }
 
-.border-brand-subtle {
-    border: 1px solid hsla(185, 65%, 38%, 0.2) !important;
+.sidebar-border-light {
+    border-color: hsl(213, 25%, 22%) !important;
 }
 
-.card-hover-elevate {
-    transition: all 0.25s ease-in-out;
+/* Links do Menu */
+.sidebar-item {
+    color: hsl(210, 30%, 88%);
+    /* Cinza claro subtil */
+    font-size: 1.2rem;
+    padding: 0.75rem 1.0rem;
+    /* Espaçamento exato py-2.5 px-3 */
+    border-radius: 0.375rem;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
 }
 
-.card-hover-elevate:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+.sidebar-item:hover {
+    background-color: hsl(213, 25%, 22%);
+    color: #ffffff;
 }
 
-/* Navbar transparente ao fazer scroll */
-.navbar {
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+/* Link Ativo */
+.sidebar-item.active {
+    background-color: var(--brand-color);
+    color: #ffffff;
+    font-weight: 500;
 }
 
-.navbar.scrolled {
-    background-color: rgba(255, 255, 255, 0.85) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+/* Alinhamento perfeito dos Ícones */
+.sidebar-item i,
+.sidebar-item svg {
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
 }
 
-/* Compensar altura da navbar nas âncoras */
-section[id] {
-    scroll-margin-top: 100px;
+/* Scrollbar da Sidebar */
+.sidebar-scroll::-webkit-scrollbar {
+    width: 6px;
 }
 
-/*Comecei aqui os equipamentos*/
+.sidebar-scroll::-webkit-scrollbar-thumb {
+    background-color: hsl(213, 25%, 30%);
+    border-radius: 10px;
+}
+
+/* Efeito de brilho apenas no logótipo da sidebar */
+.sidebar-backend img {
+    filter: brightness(0) invert(1);
+    /* Isto força a imagem a ficar branca pura */
+}
+
+/* ============================================================
+   TABELAS
+============================================================ */
 /* Badges Suaves para Tabelas (Backend) */
 .badge-soft-success {
     background-color: rgba(16, 185, 129, 0.15);
@@ -226,24 +323,8 @@ section[id] {
     border: 1px solid rgba(14, 165, 233, 0.3);
 }
 
-.font-monospace {
+.custom-monospace {
     font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-}
-
-/* Barra de Pesquisa Contínua */
-.search-group {
-    border: 1px solid #e2e8f0;
-    border-radius: 0.375rem;
-    overflow: hidden;
-    background-color: #fff;
-}
-.search-group .input-group-text,
-.search-group .form-control {
-    border: none !important;
-    background: transparent !important;
-}
-.search-group .form-control:focus {
-    box-shadow: none;
 }
 
 /* Botões de Ação Quadrados (Tabela) */
@@ -261,11 +342,13 @@ section[id] {
     transition: all 0.2s;
     text-decoration: none;
 }
+
 .btn-action:hover {
     background-color: #f1f5f9;
     border-color: #e2e8f0;
     color: #0f172a;
 }
+
 .btn-action.text-danger:hover {
     background-color: #fef2f2;
     color: #dc2626 !important;
@@ -274,65 +357,168 @@ section[id] {
 
 /* Ajustes finos para a Tabela */
 .table-custom th {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #64748b;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid #cbd5e1;
     background-color: #f8fafc !important;
 }
+
 .table-custom td {
     vertical-align: middle;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid #cbd5e1;
 }
 
 /* ============================================================
-   SIDEBAR (Menu Lateral do Backend)
-   ============================================================ */
+   FORMULÁRIOS
+============================================================ */
 
-.sidebar-backend {
-    background-color: hsl(213, 32%, 16%);
-    border-right: 1px solid hsl(213, 25%, 22%);
-}
-
-.sidebar-border-light {
-    border-color: hsl(213, 25%, 22%) !important;
-}
-
-/* Links do Menu */
-.sidebar-item {
-    color: hsl(210, 30%, 88%); /* Cinza claro subtil */
-    font-size: 0.875rem; /* Tamanho exato do Replit (14px) */
-    padding: 0.625rem 0.75rem; /* Espaçamento exato py-2.5 px-3 */
+/* Barra de Pesquisa Contínua */
+.search-group {
+    border: 1px solid #e2e8f0;
     border-radius: 0.375rem;
-    transition: all 0.2s ease-in-out;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.search-group .input-group-text,
+.search-group .form-control {
+    border: none;
+    background: transparent;
+}
+
+.search-group .form-control:focus {
+    box-shadow: none;
+}
+
+/* Estilo personalizado para os items do dropdown */
+.dropdown-menu {
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    max-height: 250px; /* Limita a altura do menu */
+    overflow-y: auto;  /* Adiciona scroll vertical se a lista for muito longa */
+}
+
+.dropdown-item {
+    border-radius: 0.375rem;
+    color: #334155;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+/* A cor de seleção */
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: hsla(185, 65%, 38%, 0.1);
+    /* Verde água suave */
+    color: #115e59;
+}
+
+/* Estilo base do Select */
+.form-select {
+    border: 1px solid #e2e8f0 !important;
+    /* Cor da borda em repouso */
+    border-radius: 0.5rem !important;
+    padding: 0.5rem 0.75rem !important;
+    background-color: #ffffff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* a borda quando clicas */
+.form-select:focus {
+    border-color: #14b8a6 !important;
+    /* Cor exata do teu design */
+    box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2) !important;
+    /* O efeito de brilho suave à volta */
+    outline: none;
+}
+
+/* Se quiseres que os inputs também fiquem iguais */
+.form-control:focus {
+    border-color: #14b8a6 !important;
+    box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2) !important;
+}
+
+/* ============================================================
+   EQUIPAMENTOS
+============================================================ */
+
+/* Botoes do detalhes equipamentos */
+.btn-action-custom {
+    padding: 0.5rem 1.2rem;   /* Aumentei o padding horizontal */
+    font-size: 0.9rem;        /* Tamanho de letra confortável */
+    font-weight: 500;
+    border-radius: 0.5rem;    /* Arredondamento suave */
+    transition: all 0.2s ease;
+    border: 1px solid #e2e8f0;
+    background-color: #fff;
+    color: #0f172a;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     text-decoration: none;
 }
 
-.sidebar-item:hover {
-    background-color: hsl(213, 25%, 22%);
-    color: #ffffff;
+.btn-action-custom:hover {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
 }
 
-/* Link Ativo */
-.sidebar-item.active {
-    background-color: var(--brand-color);
-    color: #ffffff;
+/* Variante Destrutiva (Remover) */
+.btn-action-danger {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.btn-action-danger:hover {
+    background-color: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+/* Labels pequeninas (ex: CATEGORIA, MARCA) */
+.detail-label {
+    font-size: 0.75rem; /* text-xs */
     font-weight: 500;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    margin-bottom: 0.125rem; /* gap-0.5 */
 }
 
-/* Alinhamento perfeito dos Ícones */
-.sidebar-item i {
-    font-size: 1.15rem;
-    width: 24px; /* Força os ícones a terem a mesma largura para o texto alinhar */
-    text-align: center;
+/* Texto de valor (ex: Monitorização, Philips) */
+.detail-value {
+    font-size: 0.875rem; /* text-sm */
+    color: #0f172a; /* text-foreground */
+    margin-bottom: 0;
 }
 
-/* Scrollbar da Sidebar */
-.sidebar-scroll::-webkit-scrollbar {
-    width: 6px;
+/* Caixas dos Fornecedores e Documentos */
+.list-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem; /* rounded-md */
+    padding: 0.75rem; /* p-3 */
+    transition: background-color 0.2s;
+    background-color: transparent;
 }
-.sidebar-scroll::-webkit-scrollbar-thumb {
-    background-color: hsl(213, 25%, 30%);
-    border-radius: 10px;
+
+.list-box-light {
+    background-color: #f8fafc; /* bg-muted/20 */
+}
+
+.list-box:hover {
+    background-color: rgba(241, 245, 249, 0.5); /* hover:bg-muted/30 */
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+============================================================ */
+
+/* Ajustes Mobile do Título */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
 }
