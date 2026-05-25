@@ -3,7 +3,7 @@
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("MedStock Frontend inicializado com sucesso.");
+    console.log("MedStock Frontend iniciado com sucesso.");
 
     const navbar = document.querySelector('.navbar');
 
