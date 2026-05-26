@@ -2,16 +2,19 @@
     FONTES LOCAIS (MODO OFFLINE)
    ============================================================ */
 
-/* Fonte Inter para o Frontend */
+/* Fonte Inter Regular para o Frontend */
 @font-face {
     font-family: 'Inter';
-    src: url('../fonts/Inter.ttf') format('truetype');
-    font-weight: 100 900;
+    src: url('../fonts/Inter/static/Inter_18pt-Regular.ttf') format('truetype');
+    font-weight: 400; /* Regular */
+    font-style: normal;
+    font-display: swap;
 }
 
+/* Fonte Inter Bold para o Frontend */
 @font-face {
     font-family: 'Inter';
-    src: url('../fonts/Inter-Bold.ttf') format('truetype'); /* Certifica-te que tens este ficheiro */
+    src: url('../fonts/Inter/static/Inter_18pt-Bold.ttf') format('truetype');
     font-weight: 700; /* Bold */
     font-style: normal;
     font-display: swap;
@@ -20,8 +23,9 @@
 /* Fonte Titillium Web para o Backend (conforme Ficha 08) */
 @font-face {
     font-family: 'Titillium Web';
-    src: url('../fonts/TitilliumWeb-Regular.ttf') format('truetype');
+    src: url('../fonts/Titillium_Web/TitilliumWeb-Regular.ttf') format('truetype');
     font-weight: normal;
+    font-style: normal;
 }
 
 /* ============================================================
@@ -45,6 +49,10 @@
 body {
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
+}
+
+.bg-backend {
+    font-family: 'Titillium Web', sans-serif;
 }
 
 /* ============================================================

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedStock — Documentação</title>
+    <title>MedStock — Alertas</title>
 
     <link rel="stylesheet" href="../../assets/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/fontawesome/all.min.css">
@@ -25,7 +25,7 @@
         <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
             <ul class="nav flex-column gap-1">
                 <li class="nav-item">
-                    <a href="../dashboard.html" class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                    <a href="../dashboard/dashboard.html" class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="7" height="9" x="3" y="3" rx="1"></rect>
@@ -80,7 +80,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="../documentacao/lista_docs.html"
-                        class="nav-link sidebar-item active d-flex align-items-center gap-2 py-2 px-3">
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
@@ -108,7 +108,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="../alertas/alertas.html"
-                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                        class="nav-link sidebar-item active d-flex align-items-center gap-2 py-2 px-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
@@ -129,3 +129,193 @@
                 </li>
             </ul>
         </nav>
+
+        <div class="p-4 sidebar-border-light border-top">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold bg-brand-subtle text-brand"
+                    style="width: 40px; height: 40px; font-size: 1.1rem;">A</div>
+                <div class="d-flex flex-column overflow-hidden">
+                    <span class="text-white text-truncate fs-6 fw-semibold">Administrador</span>
+                    <span class="text-secondary text-truncate" style="font-size: 0.85rem;">admin</span>
+                </div>
+            </div>
+            <a href="../../public/index.html"
+                class="btn btn-outline-secondary w-100 text-start border-0 text-secondary d-flex align-items-center gap-2 fs-6 shadow-none hover-white-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Terminar Sessão
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-grow-1 overflow-auto p-4 p-md-5">
+
+        <!-- HEADER -->
+        <div class="mb-4">
+
+            <h1 class="h3 fw-bold text-dark mb-1">
+                Alertas
+            </h1>
+
+            <p class="text-muted small mb-0">
+                Sem alertas ativos
+            </p>
+
+        </div>
+
+        <!-- GARANTIAS A EXPIRAR -->
+        <div class="dash-card p-4 mb-4">
+
+            <div class="d-flex align-items-start gap-3">
+
+                <div class="text-warning fs-4 pt-1">
+
+                    <i class="fa-regular fa-clock"></i>
+
+                </div>
+
+                <div class="w-100">
+
+                    <h5 class="fw-bold text-dark mb-2">
+                        Garantias a Expirar (próximos 30 dias)
+                    </h5>
+
+                    <p class="text-muted mb-4">
+                        Contratos e garantias que expiram brevemente
+                    </p>
+
+                    <p class="text-muted mb-0">
+                        Sem garantias a expirar
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- GARANTIAS EXPIRADAS -->
+        <div class="dash-card p-4 mb-4">
+
+            <div class="d-flex align-items-start gap-3">
+
+                <div class="text-danger fs-4 pt-1">
+
+                    <i class="fa-regular fa-circle-xmark"></i>
+
+                </div>
+
+                <div class="w-100">
+
+                    <h5 class="fw-bold text-dark mb-2">
+                        Garantias Expiradas
+                    </h5>
+
+                    <p class="text-muted mb-4">
+                        Contratos e garantias sem cobertura ativa
+                    </p>
+
+                    <p class="text-muted mb-0">
+                        Sem garantias expiradas
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- EQUIPAMENTOS SEM DOCUMENTAÇÃO -->
+        <div class="dash-card p-4 mb-4">
+
+            <div class="d-flex align-items-start gap-3">
+
+                <div class="text-warning fs-4 pt-1">
+
+                    <i class="fa-regular fa-file-circle-xmark"></i>
+
+                </div>
+
+                <div class="w-100">
+
+                    <h5 class="fw-bold text-dark mb-2">
+                        Equipamentos sem Documentação
+                    </h5>
+
+                    <p class="text-muted mb-4">
+                        Equipamentos que não têm qualquer documento registado
+                    </p>
+
+                    <p class="text-muted mb-0">
+                        Todos os equipamentos têm documentação
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- DOCUMENTOS EXPIRADOS -->
+        <div class="dash-card p-4 mb-4">
+
+            <div class="d-flex align-items-start gap-3">
+
+                <div class="text-danger fs-4 pt-1">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+                <div class="w-100">
+
+                    <h5 class="fw-bold text-dark mb-2">
+                        Documentos Expirados
+                    </h5>
+
+                    <p class="text-muted mb-4">
+                        Documentos cuja validade está ultrapassada
+                    </p>
+
+                    <p class="text-muted mb-0">
+                        Sem documentos expirados
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SEM ALERTAS -->
+        <div class="dash-card p-5 text-center">
+
+            <div class="mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center" style="width: 74px;
+                       height: 74px;
+                       background-color: #d1fae5;">
+
+                <i class="fa-solid fa-circle-check text-success fs-2"></i>
+
+            </div>
+
+            <h2 class="h3 fw-medium text-dark mb-3">
+                Sem alertas ativos
+            </h2>
+
+            <p class="text-muted mb-0 mx-auto" style="max-width: 500px; line-height: 1.7;">
+
+                Todas as garantias estão válidas,
+                os documentos estão atualizados
+                e todos os equipamentos têm documentação.
+
+            </p>
+
+        </div>
+
+    </main>
+
+    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/1231184.js"></script>
+
+</body>
+
+</html>
