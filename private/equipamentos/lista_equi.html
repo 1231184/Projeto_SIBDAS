@@ -23,7 +23,8 @@
         <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
             <ul class="nav flex-column gap-1">
                 <li class="nav-item">
-                    <a href="../dashboard.html" class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                    <a href="../dashboard/dashboard.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="7" height="9" x="3" y="3" rx="1"></rect>
@@ -117,7 +118,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../conteudo/lista_conteudo.html"
+                    <a href="../conteudo/conteudo.html"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <i class="fa-regular fa-pen-to-square"></i>
                         <span class="fw-medium">
@@ -190,21 +191,6 @@
                         </select>
                     </div>
                     <div class="col-sm-6 col-md-3 col-lg-2">
-                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
-                            <option selected>Categoria</option>
-                            <option value="1">Ventilação</option>
-                            <option value="2">Monitorização</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-6 col-md-3 col-lg-2">
-                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
-                            <option selected>Criticidade</option>
-                            <option value="1">Alta</option>
-                            <option value="2">Média</option>
-                            <option value="3">Suporte de Vida</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-6 col-md-3 col-lg-2">
                         <button class="btn btn-brand w-100 shadow-sm">Pesquisar</button>
                     </div>
                 </div>
@@ -219,11 +205,9 @@
                             <tr>
                                 <th class="px-4 py-3 border-0" style="width: 120px;">Código</th>
                                 <th class="px-4 py-3 border-0">Designação</th>
-                                <th class="px-4 py-3 border-0">Categoria</th>
                                 <th class="px-4 py-3 border-0">Marca / Modelo</th>
                                 <th class="px-4 py-3 border-0">Localização</th>
                                 <th class="px-4 py-3 border-0">Estado</th>
-                                <th class="px-4 py-3 border-0">Criticidade</th>
                                 <th class="px-4 py-3 border-0 text-end">Ações</th>
                             </tr>
                         </thead>
@@ -235,7 +219,6 @@
                                     </div>
                                     <div class="text-muted" style="font-size: 0.75rem;">SN-PH-2024-001</div>
                                 </td>
-                                <td class="px-4 py-3 small text-dark">Monitorização</td>
                                 <td class="px-4 py-3">
                                     <div class="fw-medium text-dark small">Philips</div>
                                     <div class="text-muted" style="font-size: 0.75rem;">IntelliVue MX700</div>
@@ -244,17 +227,10 @@
                                 <td class="px-4 py-3">
                                     <span class="badge badge-soft-success">Ativo</span>
                                 </td>
-                                <td class="px-4 py-3">
-                                    <span class="badge badge-soft-warning">Alta</span>
-                                </td>
                                 <td class="px-4 py-3 text-end">
                                     <div class="d-flex justify-content-end gap-1">
                                         <button class="btn-action" title="Ver Detalhes" data-bs-toggle="modal"
                                             data-bs-target="#modalDetalhes"><i class="fa-regular fa-eye"></i></button>
-                                        <button class="btn-action" title="Editar" data-bs-toggle="modal"
-                                            data-bs-target="#modalEditar">
-                                            <i class="fa-solid fa-pencil"></i>
-                                        </button>
                                         <button class="btn-action text-danger" title="Remover" data-bs-toggle="modal"
                                             data-bs-target="#modalRemover"><i
                                                 class="fa-solid fa-trash-can"></i></button>
@@ -268,7 +244,6 @@
                                     <div class="fw-medium text-dark small">Ventilador Pulmonar de Alta Performance</div>
                                     <div class="text-muted" style="font-size: 0.75rem;">SN-DR-2024-002</div>
                                 </td>
-                                <td class="px-4 py-3 small text-dark">Ventilação</td>
                                 <td class="px-4 py-3">
                                     <div class="fw-medium text-dark small">Dräger</div>
                                     <div class="text-muted" style="font-size: 0.75rem;">Evita Infinity V500</div>
@@ -277,17 +252,10 @@
                                 <td class="px-4 py-3">
                                     <span class="badge badge-soft-success">Ativo</span>
                                 </td>
-                                <td class="px-4 py-3">
-                                    <span class="badge badge-soft-danger">Suporte de vida</span>
-                                </td>
                                 <td class="px-4 py-3 text-end">
                                     <div class="d-flex justify-content-end gap-1">
                                         <button class="btn-action" title="Ver Detalhes" data-bs-toggle="modal"
                                             data-bs-target="#modalDetalhes"><i class="fa-regular fa-eye"></i></button>
-                                        <button class="btn-action" title="Editar" data-bs-toggle="modal"
-                                            data-bs-target="#modalEditar">
-                                            <i class="fa-solid fa-pencil"></i>
-                                        </button>
                                         <button class="btn-action text-danger" title="Remover" data-bs-toggle="modal"
                                             data-bs-target="#modalRemover"><i
                                                 class="fa-solid fa-trash-can"></i></button>
@@ -301,7 +269,6 @@
                                     <div class="fw-medium text-dark small">Tomógrafo Computorizado 64 cortes</div>
                                     <div class="text-muted" style="font-size: 0.75rem;">SN-SI-2024-005</div>
                                 </td>
-                                <td class="px-4 py-3 small text-dark">Diagnóstico por Imagem</td>
                                 <td class="px-4 py-3">
                                     <div class="fw-medium text-dark small">Siemens</div>
                                     <div class="text-muted" style="font-size: 0.75rem;">SOMATOM Definition</div>
@@ -310,17 +277,10 @@
                                 <td class="px-4 py-3">
                                     <span class="badge badge-soft-warning">Em manutenção</span>
                                 </td>
-                                <td class="px-4 py-3">
-                                    <span class="badge badge-soft-warning">Alta</span>
-                                </td>
                                 <td class="px-4 py-3 text-end">
                                     <div class="d-flex justify-content-end gap-1">
                                         <button class="btn-action" title="Ver Detalhes" data-bs-toggle="modal"
                                             data-bs-target="#modalDetalhes"><i class="fa-regular fa-eye"></i></button>
-                                        <button class="btn-action" title="Editar" data-bs-toggle="modal"
-                                            data-bs-target="#modalEditar">
-                                            <i class="fa-solid fa-pencil"></i>
-                                        </button>
                                         <button class="btn-action text-danger" title="Remover" data-bs-toggle="modal"
                                             data-bs-target="#modalRemover"><i
                                                 class="fa-solid fa-trash-can"></i></button>
@@ -335,113 +295,121 @@
     </main>
 
     <!-- Modal Detalhes Equipamento -->
+    <!-- Modal Detalhes Equipamento -->
     <div class="modal fade" id="modalDetalhes" tabindex="-1" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
-
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content border-0 shadow-lg bg-backend">
 
-                <!-- Header -->
+                <!-- Header do Modal -->
                 <div class="modal-header border-bottom px-4 py-3">
                     <div>
                         <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
                             <h5 class="modal-title fw-bold text-dark mb-0" id="modalDetalhesLabel">
                                 Monitor Multiparamétrico de Sinais Vitais
                             </h5>
-
-                            <span class="badge badge-soft-success">
-                                Ativo
-                            </span>
-
-                            <span class="badge badge-soft-warning">
-                                Alta
-                            </span>
+                            <span class="badge badge-soft-success">Ativo</span>
+                            <span class="badge badge-soft-warning">Alta</span>
                         </div>
-
-                        <p class="text-muted custom-monospace small mb-0">
-                            EQ-2024-001
-                        </p>
+                        <p class="text-muted custom-monospace small mb-0">EQ-2024-001</p>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <button class="btn-action-custom py-2 px-3" data-bs-toggle="modal" data-bs-target="#modalEditar"
                             data-bs-dismiss="modal">
-                            <i class="fa-solid fa-pencil me-2"></i>
-                            Editar
+                            <i class="fa-solid fa-pencil me-2"></i> Editar
                         </button>
                         <button class="btn-action-custom btn-action-danger" data-bs-toggle="modal"
                             data-bs-target="#modalRemover">
-                            <i class="fa-solid fa-trash-can me-2"></i>
-                            Remover
+                            <i class="fa-solid fa-trash-can me-2"></i> Remover
                         </button>
-                        <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Fechar">
-                        </button>
+                        <button type="button" class="btn-close ms-2" data-bs-dismiss="modal"
+                            aria-label="Fechar"></button>
                     </div>
                 </div>
-                <!-- Body -->
+
+                <!-- Body do Modal -->
                 <div class="modal-body p-4">
-                    <div class="d-flex flex-column gap-4" style="max-width: 1024px; margin: 0 auto;">
-                        <!-- Identificação + Aquisição -->
-                        <div class="row g-4">
-                            <!-- Identificação -->
-                            <div class="col-12 col-md-6">
-                                <div class="card dash-card h-100">
-                                    <div class="card-header border-0 bg-transparent pt-4 px-4 pb-3">
-                                        <h6 class="card-title-custom">
-                                            Identificação
-                                        </h6>
-                                    </div>
-                                    <div class="card-body px-4 pb-4 pt-0">
-                                        <div class="row row-cols-2 g-4">
+                    <div class="w-100" style="max-width: 1024px; margin: 0 auto;">
+
+                        <!-- SEPARADORES (Nav Tabs) -->
+                        <ul class="nav nav-tabs border-bottom-0" id="detalhesTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active text-dark fw-medium" id="geral-tab" data-bs-toggle="tab"
+                                    data-bs-target="#geral-pane" type="button" role="tab" aria-selected="true">
+                                    <i class="fa-solid fa-circle-info me-1"></i> Geral
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="localizacao-tab" data-bs-toggle="tab"
+                                    data-bs-target="#localizacao-pane" type="button" role="tab" aria-selected="false">
+                                    <i class="fa-solid fa-map-pin me-1"></i> Localização
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="fornecedores-tab" data-bs-toggle="tab"
+                                    data-bs-target="#fornecedores-pane" type="button" role="tab" aria-selected="false">
+                                    <i class="fa-solid fa-truck me-1"></i> Fornecedores
+                                    <span class="badge bg-secondary rounded-pill ms-1"
+                                        style="font-size: 0.65rem;">2</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="garantias-tab" data-bs-toggle="tab"
+                                    data-bs-target="#garantias-pane" type="button" role="tab" aria-selected="false">
+                                    <i class="fa-solid fa-shield-check me-1"></i> Garantias
+                                    <span class="badge bg-secondary rounded-pill ms-1"
+                                        style="font-size: 0.65rem;">1</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="documentos-tab" data-bs-toggle="tab"
+                                    data-bs-target="#documentos-pane" type="button" role="tab" aria-selected="false">
+                                    <i class="fa-regular fa-file-lines me-1"></i> Documentos
+                                    <span class="badge bg-secondary rounded-pill ms-1"
+                                        style="font-size: 0.65rem;">3</span>
+                                </button>
+                            </li>
+                        </ul>
+
+                        <!-- CONTEÚDO DOS SEPARADORES -->
+                        <div class="card dash-card p-0 mb-3">
+                            <div class="card-body p-4">
+                                <div class="tab-content" id="detalhesTabsContent">
+
+                                    <!-- TAB 1: GERAL -->
+                                    <div class="tab-pane fade show active" id="geral-pane" role="tabpanel" tabindex="0">
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Identificação e
+                                            Fabrico</h5>
+                                        <div class="row row-cols-2 row-cols-md-3 g-4 mb-4">
                                             <div class="col">
                                                 <p class="detail-label">Categoria</p>
                                                 <p class="detail-value">Monitorização</p>
                                             </div>
-
                                             <div class="col">
                                                 <p class="detail-label">Marca</p>
                                                 <p class="detail-value">Philips</p>
                                             </div>
-
                                             <div class="col">
                                                 <p class="detail-label">Modelo</p>
                                                 <p class="detail-value">IntelliVue MX700</p>
                                             </div>
-
                                             <div class="col">
                                                 <p class="detail-label">Número de Série</p>
-                                                <p class="detail-value custom-monospace" style="font-size: 0.75rem;">
-                                                    SN-PH-2024-001
-                                                </p>
+                                                <p class="detail-value custom-monospace" style="font-size: 0.8rem;">
+                                                    SN-PH-2024-001</p>
                                             </div>
-
                                             <div class="col">
                                                 <p class="detail-label">Fabricante</p>
                                                 <p class="detail-value">Philips Healthcare</p>
                                             </div>
-
                                             <div class="col">
                                                 <p class="detail-label">Ano de Fabrico</p>
                                                 <p class="detail-value">2023</p>
                                             </div>
-
                                         </div>
 
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <!-- Aquisição -->
-                            <div class="col-12 col-md-6">
-                                <div class="card dash-card h-100">
-
-                                    <div class="card-header border-0 bg-transparent pt-4 px-4 pb-3">
-                                        <h6 class="card-title-custom">
-                                            Aquisição
-                                        </h6>
-                                    </div>
-
-                                    <div class="card-body px-4 pb-4 pt-0">
-                                        <div class="row row-cols-2 g-4">
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2 mt-4">Aquisição
+                                        </h5>
+                                        <div class="row row-cols-2 row-cols-md-3 g-4 mb-4">
                                             <div class="col">
                                                 <p class="detail-label">Tipo de Entrada</p>
                                                 <p class="detail-value">Compra</p>
@@ -454,276 +422,176 @@
                                                 <p class="detail-label">Custo de Aquisição</p>
                                                 <p class="detail-value">18 500,00 €</p>
                                             </div>
+                                        </div>
+
+                                        <h5 class="fw-semibold fs-6 mb-2 text-dark border-bottom pb-2 mt-4">Observações
+                                        </h5>
+                                        <p class="detail-value text-muted" style="font-size: 0.875rem;">Monitor de UCI
+                                            com 12 derivações ECG. Equipamento encontra-se em excelente estado de
+                                            conservação.</p>
+                                    </div>
+
+                                    <!-- TAB 2: LOCALIZAÇÃO -->
+                                    <div class="tab-pane fade" id="localizacao-pane" role="tabpanel" tabindex="0">
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Localização Atual
+                                        </h5>
+                                        <div class="row row-cols-2 row-cols-md-4 g-4">
                                             <div class="col">
-                                                <p class="detail-label">Documentos</p>
+                                                <p class="detail-label">Edifício</p>
                                                 <p class="detail-value d-flex align-items-center gap-1">
-                                                    <i class="fa-solid fa-file-lines text-muted"></i>
-                                                    3
+                                                    <i class="fa-regular fa-building text-muted"></i> Edifício Principal
                                                 </p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="detail-label">Piso</p>
+                                                <p class="detail-value">1</p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="detail-label">Serviço</p>
+                                                <p class="detail-value">UCI</p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="detail-label">Sala</p>
+                                                <p class="detail-value">Unidade A</p>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Localização -->
-                        <div class="card dash-card">
-                            <div
-                                class="card-header border-0 bg-transparent pt-4 px-4 pb-3 d-flex align-items-center gap-2">
-                                <i class="fa-solid fa-map-pin text-muted" style="font-size: 1rem;"></i>
-                                <h6 class="card-title-custom mb-0">
-                                    Localização Atual
-                                </h6>
-                            </div>
-                            <div class="card-body px-4 pb-4 pt-0">
-                                <div class="row row-cols-2 row-cols-md-4 g-4">
-                                    <div class="col">
-                                        <p class="detail-label">Edifício</p>
 
-                                        <p class="detail-value d-flex align-items-center gap-1">
-                                            <i class="fa-regular fa-building text-muted"></i>
-                                            Edifício Principal
-                                        </p>
+                                    <!-- TAB 3: FORNECEDORES -->
+                                    <div class="tab-pane fade" id="fornecedores-pane" role="tabpanel" tabindex="0">
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Entidades
+                                            Associadas</h5>
+                                        <div class="d-flex flex-column gap-2 mt-3">
+                                            <a href="#" class="text-decoration-none text-dark">
+                                                <div class="list-box d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <p class="detail-value fw-medium">Philips Healthcare</p>
+                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                            Distribuidor-Fornecedor Comercial</p>
+                                                    </div>
+                                                    <div class="text-end d-none d-sm-block">
+                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                            +351 210 000 002</p>
+                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                            contacto@philips-saude.pt</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="text-decoration-none text-dark">
+                                                <div class="list-box d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <p class="detail-value fw-medium">MedServ - Assistência Técnica
+                                                        </p>
+                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                            Empresa de Assistência Técnica</p>
+                                                    </div>
+                                                    <div class="text-end d-none d-sm-block">
+                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                            +351 210 000 004</p>
+                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                            suporte@medserv.pt</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <p class="detail-label">Piso</p>
-                                        <p class="detail-value">1</p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="detail-label">Serviço</p>
-                                        <p class="detail-value">UCI</p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="detail-label">Sala</p>
-                                        <p class="detail-value">Unidade A</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Fornecedores -->
-                        <div class="card dash-card">
 
-                            <div
-                                class="card-header border-0 bg-transparent pt-4 px-4 pb-3 d-flex align-items-center gap-2">
-
-                                <i class="fa-solid fa-users text-muted" style="font-size: 1rem;"></i>
-
-                                <h6 class="card-title-custom mb-0">
-                                    Fornecedores (2)
-                                </h6>
-
-                            </div>
-
-                            <div class="card-body px-4 pb-4 pt-0">
-
-                                <div class="d-flex flex-column gap-2">
-
-                                    <a href="#" class="text-decoration-none text-dark">
-
-                                        <div class="list-box d-flex justify-content-between align-items-center">
-
-                                            <div>
-                                                <p class="detail-value fw-medium">
-                                                    Philips Healthcare
-                                                </p>
-
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                    Distribuidor-Fornecedor Comercial
-                                                </p>
-                                            </div>
-
-                                            <div class="text-end d-none d-sm-block">
-
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                    +351 210 000 002
-                                                </p>
-
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                    contacto@philips-saude.pt
-                                                </p>
+                                    <!-- TAB 4: GARANTIAS -->
+                                    <div class="tab-pane fade" id="garantias-pane" role="tabpanel" tabindex="0">
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Coberturas Ativas
+                                        </h5>
+                                        <div class="list-box list-box-light border-0 mt-3">
+                                            <div class="row row-cols-2 row-cols-md-4 g-3">
+                                                <div class="col">
+                                                    <p class="detail-label">Início</p>
+                                                    <p class="detail-value">15/01/2024</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="detail-label">Fim</p>
+                                                    <p class="detail-value">15/01/2027</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="detail-label">Tipo</p>
+                                                    <p class="detail-value">Full Service</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="detail-label">Manutenção</p>
+                                                    <p class="detail-value">Sim (Anual)</p>
+                                                </div>
+                                                <div class="col-12 mt-2">
+                                                    <p class="detail-label">Entidade Responsável</p>
+                                                    <p class="detail-value">Philips Healthcare</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </a>
-                                    <a href="#" class="text-decoration-none text-dark">
-                                        <div class="list-box d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <p class="detail-value fw-medium">
-                                                    MedServ - Assistência Técnica
-                                                </p>
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                    Empresa de Assistência Técnica
-                                                </p>
+                                    </div>
+
+                                    <!-- TAB 5: DOCUMENTOS -->
+                                    <div class="tab-pane fade" id="documentos-pane" role="tabpanel" tabindex="0">
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Ficheiros
+                                            Anexados</h5>
+                                        <div class="d-flex flex-column gap-2 mt-3">
+
+                                            <div
+                                                class="list-box list-box-light d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <p class="detail-value fw-medium">IntelliVue MX700 - Manual do
+                                                        Utilizador</p>
+                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">Manual
+                                                        de Utilizador — 01/01/2023</p>
+                                                </div>
+                                                <div class="text-end">
+                                                    <p class="text-muted custom-monospace small mb-0"
+                                                        style="font-size: 0.75rem;">intellivue_mx700_manual.pdf</p>
+                                                </div>
                                             </div>
-                                            <div class="text-end d-none d-sm-block">
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                    +351 210 000 004
-                                                </p>
 
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                    suporte@medserv.pt
-                                                </p>
+                                            <div class="list-box d-flex justify-content-between align-items-center"
+                                                style="background-color: rgba(254, 242, 242, 0.5); border-color: rgba(254, 202, 202, 0.5);">
+                                                <div>
+                                                    <p class="detail-value fw-medium">Certificado de Calibração -
+                                                        Monitor MX700</p>
+                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                        Certificado de Calibração — 01/06/2024</p>
+                                                </div>
+                                                <div class="text-end">
+                                                    <p class="text-danger fw-medium small mb-0"
+                                                        style="font-size: 0.75rem;">Validade: 01/06/2025 (Expirado)</p>
+                                                    <p class="text-muted custom-monospace small mb-0"
+                                                        style="font-size: 0.75rem;">calib_monitor_2024.pdf</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Garantias -->
-                        <div class="card dash-card">
-                            <div
-                                class="card-header border-0 bg-transparent pt-4 px-4 pb-3 d-flex align-items-center gap-2">
-                                <i class="fa-solid fa-shield-check text-muted" style="font-size: 1rem;"></i>
-                                <h6 class="card-title-custom mb-0">
-                                    Garantias e Contratos (1)
-                                </h6>
-                            </div>
-                            <div class="card-body px-4 pb-4 pt-0">
-                                <div class="list-box list-box-light border-0 mb-3">
-                                    <div class="row row-cols-2 row-cols-md-4 g-3">
-                                        <div class="col">
-                                            <p class="detail-label">Início</p>
-                                            <p class="detail-value">15/01/2024</p>
-                                        </div>
-                                        <div class="col">
-                                            <p class="detail-label">Fim</p>
-                                            <p class="detail-value">15/01/2027</p>
-                                        </div>
-                                        <div class="col">
-                                            <p class="detail-label">Contrato Manutenção</p>
-                                            <p class="detail-value">Sim</p>
-                                        </div>
-                                        <div class="col">
-                                            <p class="detail-label">Tipo</p>
-                                            <p class="detail-value">Full Service</p>
-                                        </div>
-                                        <div class="col mt-2">
-                                            <p class="detail-label">
-                                                Entidade Responsável
-                                            </p>
-                                            <p class="detail-value">
-                                                Philips Healthcare
-                                            </p>
-                                        </div>
-                                        <div class="col mt-2">
-                                            <p class="detail-label">Periodicidade</p>
-                                            <p class="detail-value">Anual</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Documentação -->
-                        <div class="card dash-card">
-                            <div
-                                class="card-header border-0 bg-transparent pt-4 px-4 pb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="fa-regular fa-file-lines text-muted" style="font-size: 1rem;"></i>
-                                    <h6 class="card-title-custom mb-0">
-                                        Documentação (3)
-                                    </h6>
-                                </div>
-                                <a href="../documentacao/lista.html" class="btn-action-custom py-1 px-3">
-                                    Gerir documentos
-                                </a>
-                            </div>
-                            <div class="card-body px-4 pb-4 pt-0">
-                                <div class="d-flex flex-column gap-2">
-                                    <div
-                                        class="list-box list-box-light d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <p class="detail-value fw-medium">
-                                                IntelliVue MX700 - Manual do Utilizador
-                                            </p>
-                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                Manual de Utilizador — 01/01/2023
-                                            </p>
-                                        </div>
-                                        <div class="text-end">
-                                            <p class="text-muted custom-monospace small mb-0"
-                                                style="font-size: 0.75rem;">
-                                                intellivue_mx700_manual_pt.pdf
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="list-box d-flex justify-content-between align-items-center"
-                                        style="background-color: rgba(254, 242, 242, 0.5); border-color: rgba(254, 202, 202, 0.5);">
 
-                                        <div>
-                                            <p class="detail-value fw-medium">
-                                                Certificado de Calibração - Monitor MX700
-                                            </p>
-                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                Certificado de Calibração — 01/06/2024
-                                            </p>
-                                        </div>
-                                        <div class="text-end">
-                                            <p class="text-danger fw-medium small mb-0" style="font-size: 0.75rem;">
-                                                Validade: 01/06/2025 (Expirado)
-                                            </p>
-                                            <p class="text-muted custom-monospace small mb-0"
-                                                style="font-size: 0.75rem;">
-                                                calib_monitor_mx700_2024.pdf
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="list-box list-box-light d-flex justify-content-between align-items-center">
-
-                                        <div>
-                                            <p class="detail-value fw-medium">
-                                                Contrato Full Service Philips 2024-2027
-                                            </p>
-
-                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                Contrato de Manutenção — 15/01/2024
-                                            </p>
-                                        </div>
-
-                                        <div class="text-end">
-
-                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                Validade: 15/01/2027
-                                            </p>
-
-                                            <p class="text-muted custom-monospace small mb-0"
-                                                style="font-size: 0.75rem;">
-                                                contrato_philips_2024.pdf
-                                            </p>
+                                            <div
+                                                class="list-box list-box-light d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <p class="detail-value fw-medium">Contrato Full Service Philips
+                                                        2024-2027</p>
+                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                        Contrato de Manutenção — 15/01/2024</p>
+                                                </div>
+                                                <div class="text-end">
+                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                        Validade: 15/01/2027</p>
+                                                    <p class="text-muted custom-monospace small mb-0"
+                                                        style="font-size: 0.75rem;">contrato_philips.pdf</p>
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
-                        <!-- Observações -->
-                        <div class="card dash-card">
-                            <div class="card-header border-0 bg-transparent pt-4 px-4 pb-3">
-                                <h6 class="card-title-custom">
-                                    Observações
-                                </h6>
-                            </div>
-                            <div class="card-body px-4 pb-4 pt-0">
-                                <p class="detail-value text-muted" style="font-size: 0.875rem;">
-                                    Monitor de UCI com 12 derivações ECG
-                                </p>
-                            </div>
-                        </div>
 
-                        <!-- Footer -->
-                        <div class="d-flex gap-4 text-muted mt-2 flex-wrap" style="font-size: 0.75rem;">
-
-                            <span>
-                                Criado: 16/04/2026
-                            </span>
-
-                            <span>
-                                Atualizado: 16/04/2026
-                            </span>
-
+                        <!-- Rodapé de Metadados -->
+                        <div class="d-flex gap-4 text-muted px-2" style="font-size: 0.75rem;">
+                            <span>Criado a: 16/04/2026</span>
+                            <span>Última atualização: 16/04/2026</span>
                         </div>
 
                     </div>
-
                 </div>
             </div>
         </div>

@@ -117,7 +117,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../conteudo/lista_conteudo.html"
+                    <a href="../conteudo/conteudo.html"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <i class="fa-regular fa-pen-to-square"></i>
                         <span class="fw-medium">
@@ -144,8 +144,9 @@
         </div>
     </aside>
 
-    <main class="flex-grow-1 overflow-auto p-4 p-md-5">
+<main class="flex-grow-1 overflow-auto p-4 p-md-5">
 
+        <!-- Cabeçalho Mobile -->
         <header class="d-md-none d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
             <div class="d-flex align-items-center gap-2">
                 <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
@@ -154,6 +155,7 @@
             <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
         </header>
 
+        <!-- Título da Página -->
         <div class="d-flex align-items-center gap-3 mb-4" style="max-width: 1024px;">
             <a href="lista_equi.html" class="btn btn-light border shadow-sm d-flex align-items-center justify-content-center"
                 style="width: 36px; height: 36px;">
@@ -165,217 +167,247 @@
             </div>
         </div>
 
-        <form action="#" method="POST" style="max-width: 1024px;">
+        <form action="lista_equi.html" method="GET" style="max-width: 1024px;">
 
-            <div class="card dash-card mb-4">
-                <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                    <h5 class="fw-semibold fs-6 mb-0 text-dark">Identificação</h5>
-                </div>
-                <div class="card-body p-4 pt-2">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="internalCode" class="form-label small fw-medium mb-1">Código Interno *</label>
-                            <input type="text" id="internalCode" name="internalCode" class="form-control shadow-sm"
-                                placeholder="EQ-2024-001" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="name" class="form-label small fw-medium mb-1">Designação *</label>
-                            <input type="text" id="name" name="name" class="form-control shadow-sm"
-                                placeholder="Monitor Multiparamétrico..." required>
-                        </div>
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label small fw-medium mb-1">Categoria *</label>
-                            <div class="dropdown">
-                                <button
-                                    class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                    data-bs-display="static">
-                                    <span>Selecionar categoria</span>
-                                </button>
-                                <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                    <li><a class="dropdown-item py-2" href="#">Monitorização</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Ventilação</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Infusão</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Cardiologia</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Diagnóstico por Imagem</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Laboratório</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Bloco Operatório</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Pediatria</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Esterilização</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Pneumologia</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Outro</a></li>
-                                </ul>
+            <!-- SEPARADORES (WIZARD STEPS) -->
+            <ul class="nav nav-tabs mb-4 border-bottom-0" id="equipamentoTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active text-dark fw-medium" id="step1-tab" data-bs-toggle="tab" data-bs-target="#step1-pane" type="button" role="tab" aria-selected="true">
+                        <span class="badge bg-brand text-white me-1 rounded-pill">1</span> Identificação
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-muted fw-medium" id="step2-tab" data-bs-toggle="tab" data-bs-target="#step2-pane" type="button" role="tab" aria-selected="false">
+                        <span class="badge bg-secondary text-white me-1 rounded-pill">2</span> Fabricante
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-muted fw-medium" id="step3-tab" data-bs-toggle="tab" data-bs-target="#step3-pane" type="button" role="tab" aria-selected="false">
+                        <span class="badge bg-secondary text-white me-1 rounded-pill">3</span> Aquisição
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-muted fw-medium" id="step4-tab" data-bs-toggle="tab" data-bs-target="#step4-pane" type="button" role="tab" aria-selected="false">
+                        <span class="badge bg-secondary text-white me-1 rounded-pill">4</span> Fornecedores
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-muted fw-medium" id="step5-tab" data-bs-toggle="tab" data-bs-target="#step5-pane" type="button" role="tab" aria-selected="false">
+                        <span class="badge bg-secondary text-white me-1 rounded-pill">5</span> Observações
+                    </button>
+                </li>
+            </ul>
+
+            <!-- CONTEÚDO DOS PASSOS -->
+            <div class="card dash-card mb-4 p-0">
+                <div class="tab-content" id="equipamentoTabsContent">
+                    
+                    <!-- PASSO 1: IDENTIFICAÇÃO -->
+                    <div class="tab-pane fade show active" id="step1-pane" role="tabpanel" tabindex="0">
+                        <div class="card-body p-4">
+                            <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Detalhes de Identificação</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-medium mb-1">Código Interno *</label>
+                                    <input type="text" name="internalCode" class="form-control shadow-sm" placeholder="EQ-2024-001" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-medium mb-1">Designação *</label>
+                                    <input type="text" name="name" class="form-control shadow-sm" placeholder="Monitor Multiparamétrico..." required>
+                                </div>
+                                <div class="col-md-6 position-relative">
+                                    <label class="form-label small fw-medium mb-1">Categoria *</label>
+                                    <div class="dropdown">
+                                        <button class="form-select text-start d-flex justify-content-between align-items-center shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                                            <span class="text-muted">Selecionar categoria</span>
+                                        </button>
+                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                            <li><a class="dropdown-item py-2" href="#">Monitorização</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Ventilação</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Infusão</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Diagnóstico por Imagem</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-medium mb-1">Número de Série *</label>
+                                    <input type="text" name="serialNumber" class="form-control shadow-sm" placeholder="SN-XXXX-0000" required>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="col-md-6">
-                            <label for="serialNumber" class="form-label small fw-medium mb-1">Número de Série *</label>
-                            <input type="text" id="serialNumber" name="serialNumber" class="form-control shadow-sm"
-                                placeholder="SN-XXXX-0000" required>
+                        <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                            <a href="lista_equi.html" class="btn btn-outline-secondary px-4">Cancelar</a>
+                            <button type="button" class="btn btn-brand px-4" data-bs-wizard-step="#step2-tab">
+                                Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="card dash-card mb-4">
-                <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                    <h5 class="fw-semibold fs-6 mb-0 text-dark">Fabricante e Modelo</h5>
-                </div>
-                <div class="card-body p-4 pt-2">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="brand" class="form-label small fw-medium mb-1">Marca *</label>
-                            <input type="text" id="brand" name="brand" class="form-control shadow-sm"
-                                placeholder="Philips" required>
+                    <!-- PASSO 2: FABRICANTE -->
+                    <div class="tab-pane fade" id="step2-pane" role="tabpanel" tabindex="0">
+                        <div class="card-body p-4">
+                            <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Detalhes do Fabricante e Modelo</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-medium mb-1">Marca *</label>
+                                    <input type="text" name="brand" class="form-control shadow-sm" placeholder="Ex: Philips" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-medium mb-1">Modelo *</label>
+                                    <input type="text" name="model" class="form-control shadow-sm" placeholder="Ex: IntelliVue MX700" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-medium mb-1">Fabricante *</label>
+                                    <input type="text" name="manufacturer" class="form-control shadow-sm" placeholder="Ex: Philips Healthcare" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-medium mb-1">Ano de Fabrico</label>
+                                    <input type="number" name="manufacturingYear" class="form-control shadow-sm" placeholder="2024" min="1900" max="2099">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="model" class="form-label small fw-medium mb-1">Modelo *</label>
-                            <input type="text" id="model" name="model" class="form-control shadow-sm"
-                                placeholder="IntelliVue MX700" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="manufacturer" class="form-label small fw-medium mb-1">Fabricante *</label>
-                            <input type="text" id="manufacturer" name="manufacturer" class="form-control shadow-sm"
-                                placeholder="Philips Healthcare" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="manufacturingYear" class="form-label small fw-medium mb-1">Ano de
-                                Fabrico</label>
-                            <input type="number" id="manufacturingYear" name="manufacturingYear"
-                                class="form-control shadow-sm" placeholder="2024" min="1900" max="2099">
+                        <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary px-4" data-bs-wizard-step="#step1-tab">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                            </button>
+                            <button type="button" class="btn btn-brand px-4" data-bs-wizard-step="#step3-tab">
+                                Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="card dash-card mb-4">
-                <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                    <h5 class="fw-semibold fs-6 mb-0 text-dark">Aquisição e Classificação</h5>
-                </div>
-                <div class="card-body p-4 pt-2">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="acquisitionDate" class="form-label small fw-medium mb-1">Data de
-                                Aquisição</label>
-                            <input type="date" id="acquisitionDate" name="acquisitionDate"
-                                class="form-control shadow-sm">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="acquisitionCost" class="form-label small fw-medium mb-1">Custo de Aquisição
-                                (EUR)</label>
-                            <input type="number" id="acquisitionCost" name="acquisitionCost"
-                                class="form-control shadow-sm" step="0.01" placeholder="0.00">
-                        </div>
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label small fw-medium mb-1">Tipo de Entrada *</label>
-                            <div class="dropdown">
-                                <button
-                                    class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                    data-bs-display="static">
-                                    <span>Compra</span>
-                                </button>
-                                <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                    <li><a class="dropdown-item py-2" href="#">Compra</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Doação</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Aluguer</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Empréstimo</a></li>
-                                </ul>
+                    <!-- PASSO 3: AQUISIÇÃO -->
+                    <div class="tab-pane fade" id="step3-pane" role="tabpanel" tabindex="0">
+                        <div class="card-body p-4">
+                            <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Detalhes de Aquisição e Classificação</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-medium mb-1">Data de Aquisição</label>
+                                    <input type="date" name="acquisitionDate" class="form-control shadow-sm">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-medium mb-1">Custo de Aquisição (EUR)</label>
+                                    <input type="number" name="acquisitionCost" class="form-control shadow-sm" step="0.01" placeholder="0.00">
+                                </div>
+                                <div class="col-md-6 position-relative">
+                                    <label class="form-label small fw-medium mb-1">Tipo de Entrada *</label>
+                                    <div class="dropdown">
+                                        <button class="form-select text-start d-flex justify-content-between align-items-center shadow-sm" type="button" data-bs-toggle="dropdown">
+                                            <span class="text-muted">Selecionar tipo</span>
+                                        </button>
+                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                            <li><a class="dropdown-item py-2" href="#">Compra</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Doação</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Aluguer</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 position-relative">
+                                    <label class="form-label small fw-medium mb-1">Estado Atual *</label>
+                                    <div class="dropdown">
+                                        <button class="form-select text-start d-flex justify-content-between align-items-center shadow-sm" type="button" data-bs-toggle="dropdown">
+                                            <span class="text-muted">Selecionar estado</span>
+                                        </button>
+                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                            <li><a class="dropdown-item py-2" href="#">Ativo</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Em manutenção</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Inativo</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 position-relative">
+                                    <label class="form-label small fw-medium mb-1">Criticidade Clínica *</label>
+                                    <div class="dropdown">
+                                        <button class="form-select text-start d-flex justify-content-between align-items-center shadow-sm" type="button" data-bs-toggle="dropdown">
+                                            <span class="text-muted">Selecionar criticidade</span>
+                                        </button>
+                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                            <li><a class="dropdown-item py-2" href="#">Baixa</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Média</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Alta</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">Suporte de vida</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 position-relative">
+                                    <label class="form-label small fw-medium mb-1">Localização Inicial</label>
+                                    <div class="dropdown">
+                                        <button class="form-select text-start d-flex justify-content-between align-items-center shadow-sm" type="button" data-bs-toggle="dropdown">
+                                            <span class="text-muted">Sem localização</span>
+                                        </button>
+                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                            <li><a class="dropdown-item py-2" href="#">Urgência — Edifício Principal (0º)</a></li>
+                                            <li><a class="dropdown-item py-2" href="#">UCI — Edifício Principal (1º)</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label small fw-medium mb-1">Estado Atual *</label>
-                            <div class="dropdown">
-                                <button
-                                    class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                    data-bs-display="static">
-                                    <span>Ativo</span>
-                                </button>
-                                <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                    <li><a class="dropdown-item py-2" href="#">Ativo</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Em manutenção</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Inativo</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Em calibração</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Em quarentena</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Abatido</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label small fw-medium mb-1">Criticidade Clínica *</label>
-                            <div class="dropdown">
-                                <button
-                                    class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                    data-bs-display="static">
-                                    <span>Baixa</span>
-                                </button>
-                                <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                    <li><a class="dropdown-item py-2" href="#">Baixa</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Média</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Alta</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Suporte de vida</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-6 position-relative">
-                            <label class="form-label small fw-medium mb-1">Localização</label>
-                            <div class="dropdown">
-                                <button
-                                    class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                    data-bs-display="static">
-                                    <span>Sem localização</span>
-                                </button>
-                                <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                    <li><a class="dropdown-item py-2" href="#">Bloco Operatório — Edifício Principal
-                                            (2º)</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Cardiologia — Edifício Principal (3º)</a>
-                                    </li>
-                                    <li><a class="dropdown-item py-2" href="#">Laboratório — Edifício C (0º)</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Pediatria — Edifício B (1º)</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Pneumologia — Edifício Principal (2º)</a>
-                                    </li>
-                                    <li><a class="dropdown-item py-2" href="#">Radiologia — Edifício B (0º)</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">UCI — Edifício Principal (1º)</a></li>
-                                    <li><a class="dropdown-item py-2" href="#">Urgência — Edifício Principal (0º)</a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary px-4" data-bs-wizard-step="#step2-tab">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                            </button>
+                            <button type="button" class="btn btn-brand px-4" data-bs-wizard-step="#step4-tab">
+                                Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </button>
                         </div>
                     </div>
+
+                    <!-- PASSO 4: FORNECEDORES -->
+                    <div class="tab-pane fade" id="step4-pane" role="tabpanel" tabindex="0">
+                        <div class="card-body p-4">
+                            <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Fornecedores Associados</h5>
+                            <p class="text-muted small mb-0"><i class="fa-solid fa-circle-info me-1 text-primary"></i> Pode associar fornecedores a este equipamento mais tarde, após a sua criação.</p>
+                        </div>
+                        <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary px-4" data-bs-wizard-step="#step3-tab">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                            </button>
+                            <button type="button" class="btn btn-brand px-4" data-bs-wizard-step="#step5-tab">
+                                Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PASSO 5: OBSERVAÇÕES -->
+                    <div class="tab-pane fade" id="step5-pane" role="tabpanel" tabindex="0">
+                        <div class="card-body p-4">
+                            <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Notas e Observações</h5>
+                            <textarea name="observations" class="form-control shadow-sm" rows="6" placeholder="Insira notas adicionais sobre o equipamento, detalhes de instalação, ou informações relevantes..."></textarea>
+                        </div>
+                        <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary px-4" data-bs-wizard-step="#step4-tab">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                            </button>
+                            
+                            <!-- BOTÃO FINAL AQUI -->
+                            <button type="submit" class="btn btn-brand px-4 shadow-sm fw-bold">
+                                <i class="fa-solid fa-save me-1"></i> Registar Equipamento
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
-            <div class="card dash-card mb-4">
-                <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                    <h5 class="fw-semibold fs-6 mb-0 text-dark">Fornecedores Associados</h5>
-                </div>
-                <div class="card-body p-4 pt-2">
-                    <p class="text-muted small mb-0">Esta secção estará disponível após guardar o equipamento.</p>
-                </div>
-            </div>
-
-            <div class="card dash-card mb-4">
-                <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                    <h5 class="fw-semibold fs-6 mb-0 text-dark">Observações</h5>
-                </div>
-                <div class="card-body p-4 pt-2">
-                    <textarea name="observations" class="form-control shadow-sm" rows="3"
-                        placeholder="Notas adicionais sobre o equipamento..."></textarea>
-                </div>
-            </div>
-
-            <div class="d-flex gap-3 mb-5">
-                <button type="submit" class="btn btn-brand d-inline-flex align-items-center gap-2 px-4 shadow-sm">
-                    <i class="fa-solid fa-save"></i> Registar Equipamento
-                </button>
-                <a href="lista_equi.html" class="btn btn-light border px-4 hover-elevate">Cancelar</a>
-            </div>
-
         </form>
     </main>
+
+    <!-- JS DO WIZARD -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Script para permitir que os botões "Próximo" e "Anterior" mudem a aba selecionada no topo
+            document.querySelectorAll('[data-bs-wizard-step]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTabId = this.getAttribute('data-bs-wizard-step');
+                    const targetTabElement = document.querySelector(targetTabId);
+                    if (targetTabElement) {
+                        const tab = new bootstrap.Tab(targetTabElement);
+                        tab.show();
+                    }
+                });
+            });
+        });
+    </script>
 
     <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../../assets/js/1231184.js"></script>
