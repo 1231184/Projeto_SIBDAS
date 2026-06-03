@@ -23,7 +23,7 @@
         <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
             <ul class="nav flex-column gap-1">
                 <li class="nav-item">
-                    <a href="../dashboard.html" class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                    <a href="../dashboard/dashboard.html" class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="7" height="9" x="3" y="3" rx="1"></rect>
@@ -146,472 +146,608 @@
 
     <main class="flex-grow-1 overflow-auto p-4 p-md-5">
 
-        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
-            <div>
-                <h1 class="h3 fw-bold text-dark mb-1">Fornecedores</h1>
-                <p class="text-muted small mb-0">
-                    Fabricantes, distribuidores e prestadores de serviços
-                </p>
+        <header class="d-md-none d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
+                <h1 class="h5 fw-bold mb-0 text-dark">MedStock</h1>
             </div>
-            <button class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal"
-                data-bs-target="#modalNovoFornecedor">
-                <i class="fa-solid fa-plus"></i> Novo Fornecedor
-            </button>
+            <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
+        </header>
+
+        <div id="view-lista" class="fornecedor-view">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+                <div>
+                    <h1 class="h3 fw-bold text-dark mb-1">Fornecedores</h1>
+                    <p class="text-muted small mb-0">8 fornecedores registados</p>
+                </div>
+                <button class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm fw-bold"
+                    data-bs-toggle="modal" data-bs-target="#modalNovoFornecedor">
+                    <i class="fa-solid fa-plus fs-6"></i> Novo Fornecedor
+                </button>
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+                <div class="position-relative flex-grow-1" style="max-width: 350px;">
+                    <i class="fa-solid fa-magnifying-glass position-absolute text-muted"
+                        style="left: 14px; top: 50%; transform: translateY(-50%);"></i>
+                    <input type="text" class="form-control ps-5 shadow-sm border-0"
+                        placeholder="Pesquisar por nome ou contacto..."
+                        style="border-radius: 9px; padding-top: 10px; padding-bottom: 10px;">
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <button class="btn-filter active">Todos</button>
+                    <button class="btn-filter">Fabricante</button>
+                    <button class="btn-filter">Assistência Técnica</button>
+                    <button class="btn-filter">Distribuidor</button>
+                    <button class="btn-filter">Consumíveis</button>
+                </div>
+            </div>
+
+            <div class="card dash-card border-0 shadow-sm overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Fornecedor</th>
+                                <th class="px-3 py-3 text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Tipo</th>
+                                <th class="px-3 py-3 text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Pessoa de Contacto</th>
+                                <th class="px-3 py-3 text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Contacto</th>
+                                <th class="px-3 py-3 text-muted text-uppercase text-center"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Equipamentos</th>
+                                <th class="px-4 py-3 text-muted text-uppercase text-end"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td class="px-4 py-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div>
+                                            <div class="fw-bold text-dark small mb-0">Dräger Portugal</div>
+                                            <div class="text-muted" style="font-size: 0.7rem;">NIF: 500 123 456</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-3 py-3">
+                                    <span class="badge-tipo badge-fabricante"><span class="dot"></span>Fabricante</span>
+                                </td>
+                                <td class="px-3 py-3 fw-medium text-dark small">Ana Ferreira</td>
+                                <td class="px-3 py-3">
+                                    <div class="text-dark fw-medium small">+351 210 000 111</div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">ana.ferreira@drager.pt</div>
+                                </td>
+                                <td class="px-3 py-3 text-center">
+                                    <span class="badge bg-brand-subtle text-brand fw-bold px-2 py-1 fs-6">12</span>
+                                </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button class="btn btn-sm btn-brand-subtle text-brand fw-semibold shadow-none"
+                                            onclick="abrirDetalhe('Dräger Portugal', 'badge-fabricante', 'Fabricante')">Ver
+                                        </button>
+                                        <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                            data-bs-toggle="modal" data-bs-target="#modalRemoverFornecedor"><i
+                                                class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="px-4 py-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div>
+                                            <div class="fw-bold text-dark small mb-0">MedServ Técnica</div>
+                                            <div class="text-muted" style="font-size: 0.7rem;">NIF: 500 345 678</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-3 py-3">
+                                    <span class="badge-tipo badge-assistencia"><span class="dot"></span>Assistência
+                                        Técnica</span>
+                                </td>
+                                <td class="px-3 py-3 fw-medium text-dark small">Carlos Sousa</td>
+                                <td class="px-3 py-3">
+                                    <div class="text-dark fw-medium small">+351 220 000 333</div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">carlos@medserv.pt</div>
+                                </td>
+                                <td class="px-3 py-3 text-center">
+                                    <span class="badge bg-brand-subtle text-brand fw-bold px-2 py-1 fs-6">27</span>
+                                </td>
+                                <td class="px-4 py-3 text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button class="btn btn-sm btn-brand-subtle text-brand fw-semibold shadow-none"
+                                            onclick="abrirDetalhe('MedServ Técnica', 'badge-assistencia', 'Assistência Técnica')">Ver
+                                        </button>
+                                        <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                            data-bs-toggle="modal" data-bs-target="#modalRemoverFornecedor"><i
+                                                class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <div class="dash-card">
-            <div class="table-responsive">
-                <table class="table table-custom mb-0">
-                    <thead>
-                        <tr class="table-header-row">
-                            <th class="px-2 py-2 border-0">Nome</th>
-                            <th class="px-2 py-2 border-0">Tipo</th>
-                            <th class="px-2 py-2 border-0">Contacto</th>
-                            <th class="px-2 py-2 border-0">Email</th>
-                            <th class="px-2 py-2 border-0">Telefone</th>
-                            <th class="px-2 py-2 border-0 text-center">Equipamentos</th>
-                            <th class="px-2 py-2 border-0 text-end">Ações</th>
-                        </tr>
-                    </thead>
 
-                    <tbody>
+        <div id="view-detalhe" class="fornecedor-view d-none">
 
-                        <tr>
-                            <td class="px-2 py-2 fw-medium small">
-                                BD Medical Portugal
-                            </td>
-
-                            <td class="px-2 py-2">
-                                <span class="badge border text-dark fw-semibold px-2 py-1">
-                                    Fornecedor de Consumíveis
-                                </span>
-                            </td>
-
-                            <td class="px-2 py-2 text-muted small">
-                                Marta Alves
-                            </td>
-
-                            <td class="px-2 py-2">
-                                <a href="#" class="text-decoration-none text-brand small">
-                                    <i class="fa-regular fa-envelope me-1"></i>
-                                    bd@bdmed.pt
-                                </a>
-                            </td>
-
-                            <td class="px-2 py-2 text-brand small">
-                                <i class="fa-solid fa-phone me-1"></i>
-                                +351 210 000 005
-                            </td>
-
-                            <td class="px-2 py-2 text-center fw-medium">
-                                1
-                            </td>
-
-                            <td class="px-2 py-2 text-end">
-                                <div class="d-flex align-items-center justify-content-end gap-1">
-
-                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditarFornecedor">
-
-                                        <i class="fas fa-pencil fa-sm"></i>
-
-                                    </button>
-
-                                    <button class="btn-action text-danger border-0 bg-transparent"
-                                        data-bs-toggle="modal" data-bs-target="#modalRemoverFornecedor">
-
-                                        <i class="fa-regular fa-trash-can"></i>
-
-                                    </button>
-
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="px-2 py-3 fw-medium small">
-                                Dräger Portugal
-                            </td>
-
-                            <td class="px-2 py-3">
-                                <span class="badge border text-dark fw-semibold px-2 py-1">
-                                    Fabricante
-                                </span>
-                            </td>
-
-                            <td class="px-2 py-3 text-muted small">
-                                Carlos Oliveira
-                            </td>
-
-                            <td class="px-2 py-3">
-                                <a href="#" class="text-decoration-none text-brand small">
-                                    <i class="fa-regular fa-envelope me-1"></i>
-                                    saude@draeger.pt
-                                </a>
-                            </td>
-
-                            <td class="px-2 py-3 text-brand small">
-                                <i class="fa-solid fa-phone me-1"></i>
-                                +351 210 000 003
-                            </td>
-
-                            <td class="px-2 py-3 text-center fw-medium">
-                                1
-                            </td>
-
-                            <td class="px-2 py-3 text-end">
-                                <div class="d-flex align-items-center justify-content-end gap-1">
-
-                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditarFornecedor">
-
-                                        <i class="fas fa-pencil fa-sm"></i>
-
-                                    </button>
-
-                                    <button class="btn-action text-danger border-0 bg-transparent"
-                                        data-bs-toggle="modal" data-bs-target="#modalRemoverFornecedor">
-
-                                        <i class="fa-regular fa-trash-can"></i>
-
-                                    </button>
-
-                                </div>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
+            <div class="d-flex flex-column flex-md-row align-items-md-start justify-content-between mb-4 gap-3">
+                <div>
+                    <button
+                        class="btn btn-sm btn-light border text-muted fw-semibold shadow-none mb-3 d-inline-flex align-items-center gap-2"
+                        onclick="voltarLista()">
+                        <i class="fa-solid fa-arrow-left"></i> Voltar à Lista
+                    </button>
+                    <h1 class="h3 fw-bold text-dark mb-1" id="detalhe-nome">Nome do Fornecedor</h1>
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <span class="text-muted small">Ficha de Fornecedor</span>
+                        <span class="text-muted small">&bull;</span>
+                        <span id="detalhe-badge-container"></span>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-2 mt-md-0">
+                    <button class="btn btn-light border shadow-sm text-dark fw-medium" data-bs-toggle="modal"
+                        data-bs-target="#modalEditarFornecedor"><i class="fa-solid fa-pencil me-1"></i> Editar</button>
+                    <button class="btn btn-outline-danger border-0 bg-danger bg-opacity-10 shadow-sm fw-medium"
+                        data-bs-toggle="modal" data-bs-target="#modalRemoverFornecedor"><i
+                            class="fa-solid fa-trash-can me-1"></i> Remover</button>
+                </div>
             </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-lg-6">
+                    <div class="card dash-card border-0 shadow-sm h-100 p-4">
+                        <h6 class="fw-bold text-dark mb-4"><i class="fa-solid fa-building me-2 text-brand"></i>
+                            Informação Geral</h6>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex gap-3">
+                                <i class="fa-regular fa-id-card text-muted mt-1"></i>
+                                <div>
+                                    <div class="small text-muted fw-semibold text-uppercase"
+                                        style="font-size: 0.65rem;">NIF</div>
+                                    <div class="text-dark fw-medium small">500 123 456</div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-3">
+                                <i class="fa-solid fa-location-dot text-muted mt-1"></i>
+                                <div>
+                                    <div class="small text-muted fw-semibold text-uppercase"
+                                        style="font-size: 0.65rem;">Morada</div>
+                                    <div class="text-dark fw-medium small">Av. da Liberdade, 110, Lisboa</div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-3">
+                                <i class="fa-solid fa-globe text-muted mt-1"></i>
+                                <div>
+                                    <div class="small text-muted fw-semibold text-uppercase"
+                                        style="font-size: 0.65rem;">Website</div>
+                                    <a href="#"
+                                        class="text-brand fw-medium small text-decoration-none">www.drager.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card dash-card border-0 shadow-sm h-100 p-4">
+                        <h6 class="fw-bold text-dark mb-4"><i class="fa-solid fa-user me-2 text-brand"></i> Pessoa de
+                            Contacto</h6>
+
+                        <div class="d-flex align-items-center gap-3 bg-light rounded-3 p-3 mb-3 border">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-brand text-white fw-bold fs-5 flex-shrink-0"
+                                style="width: 46px; height: 46px;">
+                                A
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark">Ana Ferreira</div>
+                                <div class="text-muted small">Gestora de Conta / Responsável</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column gap-3 px-1">
+                            <div class="d-flex gap-3 align-items-center">
+                                <i class="fa-solid fa-phone text-muted"></i>
+                                <div class="text-dark fw-medium small">+351 210 000 111</div>
+                            </div>
+                            <div class="d-flex gap-3 align-items-center">
+                                <i class="fa-solid fa-envelope text-muted"></i>
+                                <div class="text-dark fw-medium small">ana.ferreira@drager.pt</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card dash-card border-0 shadow-sm p-4 mb-4">
+                <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-file-lines me-2 text-brand"></i> Notas e
+                    Observações</h6>
+                <p class="text-muted small mb-0 lh-lg">Fabricante oficial de ventiladores e monitores de sinais vitais.
+                    Contrato de suporte premium ativo até ao final de 2026. Prioridade máxima em pedidos de assistência
+                    para equipamentos de suporte de vida localizados na UCI.</p>
+            </div>
+
+            <h6 class="fw-bold text-dark mb-3 mt-4"><i class="fa-solid fa-box-open me-2 text-brand"></i> Equipamentos
+                Associados <span class="badge bg-brand-subtle text-brand ms-2">12</span></h6>
+            <div class="card dash-card border-0 shadow-sm overflow-hidden mb-5">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3 text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Código</th>
+                                <th class="px-3 py-3 text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Equipamento</th>
+                                <th class="px-3 py-3 text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Localização</th>
+                                <th class="px-3 py-3 text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;">Estado</th>
+                                <th class="px-4 py-3 text-muted text-uppercase text-end"
+                                    style="font-size: 0.7rem; letter-spacing: 0.5px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="px-4 py-3 text-brand fw-bold small">EQ-0042</td>
+                                <td class="px-3 py-3 fw-medium text-dark small">Ventilador Pulmonar Evita V500</td>
+                                <td class="px-3 py-3 text-muted small">UCI — Piso 1</td>
+                                <td class="px-3 py-3"><span class="badge badge-soft-success">Ativo</span></td>
+                                <td class="px-4 py-3 text-end"><a href="../equipamentos/lista_equi.html"
+                                        class="text-brand text-decoration-none small fw-semibold">Ver ficha &rarr;</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 text-brand fw-bold small">EQ-0043</td>
+                                <td class="px-3 py-3 fw-medium text-dark small">Ventilador Pulmonar Evita V300</td>
+                                <td class="px-3 py-3 text-muted small">Bloco Operatório</td>
+                                <td class="px-3 py-3"><span class="badge badge-soft-success">Ativo</span></td>
+                                <td class="px-4 py-3 text-end"><a href="../equipamentos/lista_equi.html"
+                                        class="text-brand text-decoration-none small fw-semibold">Ver ficha &rarr;</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </main>
 
-    <!-- Modal Novo Fornecedor -->
-    <div class="modal fade" id="modalNovoFornecedor" tabindex="-1">
-
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-
-                <div class="modal-header border-0 px-4 pt-4 pb-2">
-
-                    <div class="d-flex align-items-center gap-2">
-
-                        <i class="fa-regular fa-building text-brand fs-4"></i>
-
-                        <h5 class="modal-title fw-bold mb-0">
-                            Novo Fornecedor
-                        </h5>
-
+    <!-- MODAL NOVO FORNECEDOR -->
+    <div class="modal fade" id="modalNovoFornecedor" tabindex="-1" aria-labelledby="modalNovoFornecedorLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg bg-backend">
+                
+                <div class="modal-header border-bottom px-4 py-3 bg-white">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center bg-brand-subtle text-brand" style="width: 42px; height: 42px; font-size: 1.25rem;">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold text-dark mb-0" id="modalNovoFornecedorLabel">Novo Fornecedor</h5>
+                            <p class="text-muted small mb-0 mt-1">Registe uma nova entidade no sistema</p>
+                        </div>
                     </div>
-
-                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
-
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
 
-                <div class="modal-body px-4 pt-2 pb-4">
-
+                <div class="modal-body p-4">
                     <form id="formNovoFornecedor">
+                        
+                        <!-- SEPARADORES -->
+                        <ul class="nav nav-tabs mb-4 border-bottom-0" id="novoFornecedorTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active text-dark fw-medium" id="nf-step1-tab" data-bs-toggle="tab" data-bs-target="#nf-step1-pane" type="button" role="tab" aria-selected="true">
+                                    <span class="badge bg-brand text-white me-1 rounded-pill">1</span> Empresa
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="nf-step2-tab" data-bs-toggle="tab" data-bs-target="#nf-step2-pane" type="button" role="tab" aria-selected="false">
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">2</span> Contactos
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="nf-step3-tab" data-bs-toggle="tab" data-bs-target="#nf-step3-pane" type="button" role="tab" aria-selected="false">
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">3</span> Observações
+                                </button>
+                            </li>
+                        </ul>
 
-                        <div class="mb-3">
+                        <!-- CONTEÚDO DOS PASSOS -->
+                        <div class="card dash-card mb-0 p-0 border-0 shadow-none">
+                            <div class="tab-content" id="novoFornecedorTabsContent">
+                                
+                                <!-- PASSO 1: EMPRESA -->
+                                <div class="tab-pane fade show active" id="nf-step1-pane" role="tabpanel" tabindex="0">
+                                    <div class="card-body p-0 pb-4">
+                                        <div class="row g-3">
+                                            <div class="col-md-8">
+                                                <label class="form-label fw-medium small mb-1">Nome da Empresa *</label>
+                                                <input type="text" class="form-control shadow-sm" placeholder="Ex: Philips Healthcare Portugal" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label fw-medium small mb-1">NIF</label>
+                                                <input type="text" class="form-control shadow-sm" placeholder="Ex: 500000000">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-medium small mb-1">Tipo de Fornecedor *</label>
+                                                <select class="form-select shadow-sm text-dark" required>
+                                                    <option value="" selected disabled>Selecione um tipo...</option>
+                                                    <option value="Fabricante">Fabricante</option>
+                                                    <option value="Assistência Técnica">Assistência Técnica</option>
+                                                    <option value="Distribuidor">Distribuidor</option>
+                                                    <option value="Consumíveis">Consumíveis</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 border-top d-flex justify-content-between mx-n4 mb-n4 bg-light rounded-bottom">
+                                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-brand px-4" data-bs-wizard-step="#nf-step2-tab">
+                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                                        </button>
+                                    </div>
+                                </div>
 
-                            <label class="form-label fw-medium">
-                                Nome *
-                            </label>
+                                <!-- PASSO 2: CONTACTOS E MORADA -->
+                                <div class="tab-pane fade" id="nf-step2-pane" role="tabpanel" tabindex="0">
+                                    <div class="card-body p-0 pb-4">
+                                        <div class="row g-3">
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-medium small mb-1">Pessoa de Contacto</label>
+                                                <input type="text" class="form-control shadow-sm" placeholder="Ex: João Silva">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-medium small mb-1">Telefone</label>
+                                                <input type="text" class="form-control shadow-sm" placeholder="Ex: +351 210 000 000">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label fw-medium small mb-1">Email</label>
+                                                <input type="email" class="form-control shadow-sm" placeholder="Ex: contacto@empresa.pt">
+                                            </div>
+                                            <div class="col-md-12 mt-4">
+                                                <label class="form-label fw-medium small mb-1">Morada</label>
+                                                <input type="text" class="form-control shadow-sm" placeholder="Ex: Rua Principal 1, 1000-001 Lisboa">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label fw-medium small mb-1">Website</label>
+                                                <input type="text" class="form-control shadow-sm" placeholder="Ex: www.empresa.pt">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 border-top d-flex justify-content-between mx-n4 mb-n4 bg-light rounded-bottom">
+                                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-wizard-step="#nf-step1-tab">
+                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                                        </button>
+                                        <button type="button" class="btn btn-brand px-4" data-bs-wizard-step="#nf-step3-tab">
+                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                                        </button>
+                                    </div>
+                                </div>
 
-                            <input type="text" class="form-control shadow-sm" placeholder="Philips Healthcare Portugal">
-
-                        </div>
-
-                        <div class="row g-3">
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-medium">
-                                    Tipo *
-                                </label>
-
-                                <select class="form-select shadow-sm">
-
-                                    <option>Distribuidor</option>
-                                    <option>Fabricante</option>
-                                    <option>Assistência Técnica</option>
-
-                                </select>
+                                <!-- PASSO 3: OBSERVAÇÕES -->
+                                <div class="tab-pane fade" id="nf-step3-pane" role="tabpanel" tabindex="0">
+                                    <div class="card-body p-0 pb-4">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-medium small mb-1">Notas / Observações</label>
+                                            <textarea class="form-control shadow-sm" rows="6" placeholder="Observações adicionais, detalhes de contrato, etc..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 border-top d-flex justify-content-between mx-n4 mb-n4 bg-light rounded-bottom">
+                                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-wizard-step="#nf-step2-tab">
+                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                                        </button>
+                                        <button type="submit" class="btn btn-brand px-4 shadow-sm fw-bold">
+                                            <i class="fa-solid fa-save me-1"></i> Criar Fornecedor
+                                        </button>
+                                    </div>
+                                </div>
 
                             </div>
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-medium">
-                                    NIF
-                                </label>
-
-                                <input type="text" class="form-control shadow-sm" placeholder="500000000">
-
-                            </div>
-
-                        </div>
-
-                        <div class="row g-3 mt-1">
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-medium">
-                                    Pessoa de Contacto
-                                </label>
-
-                                <input type="text" class="form-control shadow-sm" placeholder="João Silva">
-
-                            </div>
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-medium">
-                                    Telefone
-                                </label>
-
-                                <input type="text" class="form-control shadow-sm" placeholder="+351 210 000 000">
-
-                            </div>
-
-                        </div>
-
-                        <div class="row g-3 mt-1">
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-medium">
-                                    Email
-                                </label>
-
-                                <input type="email" class="form-control shadow-sm" placeholder="contacto@empresa.pt">
-
-                            </div>
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-medium">
-                                    Website
-                                </label>
-
-                                <input type="text" class="form-control shadow-sm" placeholder="https://empresa.pt">
-
-                            </div>
-
-                        </div>
-
-                        <div class="mt-3">
-
-                            <label class="form-label fw-medium">
-                                Morada
-                            </label>
-
-                            <input type="text" class="form-control shadow-sm"
-                                placeholder="Rua Principal 1, 1000-001 Lisboa">
-
-                        </div>
-
-                        <div class="mt-3">
-
-                            <label class="form-label fw-medium">
-                                Notas
-                            </label>
-
-                            <textarea class="form-control shadow-sm" rows="3"
-                                placeholder="Observações adicionais..."></textarea>
-
                         </div>
 
                     </form>
-
                 </div>
-
-                <div class="modal-footer border-0 px-4 pb-4 pt-0">
-
-                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">
-
-                        Cancelar
-
-                    </button>
-
-                    <button type="submit" form="formNovoFornecedor" class="btn btn-brand px-4">
-
-                        Criar Fornecedor
-
-                    </button>
-
-                </div>
-
             </div>
         </div>
     </div>
 
-    <!-- Modal Editar Fornecedor -->
-    <div class="modal fade" id="modalEditarFornecedor" tabindex="-1">
-
-        <div class="modal-dialog modal-dialog-centered">
+    <!-- MODAL EDITAR FORNECEDOR -->
+    <div class="modal fade" id="modalEditarFornecedor" tabindex="-1" aria-labelledby="modalEditarFornecedorLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
 
                 <div class="modal-header border-0 px-4 pt-4 pb-2">
-
-                    <div class="d-flex align-items-center gap-2">
-
-                        <i class="fa-regular fa-building text-brand fs-4"></i>
-
-                        <h5 class="modal-title fw-bold mb-0">
-                            Editar Fornecedor
-                        </h5>
-
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center bg-brand-subtle text-brand"
+                            style="width: 42px; height: 42px; font-size: 1.25rem;">
+                            <i class="fa-solid fa-pen"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title fw-bold text-dark mb-0" id="modalEditarFornecedorLabel">Editar
+                                Fornecedor</h5>
+                            <p class="text-muted small mb-0 mt-1">Atualize os dados da entidade selecionada</p>
+                        </div>
                     </div>
-
-                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
-
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
                 </div>
 
-                <div class="modal-body px-4 pt-2 pb-4">
-
+                <div class="modal-body px-4 pt-3 pb-4">
                     <form id="formEditarFornecedor">
 
-                        <div class="mb-3">
-
-                            <label class="form-label fw-medium">
-                                Nome *
-                            </label>
-
-                            <input type="text" class="form-control shadow-sm" placeholder="Philips Healthcare Portugal">
-
-                        </div>
-
-                        <div class="row g-3">
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-medium">
-                                    Tipo *
-                                </label>
-
-                                <select class="form-select shadow-sm">
-
-                                    <option>Distribuidor</option>
-                                    <option>Fabricante</option>
-                                    <option>Assistência Técnica</option>
-
-                                </select>
-
+                        <!-- Dados da Empresa -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label fw-medium small mb-1">Nome da Empresa *</label>
+                                <input type="text" class="form-control shadow-sm" value="Dräger Portugal" required>
                             </div>
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-medium">
-                                    NIF
-                                </label>
-
-                                <input type="text" class="form-control shadow-sm" placeholder="500000000">
-
-                            </div>
-
-                        </div>
-
-                        <div class="row g-3 mt-1">
-
-                            <div class="col-md-6">
-
-                                <label class="form-label fw-medium">
-                                    Pessoa de Contacto
-                                </label>
-
-                                <input type="text" class="form-control shadow-sm" placeholder="João Silva">
-
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-medium">
-                                    Telefone
-                                </label>
-                                <input type="text" class="form-control shadow-sm" placeholder="+351 210 000 000">
+                            <div class="col-md-4">
+                                <label class="form-label fw-medium small mb-1">NIF</label>
+                                <input type="text" class="form-control shadow-sm" value="500 123 456">
                             </div>
                         </div>
-                        <div class="row g-3 mt-1">
 
-                            <div class="col-md-6">
+                        <div class="mb-4">
+                            <label class="form-label fw-medium small mb-1">Tipo de Fornecedor *</label>
+                            <select class="form-select shadow-sm text-dark">
+                                <option value="Fabricante" selected>Fabricante</option>
+                                <option value="Assistência Técnica">Assistência Técnica</option>
+                                <option value="Distribuidor">Distribuidor</option>
+                                <option value="Consumíveis">Consumíveis</option>
+                            </select>
+                        </div>
 
-                                <label class="form-label fw-medium">
-                                    Email
-                                </label>
-
-                                <input type="email" class="form-control shadow-sm" placeholder="contacto@empresa.pt">
+                        <!-- Agrupamento de Contactos -->
+                        <div class="p-3 bg-light rounded-3 border mb-3">
+                            <p class="fw-semibold text-dark mb-3 small"><i
+                                    class="fa-solid fa-address-book me-1 text-brand"></i> Dados de Contacto</p>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label class="form-label fw-medium small mb-1 text-muted">Pessoa de Contacto</label>
+                                    <input type="text" class="form-control shadow-sm" value="Ana Ferreira">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-medium small mb-1 text-muted">Telefone</label>
+                                    <input type="text" class="form-control shadow-sm" value="+351 210 000 111">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-medium small mb-1 text-muted">Email</label>
+                                    <input type="email" class="form-control shadow-sm" value="ana.ferreira@drager.pt">
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-medium">
-                                    Website
-                                </label>
-                                <input type="text" class="form-control shadow-sm" placeholder="https://empresa.pt">
+                        </div>
+
+                        <!-- Localização e Extra -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-medium small mb-1">Morada</label>
+                                <input type="text" class="form-control shadow-sm" value="Av. da Liberdade, 110, Lisboa">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-medium small mb-1">Website</label>
+                                <input type="text" class="form-control shadow-sm" value="www.drager.com">
                             </div>
                         </div>
-                        <div class="mt-3">
-                            <label class="form-label fw-medium">
-                                Morada
-                            </label>
 
-                            <input type="text" class="form-control shadow-sm"
-                                placeholder="Rua Principal 1, 1000-001 Lisboa">
+                        <div class="mb-1">
+                            <label class="form-label fw-medium small mb-1">Notas / Observações</label>
+                            <textarea class="form-control shadow-sm"
+                                rows="2">Fabricante oficial de ventiladores e monitores. Contrato de suporte premium ativo até ao final de 2026.</textarea>
                         </div>
 
-                        <div class="mt-3">
-                            <label class="form-label fw-medium">
-                                Notas
-                            </label>
-                            <textarea class="form-control shadow-sm" rows="3"
-                                placeholder="Observações adicionais..."></textarea>
-                        </div>
                     </form>
                 </div>
+
                 <div class="modal-footer border-0 px-4 pb-4 pt-0">
-                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">
-                        Cancelar
-                    </button>
-                    <button type="submit" form="formEditarFornecedor" class="btn btn-brand px-4">
-                        Guardar Alterações
-                    </button>
+                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="formEditarFornecedor"
+                        class="btn btn-brand px-4 shadow-sm fw-bold">Guardar Alterações</button>
                 </div>
+
             </div>
         </div>
     </div>
-    <!-- Modal Remover Fornecedor -->
-    <div class="modal fade" id="modalRemoverFornecedor" tabindex="-1">
+
+    <!-- MODAL REMOVER FORNECEDOR -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalRemoverFornecedor" tabindex="-1" aria-labelledby="modalRemoverFornecedorLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header border-0 px-4 pt-4 pb-0">
-                    <h5 class="modal-title fw-bold text-dark">
-                        Remover fornecedor?
-                    </h5>
 
-                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
+                <div class="modal-header border-0 px-4 pt-4 pb-0">
+                    <h5 class="modal-title fw-bold text-dark" id="modalRemoverFornecedorLabel">
+                        <i class="fa-solid fa-triangle-exclamation text-danger me-2"></i> Remover Fornecedor?
+                    </h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
                 </div>
+
                 <div class="modal-body px-4 pt-3 pb-4">
                     <p class="text-muted mb-0" style="font-size: 1.05rem; line-height: 1.6;">
-
-                        Vai remover
-                        <span class="fw-semibold text-dark">
-                            "BD Medical Portugal"
-                        </span>.
-                        Esta ação não é reversível.
+                        Está prestes a remover o fornecedor <span class="fw-semibold text-dark">"Dräger
+                            Portugal"</span>.
                     </p>
+                    <!-- Alerta de Segurança (Exemplo de impedimento) -->
+                    <div class="alert alert-danger mt-3 mb-0 border-0 bg-danger bg-opacity-10 text-danger d-flex gap-2 align-items-start"
+                        style="font-size: 0.85rem;">
+                        <i class="fa-solid fa-circle-info mt-1"></i>
+                        <div>
+                            <strong>Atenção:</strong> Não é possível remover este fornecedor porque existem <strong>12
+                                equipamentos</strong> associados a ele no inventário. Deve primeiro reatribuir ou abater
+                            esses equipamentos.
+                        </div>
+                    </div>
                 </div>
+
                 <div class="modal-footer border-0 px-4 pb-4 pt-0">
-                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">
-                        Cancelar
-                    </button>
-                    <button type="button" class="btn btn-danger px-4">
-                        Remover
-                    </button>
+                    <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <!-- Botão desativado para ilustrar a lógica de negócio -->
+                    <button type="button" class="btn btn-danger px-4 fw-bold shadow-sm" disabled>Remover
+                        Fornecedor</button>
                 </div>
+
             </div>
         </div>
     </div>
+
+    <script>
+        function abrirDetalhe(nomeFornecedor, classeBadge, textoBadge) {
+            // Esconde a lista e mostra o detalhe
+            document.getElementById('view-lista').classList.add('d-none');
+            document.getElementById('view-detalhe').classList.remove('d-none');
+
+            // Atualiza dinamicamente o título e o badge lá no topo
+            document.getElementById('detalhe-nome').innerText = nomeFornecedor;
+            document.getElementById('detalhe-badge-container').innerHTML = `<span class="badge-tipo ${classeBadge}"><span class="dot"></span>${textoBadge}</span>`;
+
+            // Faz scroll para o topo suavemente
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function voltarLista() {
+            // Esconde o detalhe e mostra a lista
+            document.getElementById('view-detalhe').classList.add('d-none');
+            document.getElementById('view-lista').classList.remove('d-none');
+        }
+
+        // Script simples para dar efeito "Active" aos botões de filtro
+        document.querySelectorAll('.btn-filter').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+
+    <!-- Script do Wizard (Passos) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[data-bs-wizard-step]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTabId = this.getAttribute('data-bs-wizard-step');
+                    const targetTabElement = document.querySelector(targetTabId);
+                    if (targetTabElement) {
+                        const tab = new bootstrap.Tab(targetTabElement);
+                        tab.show();
+                    }
+                });
+            });
+        });
+    </script>
 
     <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../../assets/js/1231184.js"></script>
 
 </body>
+
 </html>

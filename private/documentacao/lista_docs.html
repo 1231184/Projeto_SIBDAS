@@ -25,7 +25,8 @@
         <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
             <ul class="nav flex-column gap-1">
                 <li class="nav-item">
-                    <a href="../dashboard.html" class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
+                    <a href="../dashboard/dashboard.html"
+                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="7" height="9" x="3" y="3" rx="1"></rect>
@@ -159,373 +160,343 @@
         </div>
     </aside>
 
-    <!-- MAIN -->
-    <main class="flex-grow-1 overflow-auto p-4 p-md-5">
-        
-        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+    <main class="flex-grow-1 overflow-auto p-4 p-md-5 bg-backend">
 
-            <div>
-                <h1 class="h3 fw-bold text-dark mb-1">
-                    Documentação
-                </h1>
-                <p class="text-muted small mb-0">
-                    Manuais, certificados e contratos associados aos equipamentos
-                </p>
+        <header class="d-md-none d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom bg-white">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
+                <h1 class="h5 fw-bold mb-0 text-dark">MedStock</h1>
             </div>
-            <button class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal"
-                data-bs-target="#modalNovoDocumento">
-                <i class="fa-solid fa-plus"></i>
-                Novo Documento
+            <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
+        </header>
+
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+            <div>
+                <h1 class="h3 fw-bold text-dark mb-1">Documentação</h1>
+                <p class="text-muted small mb-0" id="totalRegistos">4 documentos registados</p>
+            </div>
+            <button class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm fw-bold"
+                data-bs-toggle="modal" data-bs-target="#modalNovoDocumento">
+                <i class="fa-solid fa-plus fs-6"></i> Novo Documento
             </button>
         </div>
 
-        <div class="card dash-card mb-4">
-            <div class="card-body p-4">
-                <div class="row g-3">
-
-                    <!-- Pesquisa -->
-                    <div class="col-lg-6">
-
-                        <div class="input-group search-group shadow-sm">
-
-                            <span class="input-group-text text-muted ps-3 pe-2">
-
-                                <i class="fa-solid fa-magnifying-glass"></i>
-
-                            </span>
-
-                            <input type="text" class="form-control" placeholder="Pesquisar documento...">
-
-                        </div>
-
-                    </div>
-
-                    <!-- Tipo -->
-                    <div class="col-md-3">
-
-                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
-
-                            <option selected>
-                                Tipo de documento
-                            </option>
-
-                            <option>
-                                Manual do Utilizador
-                            </option>
-
-                            <option>
-                                Certificado de Calibração
-                            </option>
-
-                            <option>
-                                Contrato de Manutenção
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                    <!-- Equipamento -->
-                    <div class="col-md-3">
-
-                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
-
-                            <option selected>
-                                Equipamento
-                            </option>
-
-                            <option>
-                                Monitor Multiparamétrico de Sinais Vitais (EQ-2024-001)
-                            </option>
-
-                            <option>
-                                Ventilador Pulmonar de Alta Performance (EQ-2024-002)
-                            </option>
-
-                            <option>
-                                Tomógrafo Computorizado 64 cortes (EQ-2024-005)
-                            </option>
-
-                        </select>
-
-                    </div>
-
+        <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+            <div class="col">
+                <div class="card kpi-doc-card h-100 p-3 bg-white" data-val-filter="Todos">
+                    <div class="fs-4 mb-2">📄</div>
+                    <div class="fs-3 fw-bold text-brand" style="line-height: 1;">4</div>
+                    <div class="small text-muted mt-1 fw-medium">Total Documentos</div>
                 </div>
-
             </div>
-
+            <div class="col">
+                <div class="card kpi-doc-card h-100 p-3 bg-white" data-val-filter="Válido"
+                    data-active-class="active-valido">
+                    <div class="fs-4 mb-2">✅</div>
+                    <div class="fs-3 fw-bold text-success" style="line-height: 1;">1</div>
+                    <div class="small text-muted mt-1 fw-medium">Válidos</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card kpi-doc-card h-100 p-3 bg-white" data-val-filter="A expirar"
+                    data-active-class="active-expirar">
+                    <div class="fs-4 mb-2">🕐</div>
+                    <div class="fs-3 fw-bold text-warning" style="line-height: 1;">1</div>
+                    <div class="small text-muted mt-1 fw-medium">A Expirar</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card kpi-doc-card h-100 p-3 bg-white" data-val-filter="Expirado"
+                    data-active-class="active-expirado">
+                    <div class="fs-4 mb-2">⚠️</div>
+                    <div class="fs-3 fw-bold text-danger" style="line-height: 1;">1</div>
+                    <div class="small text-muted mt-1 fw-medium">Expirados</div>
+                </div>
+            </div>
         </div>
 
-        <!-- TABELA -->
-        <div class="dash-card">
+        <div class="d-flex flex-column flex-xl-row gap-3 mb-3 align-items-xl-center">
 
+            <div class="position-relative flex-grow-1" style="max-width: 400px;">
+                <i class="fa-solid fa-magnifying-glass position-absolute text-muted"
+                    style="left: 14px; top: 50%; transform: translateY(-50%);"></i>
+                <input type="text" id="pesquisaDocs" class="form-control ps-5 shadow-sm border-0"
+                    placeholder="Pesquisar por nome, equipamento..."
+                    style="border-radius: 9px; padding-top: 10px; padding-bottom: 10px; font-size: 0.85rem;">
+            </div>
+
+            <div class="d-none d-xl-block border-start mx-2 align-self-stretch"></div>
+
+            <div class="d-flex flex-wrap gap-2 align-items-center" id="filterPillsContainer">
+                <span class="small fw-bold text-muted text-uppercase me-1" style="letter-spacing: 0.5px;">Tipo:</span>
+                <button class="btn-doc-filter active" data-tipo="Todos">Todos os tipos</button>
+                <button class="btn-doc-filter" data-tipo="Manual de Utilizador">Manual</button>
+                <button class="btn-doc-filter" data-tipo="Certificado de Calibração">Certificado</button>
+                <button class="btn-doc-filter" data-tipo="Contrato de Manutenção">Contrato</button>
+                <button class="btn-doc-filter" data-tipo="Declaração de Conformidade">Declaração</button>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <span class="small text-muted fw-medium" id="txtResultados">Mostrando 4 documentos</span>
+            <button class="btn btn-link text-danger p-0 text-decoration-none small fw-bold d-none" id="btnLimparDocs">×
+                Limpar filtros</button>
+        </div>
+
+        <div class="card border-0 shadow-sm overflow-hidden mb-5">
             <div class="table-responsive">
-
-                <table class="table table-custom mb-0">
-
-                    <thead>
-
-                        <tr class="table-header-row">
-
-                            <th class="px-3 py-3 border-0">
-                                Documento
-                            </th>
-
-                            <th class="px-3 py-3 border-0">
-                                Tipo
-                            </th>
-
-                            <th class="px-3 py-3 border-0">
-                                Equipamento
-                            </th>
-
-                            <th class="px-3 py-3 border-0">
-                                Data
-                            </th>
-
-                            <th class="px-3 py-3 border-0">
-                                Validade
-                            </th>
-
-                            <th class="px-3 py-3 border-0 text-end" style="width: 7rem;">
-
-                                Ações
-
-                            </th>
-
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="px-4 py-3 text-muted text-uppercase"
+                                style="font-size: 0.65rem; letter-spacing: 0.5px;">Documento</th>
+                            <th class="px-3 py-3 text-muted text-uppercase"
+                                style="font-size: 0.65rem; letter-spacing: 0.5px;">Tipo</th>
+                            <th class="px-3 py-3 text-muted text-uppercase"
+                                style="font-size: 0.65rem; letter-spacing: 0.5px;">Equipamento</th>
+                            <th class="px-3 py-3 text-muted text-uppercase"
+                                style="font-size: 0.65rem; letter-spacing: 0.5px;">Validade</th>
+                            <th class="px-3 py-3 text-muted text-uppercase"
+                                style="font-size: 0.65rem; letter-spacing: 0.5px;">Carregado por</th>
+                            <th class="px-4 py-3 text-muted text-uppercase text-end"
+                                style="font-size: 0.65rem; letter-spacing: 0.5px;">Ações</th>
                         </tr>
-
                     </thead>
+                    <tbody id="tabelaDocs">
 
-                    <tbody>
-
-                        <!-- ROW -->
-                        <tr>
-
-                            <td class="px-3 py-3">
-
-                                <div class="d-flex align-items-start gap-3">
-
-                                    <i class="fa-regular fa-file-lines text-muted mt-1"></i>
-
+                        <tr data-tipo="Manual de Utilizador" data-validade="Sem validade">
+                            <td class="px-4 py-3">
+                                <div class="d-flex align-items-center gap-3">
                                     <div>
-
-                                        <div class="fw-medium small">
-                                            IntelliVue MX700 - Manual do Utilizador
-                                        </div>
-
-                                        <div class="text-muted custom-monospace" style="font-size: 0.75rem;">
-
-                                            intellivue_mx700_manual_pt.pdf
-
-                                        </div>
-
+                                        <div class="fw-bold text-dark small mb-0 doc-nome">Manual de Utilizador
+                                            IntelliVue MP5</div>
                                     </div>
-
                                 </div>
-
                             </td>
-
+                            <td class="px-3 py-3"><span class="badge-doc doc-tipo-manual">Manual de Utilizador</span>
+                            </td>
                             <td class="px-3 py-3">
-
-                                <span class="badge badge-soft-info">
-                                    Manual
-                                </span>
-
+                                <div class="text-brand fw-bold" style="font-size: 0.75rem;">EQ-0001</div>
                             </td>
-
-                            <td class="px-3 py-3 text-muted small">
-                                #1
+                            <td class="px-3 py-3"><span class="badge-doc doc-val-sem"><span class="dot"></span>Sem
+                                    validade</span></td>
+                            <td class="px-3 py-3">
+                                <div class="fw-medium text-dark" style="font-size: 0.75rem;">João Silva</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">2022-04-01</div>
                             </td>
-
-                            <td class="px-3 py-3 text-muted small">
-                                01/01/2023
-                            </td>
-
-                            <td class="px-3 py-3 text-muted small">
-                                —
-                            </td>
-
-                            <td class="px-3 py-3 text-end">
-
-                                <div class="d-flex align-items-center justify-content-end gap-1">
-
-                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditarDocumento">
-
-                                        <i class="fas fa-pencil fa-sm"></i>
-
-                                    </button>
-
-                                    <button class="btn-action text-danger border-0 bg-transparent"
-                                        data-bs-toggle="modal" data-bs-target="#modalRemoverDocumento">
-
-                                        <i class="fa-regular fa-trash-can"></i>
-
-                                    </button>
-
+                            <td class="px-4 py-3 text-end">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none"
+                                        data-bs-toggle="modal" data-bs-target="#modalDetalhesDoc"
+                                        style="font-size: 0.75rem;">Ver</button>
+                                    <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverDoc"><i
+                                            class="fa-solid fa-trash-can"></i></button>
                                 </div>
-
                             </td>
-
                         </tr>
 
-                        <!-- ROW -->
-                        <tr>
-
-                            <td class="px-3 py-3">
-
-                                <div class="d-flex align-items-start gap-3">
-
-                                    <i class="fa-regular fa-file-pdf text-danger mt-1"></i>
-
+                        <tr data-tipo="Certificado de Calibração" data-validade="A expirar">
+                            <td class="px-4 py-3">
+                                <div class="d-flex align-items-center gap-3">
                                     <div>
-
-                                        <div class="fw-medium small">
-                                            Certificado de Calibração - Monitor MX700
-                                        </div>
-
-                                        <div class="text-muted custom-monospace" style="font-size: 0.75rem;">
-
-                                            calib_monitor_mx700_2024.pdf
-
-                                        </div>
-
+                                        <div class="fw-bold text-dark small mb-0 doc-nome">Certificado de Calibração
+                                            Evita V500</div>
                                     </div>
-
                                 </div>
-
                             </td>
-
+                            <td class="px-3 py-3"><span class="badge-doc doc-tipo-calibracao">Certificado de
+                                    Calibração</span></td>
                             <td class="px-3 py-3">
-
-                                <span class="badge badge-soft-warning">
-                                    Certificado
-                                </span>
-
+                                <div class="text-brand fw-bold" style="font-size: 0.75rem;">EQ-0002</div>
                             </td>
-
-                            <td class="px-3 py-3 text-muted small">
-                                #1
-                            </td>
-
-                            <td class="px-3 py-3 text-muted small">
-                                01/06/2024
-                            </td>
-
                             <td class="px-3 py-3">
-
-                                <span class="text-danger fw-medium small">
-
-                                    <i class="fa-solid fa-triangle-exclamation me-1"></i>
-
-                                    Expirado
-
-                                </span>
-
+                                <span class="badge-doc doc-val-expirar"><span class="dot"></span>A expirar</span>
+                                <div class="text-muted mt-1" style="font-size: 0.65rem;">2025-07-20</div>
                             </td>
-
-                            <td class="px-3 py-3 text-end">
-
-                                <div class="d-flex align-items-center justify-content-end gap-1">
-
-                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditarDocumento">
-
-                                        <i class="fas fa-pencil fa-sm"></i>
-
-                                    </button>
-
-                                    <button class="btn-action text-danger border-0 bg-transparent"
-                                        data-bs-toggle="modal" data-bs-target="#modalRemoverDocumento">
-
-                                        <i class="fa-regular fa-trash-can"></i>
-
-                                    </button>
-
+                            <td class="px-3 py-3">
+                                <div class="fw-medium text-dark" style="font-size: 0.75rem;">Ana Costa</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">2024-07-22</div>
+                            </td>
+                            <td class="px-4 py-3 text-end">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none"
+                                        data-bs-toggle="modal" data-bs-target="#modalDetalhesDoc"
+                                        style="font-size: 0.75rem;">Ver</button>
+                                    <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverDoc"><i
+                                            class="fa-solid fa-trash-can"></i></button>
                                 </div>
-
                             </td>
-
                         </tr>
 
-                        <!-- ROW -->
-                        <tr>
-
-                            <td class="px-3 py-3">
-
-                                <div class="d-flex align-items-start gap-3">
-
-                                    <i class="fa-regular fa-file-lines text-muted mt-1"></i>
-
-                                    <div>
-
-                                        <div class="fw-medium small">
-                                            Contrato Full Service Philips 2024-2027
-                                        </div>
-
-                                        <div class="text-muted custom-monospace" style="font-size: 0.75rem;">
-
-                                            contrato_philips_2024.pdf
-
-                                        </div>
-
+                        <tr data-tipo="Contrato de Manutenção" data-validade="Válido">
+                            <td class="px-4 py-3">
+                                <div class="d-flex align-items-center gap-3">
+                                        <div class="fw-bold text-dark small mb-0 doc-nome">Contrato de Manutenção Dräger
+                                            2024</div>
                                     </div>
-
                                 </div>
-
                             </td>
-
+                            <td class="px-3 py-3"><span class="badge-doc doc-tipo-contrato">Contrato de
+                                    Manutenção</span></td>
                             <td class="px-3 py-3">
-
-                                <span class="badge badge-soft-success">
-                                    Contrato
-                                </span>
-
+                                <div class="text-brand fw-bold" style="font-size: 0.75rem;">EQ-0002</div>
                             </td>
-
-                            <td class="px-3 py-3 text-muted small">
-                                #1
+                            <td class="px-3 py-3">
+                                <span class="badge-doc doc-val-valido"><span class="dot"></span>Válido</span>
+                                <div class="text-muted mt-1" style="font-size: 0.65rem;">2026-01-01</div>
                             </td>
-
-                            <td class="px-3 py-3 text-muted small">
-                                15/01/2024
+                            <td class="px-3 py-3">
+                                <div class="fw-medium text-dark" style="font-size: 0.75rem;">Ana Costa</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">2024-01-05</div>
                             </td>
-
-                            <td class="px-3 py-3 text-muted small">
-                                15/01/2027
-                            </td>
-
-                            <td class="px-3 py-3 text-end">
-
-                                <div class="d-flex align-items-center justify-content-end gap-1">
-
-                                    <button class="btn-action border-0 bg-transparent" data-bs-toggle="modal"
-                                        data-bs-target="#modalEditarDocumento">
-
-                                        <i class="fas fa-pencil fa-sm"></i>
-
-                                    </button>
-
-                                    <button class="btn-action text-danger border-0 bg-transparent"
-                                        data-bs-toggle="modal" data-bs-target="#modalRemoverDocumento">
-
-                                        <i class="fa-regular fa-trash-can"></i>
-
-                                    </button>
-
+                            <td class="px-4 py-3 text-end">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none"
+                                        data-bs-toggle="modal" data-bs-target="#modalDetalhesDoc"
+                                        style="font-size: 0.75rem;">Ver</button>
+                                    <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverDoc"><i
+                                            class="fa-solid fa-trash-can"></i></button>
                                 </div>
-
                             </td>
+                        </tr>
 
+                        <tr data-tipo="Declaração de Conformidade" data-validade="Expirado">
+                            <td class="px-4 py-3">
+                                <div class="d-flex align-items-center gap-3">
+                                        <div class="fw-bold text-dark small mb-0 doc-nome">Declaração de Conformidade
+                                            Desfibrilhador</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-3 py-3"><span class="badge-doc doc-tipo-contrato">Declaração de
+                                    Conformidade</span></td>
+                            <td class="px-3 py-3">
+                                <div class="text-brand fw-bold" style="font-size: 0.75rem;">EQ-0004</div>
+                            </td>
+                            <td class="px-3 py-3">
+                                <span class="badge-doc doc-val-expirado"><span class="dot"></span>Expirado</span>
+                                <div class="text-danger fw-bold mt-1" style="font-size: 0.65rem;">2024-09-01</div>
+                            </td>
+                            <td class="px-3 py-3">
+                                <div class="fw-medium text-dark" style="font-size: 0.75rem;">João Silva</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">2021-09-05</div>
+                            </td>
+                            <td class="px-4 py-3 text-end">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none"
+                                        data-bs-toggle="modal" data-bs-target="#modalDetalhesDoc"
+                                        style="font-size: 0.75rem;">Ver</button>
+                                    <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                        data-bs-toggle="modal" data-bs-target="#modalRemoverDoc"><i
+                                            class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr id="noResultsRowDocs" class="d-none">
+                            <td colspan="6" class="text-center py-5">
+                                <div class="fs-1 mb-2">🔍</div>
+                                <div class="fw-bold text-muted">Nenhum documento encontrado</div>
+                                <div class="small text-muted mt-1">Tenta ajustar a pesquisa ou os filtros.</div>
+                            </td>
                         </tr>
 
                     </tbody>
-
                 </table>
-
             </div>
+        </div>
 
+        <div class="modal fade" id="modalDetalhesDoc" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+                    <div class="modal-header border-bottom px-4 pt-4 pb-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-3 d-flex align-items-center justify-content-center bg-brand-subtle text-brand"
+                                style="width: 48px; height: 48px; font-size: 1.5rem;">📘</div>
+                            <div>
+                                <h5 class="modal-title fw-bold text-dark mb-1" style="font-size: 1.1rem;">Manual de
+                                    Utilizador IntelliVue MP5</h5>
+                                <div class="d-flex gap-2">
+                                    <span class="badge-doc doc-tipo-manual">Manual de Utilizador</span>
+                                    <span class="badge-doc doc-val-sem"><span class="dot"></span>Sem validade</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <div class="p-3 bg-light border rounded">
+                                    <div class="text-uppercase text-muted fw-bold mb-1"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Equipamento</div>
+                                    <div class="fw-bold text-dark small">Monitor Multiparamétrico</div>
+                                    <div class="text-brand small mt-1">EQ-0001</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light border rounded">
+                                    <div class="text-uppercase text-muted fw-bold mb-1"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Fornecedor</div>
+                                    <div class="fw-bold text-dark small">Philips Healthcare PT</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light border rounded">
+                                    <div class="text-uppercase text-muted fw-bold mb-1"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Data Documento</div>
+                                    <div class="fw-bold text-dark small">2022-03-15</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light border rounded">
+                                    <div class="text-uppercase text-muted fw-bold mb-1"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Carregado por</div>
+                                    <div class="fw-bold text-dark small">João Silva</div>
+                                    <div class="text-muted small mt-1" style="font-size: 0.7rem;">2022-04-01</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between p-3 border rounded-3 bg-light">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="fs-3">📎</span>
+                                <div>
+                                    <div class="fw-bold text-dark small">manual_mp5_v2.1.pdf</div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">Ficheiro PDF · 2.4 MB</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-brand-subtle text-brand fw-bold px-3">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalRemoverDoc" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-body p-4 text-center">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center bg-danger bg-opacity-10 text-danger mb-3"
+                            style="width: 60px; height: 60px; font-size: 1.8rem;">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Remover Documento?</h5>
+                        <p class="text-muted small mb-4">Tens a certeza que pretendes remover este documento? Esta ação
+                            não pode ser desfeita e o ficheiro será eliminado do servidor.</p>
+
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-light border flex-fill fw-bold text-secondary"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger flex-fill fw-bold shadow-sm">Sim,
+                                Remover</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -818,6 +789,104 @@
         </div>
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const kpiCards = document.querySelectorAll('.kpi-doc-card');
+            const typeBtns = document.querySelectorAll('.btn-doc-filter');
+            const searchInput = document.getElementById('pesquisaDocs');
+            const tableRows = document.querySelectorAll('#tabelaDocs tr:not(#noResultsRowDocs)');
+            const noResultsRow = document.getElementById('noResultsRowDocs');
+            const textResultados = document.getElementById('txtResultados');
+            const btnLimpar = document.getElementById('btnLimparDocs');
+
+            // Estado atual dos filtros
+            let filtroValidade = 'Todos';
+            let filtroTipo = 'Todos';
+
+            function aplicarFiltros() {
+                const termo = searchInput.value.toLowerCase().trim();
+                let visiveis = 0;
+
+                tableRows.forEach(row => {
+                    const rowText = row.innerText.toLowerCase();
+                    const dValidade = row.dataset.validade;
+                    const dTipo = row.dataset.tipo;
+
+                    const matchSearch = termo === '' || rowText.includes(termo);
+                    const matchValidade = filtroValidade === 'Todos' || dValidade === filtroValidade;
+                    const matchTipo = filtroTipo === 'Todos' || dTipo === filtroTipo;
+
+                    if(matchSearch && matchValidade && matchTipo) {
+                        row.classList.remove('d-none');
+                        visiveis++;
+                    } else {
+                        row.classList.add('d-none');
+                    }
+                });
+
+                // Atualizar UI
+                textResultados.innerText = `Mostrando ${visiveis} documento${visiveis !== 1 ? 's' : ''}`;
+                
+                if(visiveis === 0) noResultsRow.classList.remove('d-none');
+                else noResultsRow.classList.add('d-none');
+
+                if(filtroValidade !== 'Todos' || filtroTipo !== 'Todos' || termo !== '') {
+                    btnLimpar.classList.remove('d-none');
+                } else {
+                    btnLimpar.classList.add('d-none');
+                }
+            }
+
+            // Clique nos cartões KPI (Validade)
+            kpiCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Se clicar no que já está ativo, desmarca e volta a 'Todos'
+                    if(this.classList.contains(this.dataset.activeClass) && this.dataset.valFilter !== 'Todos') {
+                        this.classList.remove(this.dataset.activeClass);
+                        filtroValidade = 'Todos';
+                    } else {
+                        // Limpa ativos
+                        kpiCards.forEach(c => {
+                            if(c.dataset.activeClass) c.classList.remove(c.dataset.activeClass);
+                        });
+                        // Ativa o clicado se não for o 'Todos'
+                        if(this.dataset.valFilter !== 'Todos') {
+                            this.classList.add(this.dataset.activeClass);
+                        }
+                        filtroValidade = this.dataset.valFilter;
+                    }
+                    aplicarFiltros();
+                });
+            });
+
+            // Clique nas Pills (Tipo)
+            typeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    typeBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    filtroTipo = this.dataset.tipo;
+                    aplicarFiltros();
+                });
+            });
+
+            // Digitar na pesquisa
+            if(searchInput) searchInput.addEventListener('input', aplicarFiltros);
+
+            // Botão Limpar Filtros
+            btnLimpar.addEventListener('click', () => {
+                filtroValidade = 'Todos';
+                filtroTipo = 'Todos';
+                searchInput.value = '';
+                
+                kpiCards.forEach(c => { if(c.dataset.activeClass) c.classList.remove(c.dataset.activeClass); });
+                typeBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('.btn-doc-filter[data-tipo="Todos"]').classList.add('active');
+                
+                aplicarFiltros();
+            });
+        });
+    </script>
 
     <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../../assets/js/1231184.js"></script>

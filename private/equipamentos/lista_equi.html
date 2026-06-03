@@ -145,9 +145,9 @@
         </div>
     </aside>
 
-    <main class="flex-grow-1 overflow-auto p-4 p-md-5">
+    <main class="d-flex flex-column flex-grow-1 overflow-hidden bg-backend">
 
-        <header class="d-md-none d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+        <header class="d-md-none d-flex align-items-center justify-content-between p-4 pb-3 border-bottom bg-white">
             <div class="d-flex align-items-center gap-2">
                 <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
                 <h1 class="h5 fw-bold mb-0 text-dark">MedStock</h1>
@@ -155,142 +155,315 @@
             <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
         </header>
 
-        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+        <div
+            class="bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between flex-shrink-0 z-1">
             <div>
-                <h1 class="h3 fw-bold text-dark mb-1">Equipamentos</h1>
-                <p class="text-muted small mb-0">3 equipamentos registados</p>
+                <h1 class="h4 fw-bold text-dark mb-1">Equipamentos</h1>
+                <div class="text-muted small" id="totalRegistos">4 equipamentos registados</div>
             </div>
-            <a href="novo.html" class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm">
+            <a href="novo.html" class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm fw-bold">
                 <i class="fa-solid fa-plus"></i> Novo Equipamento
             </a>
         </div>
 
-        <div class="card dash-card mb-4">
-            <div class="card-header bg-white border-bottom pt-4 pb-3 px-4" style="border-color: #e2e8f0 !important;">
-                <h6 class="fw-semibold text-muted mb-0 d-flex align-items-center gap-2">
-                    <i class="fa-solid fa-filter"></i> Pesquisa e Filtros
-                </h6>
-            </div>
-            <div class="card-body p-4">
-                <div class="row g-3">
-                    <div class="col-md-12 col-lg-4">
-                        <div class="input-group search-group shadow-sm">
-                            <span class="input-group-text text-muted ps-3 pe-2">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </span>
-                            <input type="text" class="form-control"
-                                placeholder="Código, designação, marca, modelo, série...">
+        <div class="equipamentos-wrapper">
+
+            <aside class="filter-panel d-flex flex-column" id="filterSidebar">
+                <div
+                    class="p-3 border-bottom d-flex align-items-center justify-content-between bg-white sticky-top flex-shrink-0">
+                    <div class="fw-bold text-dark small d-flex align-items-center gap-2">
+                        Filtros
+                        <span id="badgeContadorFiltros" class="badge bg-brand rounded-pill d-none">0</span>
+                    </div>
+                    <button id="btnLimparFiltros"
+                        class="btn btn-link text-danger text-decoration-none p-0 small fw-bold d-none"
+                        style="font-size: 0.7rem;">Limpar</button>
+                </div>
+
+                <div class="accordion filter-accordion overflow-auto" id="accordionFiltros">
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button fw-bold text-uppercase shadow-none" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseEstado">
+                                Estado
+                            </button>
+                        </h2>
+                        <div id="collapseEstado" class="accordion-collapse collapse show"
+                            data-bs-parent="#accordionFiltros">
+                            <div class="accordion-body">
+                                <label class="filter-check"><input type="checkbox" value="Ativo" data-group="estado">
+                                    <div class="custom-box"></div><span class="label-text">Ativo</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Em Manutenção"
+                                        data-group="estado">
+                                    <div class="custom-box"></div><span class="label-text">Em Manutenção</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Em Calibração"
+                                        data-group="estado">
+                                    <div class="custom-box"></div><span class="label-text">Em Calibração</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Inativo" data-group="estado">
+                                    <div class="custom-box"></div><span class="label-text">Inativo</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-3 col-lg-2">
-                        <select class="form-select shadow-sm text-muted" style="border-color: #e2e8f0;">
-                            <option selected>Estado</option>
-                            <option value="1">Ativo</option>
-                            <option value="2">Inativo</option>
-                            <option value="3">Em manutenção</option>
-                        </select>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold text-uppercase shadow-none" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseCriticidade">
+                                Criticidade
+                            </button>
+                        </h2>
+                        <div id="collapseCriticidade" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFiltros">
+                            <div class="accordion-body">
+                                <label class="filter-check"><input type="checkbox" value="Suporte de Vida"
+                                        data-group="criticidade">
+                                    <div class="custom-box"></div><span class="label-text">Suporte de Vida</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Alta"
+                                        data-group="criticidade">
+                                    <div class="custom-box"></div><span class="label-text">Alta</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Média"
+                                        data-group="criticidade">
+                                    <div class="custom-box"></div><span class="label-text">Média</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Baixa"
+                                        data-group="criticidade">
+                                    <div class="custom-box"></div><span class="label-text">Baixa</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-6 col-md-3 col-lg-2">
-                        <button class="btn btn-brand w-100 shadow-sm">Pesquisar</button>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold text-uppercase shadow-none" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseCategoria">
+                                Categoria
+                            </button>
+                        </h2>
+                        <div id="collapseCategoria" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFiltros">
+                            <div class="accordion-body">
+                                <label class="filter-check"><input type="checkbox" value="Monitorização"
+                                        data-group="categoria">
+                                    <div class="custom-box"></div><span class="label-text">Monitorização</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Terapia"
+                                        data-group="categoria">
+                                    <div class="custom-box"></div><span class="label-text">Terapia</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Diagnóstico"
+                                        data-group="categoria">
+                                    <div class="custom-box"></div><span class="label-text">Diagnóstico</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold text-uppercase shadow-none" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseFornecedor">
+                                Fornecedor
+                            </button>
+                        </h2>
+                        <div id="collapseFornecedor" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFiltros">
+                            <div class="accordion-body">
+                                <label class="filter-check"><input type="checkbox" value="Dräger Portugal"
+                                        data-group="fornecedor">
+                                    <div class="custom-box"></div><span class="label-text">Dräger Portugal</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Philips Healthcare PT"
+                                        data-group="fornecedor">
+                                    <div class="custom-box"></div><span class="label-text">Philips Healthcare PT</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="MedServ Técnica"
+                                        data-group="fornecedor">
+                                    <div class="custom-box"></div><span class="label-text">MedServ Técnica</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="TechMed Solutions"
+                                        data-group="fornecedor">
+                                    <div class="custom-box"></div><span class="label-text">TechMed Solutions</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="IberiaMed Serviços"
+                                        data-group="fornecedor">
+                                    <div class="custom-box"></div><span class="label-text">IberiaMed Serviços</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+
+            <section class="flex-grow-1 p-4 overflow-auto d-flex flex-column">
+
+                <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+                    <button id="btnToggleSidebar"
+                        class="btn btn-light bg-white border shadow-sm text-secondary fw-bold small d-flex align-items-center gap-2 flex-shrink-0"
+                        style="font-size: 0.8rem;">
+                        <i class="fa-solid fa-sliders"></i> <span id="textToggleSidebar">Ocultar filtros</span>
+                    </button>
+
+                    <div class="position-relative flex-grow-1" style="min-width: 250px;">
+                        <i class="fa-solid fa-magnifying-glass position-absolute text-muted"
+                            style="left: 14px; top: 50%; transform: translateY(-50%);"></i>
+                        <input type="text" id="inputPesquisa" class="form-control ps-5 shadow-sm border-0"
+                            placeholder="Pesquisar por código, equipamento, marca ou serviço..."
+                            style="border-radius: 9px; padding-top: 9px; padding-bottom: 9px; font-size: 0.85rem;">
+                    </div>
+
+                    <div class="text-muted small fw-medium flex-shrink-0 ms-2" id="resultadosCount">Mostrando 4
+                        resultados</div>
+                </div>
+
+                <div id="activePillsContainer" class="d-flex flex-wrap gap-2 mb-3"></div>
+
+                <div class="card border-0 shadow-sm overflow-hidden flex-shrink-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="px-3 py-3 text-muted text-uppercase"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Código</th>
+                                    <th class="px-3 py-3 text-muted text-uppercase"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Equipamento</th>
+                                    <th class="px-3 py-3 text-muted text-uppercase"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Localização</th>
+                                    <th class="px-3 py-3 text-muted text-uppercase"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Criticidade</th>
+                                    <th class="px-3 py-3 text-muted text-uppercase"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Estado</th>
+                                    <th class="px-3 py-3 text-muted text-uppercase text-end"
+                                        style="font-size: 0.65rem; letter-spacing: 0.5px;">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaEquipamentos">
+
+                                <tr data-estado="Ativo" data-criticidade="Alta" data-categoria="Monitorização"
+                                    data-fornecedor="MedServ Técnica">
+                                    <td class="px-3 py-3 text-brand fw-bold" style="font-size: 0.8rem;">EQ-0001</td>
+                                    <td class="px-3 py-3">
+                                        <div class="fw-bold text-dark mb-0" style="font-size: 0.85rem;">Monitor
+                                            Multiparamétrico IntelliVue MP5</div>
+                                        <div class="text-muted" style="font-size: 0.7rem;">Philips · MP5</div>
+                                    </td>
+                                    <td class="px-3 py-3 text-dark fw-medium" style="font-size: 0.8rem;">UCI</td>
+                                    <td class="px-3 py-3"><span class="badge-eq cr-alta">Alta</span></td>
+                                    <td class="px-3 py-3"><span class="badge-eq st-ativo"><span
+                                                class="dot"></span>Ativo</span></td>
+                                    <td class="px-3 py-3 text-end">
+                                        <div class="d-flex justify-content-end gap-1">
+                                            <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none"
+                                                data-bs-toggle="modal" data-bs-target="#modalDetalhes"
+                                                style="font-size: 0.75rem;">Ver</button>
+                                            <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                                data-bs-toggle="modal" data-bs-target="#modalRemover" title="Remover">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr data-estado="Ativo" data-criticidade="Suporte de Vida" data-categoria="Terapia"
+                                    data-fornecedor="Dräger Portugal">
+                                    <td class="px-3 py-3 text-brand fw-bold" style="font-size: 0.8rem;">EQ-0002</td>
+                                    <td class="px-3 py-3">
+                                        <div class="fw-bold text-dark mb-0" style="font-size: 0.85rem;">Ventilador
+                                            Pulmonar Evita V500</div>
+                                        <div class="text-muted" style="font-size: 0.7rem;">Dräger · Evita V500</div>
+                                    </td>
+                                    <td class="px-3 py-3 text-dark fw-medium" style="font-size: 0.8rem;">UCI</td>
+                                    <td class="px-3 py-3"><span class="badge-eq cr-vida">Suporte de Vida</span></td>
+                                    <td class="px-3 py-3"><span class="badge-eq st-ativo"><span
+                                                class="dot"></span>Ativo</span></td>
+                                    <td class="px-3 py-3 text-end">
+                                        <div class="d-flex justify-content-end gap-1">
+                                            <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none"
+                                                data-bs-toggle="modal" data-bs-target="#modalDetalhes"
+                                                style="font-size: 0.75rem;">Ver</button>
+                                            <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                                data-bs-toggle="modal" data-bs-target="#modalRemover" title="Remover">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr data-estado="Em Manutenção" data-criticidade="Média" data-categoria="Terapia"
+                                    data-fornecedor="TechMed Solutions">
+                                    <td class="px-3 py-3 text-brand fw-bold" style="font-size: 0.8rem;">EQ-0003</td>
+                                    <td class="px-3 py-3">
+                                        <div class="fw-bold text-dark mb-0" style="font-size: 0.85rem;">Bomba de Infusão
+                                            Infusomat Space</div>
+                                        <div class="text-muted" style="font-size: 0.7rem;">B. Braun · Infusomat</div>
+                                    </td>
+                                    <td class="px-3 py-3 text-dark fw-medium" style="font-size: 0.8rem;">Medicina
+                                        Interna</td>
+                                    <td class="px-3 py-3"><span class="badge-eq cr-media">Média</span></td>
+                                    <td class="px-3 py-3"><span class="badge-eq st-manutencao"><span
+                                                class="dot"></span>Em Manutenção</span></td>
+                                    <td class="px-3 py-3 text-end">
+                                        <div class="d-flex justify-content-end gap-1">
+                                            <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none"
+                                                data-bs-toggle="modal" data-bs-target="#modalDetalhes"
+                                                style="font-size: 0.75rem;">Ver</button>
+                                            <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                                data-bs-toggle="modal" data-bs-target="#modalRemover" title="Remover">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr data-estado="Em Calibração" data-criticidade="Alta" data-categoria="Diagnóstico"
+                                    data-fornecedor="IberiaMed Serviços">
+                                    <td class="px-3 py-3 text-brand fw-bold" style="font-size: 0.8rem;">EQ-0005</td>
+                                    <td class="px-3 py-3">
+                                        <div class="fw-bold text-dark mb-0" style="font-size: 0.85rem;">Ecógrafo LOGIQ
+                                            P9</div>
+                                        <div class="text-muted" style="font-size: 0.7rem;">GE · LOGIQ P9</div>
+                                    </td>
+                                    <td class="px-3 py-3 text-dark fw-medium" style="font-size: 0.8rem;">Imagiologia
+                                    </td>
+                                    <td class="px-3 py-3"><span class="badge-eq cr-alta">Alta</span></td>
+                                    <td class="px-3 py-3"><span class="badge-eq st-calibracao"><span
+                                                class="dot"></span>Em Calibração</span></td>
+                                    <td class="px-3 py-3 text-end">
+                                        <div class="d-flex justify-content-end gap-1">
+                                            <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none"
+                                                data-bs-toggle="modal" data-bs-target="#modalDetalhes"
+                                                style="font-size: 0.75rem;">Ver</button>
+                                            <button class="btn btn-sm btn-light border text-danger shadow-none"
+                                                data-bs-toggle="modal" data-bs-target="#modalRemover" title="Remover">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr id="noResultsRow" class="d-none">
+                                    <td colspan="6" class="text-center py-5">
+                                        <div class="fs-1 mb-2">🔍</div>
+                                        <div class="fw-bold text-muted">Nenhum equipamento encontrado</div>
+                                        <div class="small text-muted mt-1">Tente ajustar a sua pesquisa ou limpar os
+                                            filtros.</div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="card dash-card overflow-hidden">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover table-custom mb-0">
-                        <thead>
-                            <tr>
-                                <th class="px-4 py-3 border-0" style="width: 120px;">Código</th>
-                                <th class="px-4 py-3 border-0">Designação</th>
-                                <th class="px-4 py-3 border-0">Marca / Modelo</th>
-                                <th class="px-4 py-3 border-0">Localização</th>
-                                <th class="px-4 py-3 border-0">Estado</th>
-                                <th class="px-4 py-3 border-0 text-end">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="px-4 py-3 text-muted small custom-monospace">EQ-2024-001</td>
-                                <td class="px-4 py-3">
-                                    <div class="fw-medium text-dark small">Monitor Multiparamétrico de Sinais Vitais
-                                    </div>
-                                    <div class="text-muted" style="font-size: 0.75rem;">SN-PH-2024-001</div>
-                                </td>
-                                <td class="px-4 py-3">
-                                    <div class="fw-medium text-dark small">Philips</div>
-                                    <div class="text-muted" style="font-size: 0.75rem;">IntelliVue MX700</div>
-                                </td>
-                                <td class="px-4 py-3 small text-muted">UCI - Edifício Principal</td>
-                                <td class="px-4 py-3">
-                                    <span class="badge badge-soft-success">Ativo</span>
-                                </td>
-                                <td class="px-4 py-3 text-end">
-                                    <div class="d-flex justify-content-end gap-1">
-                                        <button class="btn-action" title="Ver Detalhes" data-bs-toggle="modal"
-                                            data-bs-target="#modalDetalhes"><i class="fa-regular fa-eye"></i></button>
-                                        <button class="btn-action text-danger" title="Remover" data-bs-toggle="modal"
-                                            data-bs-target="#modalRemover"><i
-                                                class="fa-solid fa-trash-can"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-3 text-muted small custom-monospace">EQ-2024-002</td>
-                                <td class="px-4 py-3">
-                                    <div class="fw-medium text-dark small">Ventilador Pulmonar de Alta Performance</div>
-                                    <div class="text-muted" style="font-size: 0.75rem;">SN-DR-2024-002</div>
-                                </td>
-                                <td class="px-4 py-3">
-                                    <div class="fw-medium text-dark small">Dräger</div>
-                                    <div class="text-muted" style="font-size: 0.75rem;">Evita Infinity V500</div>
-                                </td>
-                                <td class="px-4 py-3 small text-muted">UCI - Edifício Principal</td>
-                                <td class="px-4 py-3">
-                                    <span class="badge badge-soft-success">Ativo</span>
-                                </td>
-                                <td class="px-4 py-3 text-end">
-                                    <div class="d-flex justify-content-end gap-1">
-                                        <button class="btn-action" title="Ver Detalhes" data-bs-toggle="modal"
-                                            data-bs-target="#modalDetalhes"><i class="fa-regular fa-eye"></i></button>
-                                        <button class="btn-action text-danger" title="Remover" data-bs-toggle="modal"
-                                            data-bs-target="#modalRemover"><i
-                                                class="fa-solid fa-trash-can"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="px-4 py-3 text-muted small custom-monospace">EQ-2024-005</td>
-                                <td class="px-4 py-3">
-                                    <div class="fw-medium text-dark small">Tomógrafo Computorizado 64 cortes</div>
-                                    <div class="text-muted" style="font-size: 0.75rem;">SN-SI-2024-005</div>
-                                </td>
-                                <td class="px-4 py-3">
-                                    <div class="fw-medium text-dark small">Siemens</div>
-                                    <div class="text-muted" style="font-size: 0.75rem;">SOMATOM Definition</div>
-                                </td>
-                                <td class="px-4 py-3 small text-muted">Radiologia - Edifício B</td>
-                                <td class="px-4 py-3">
-                                    <span class="badge badge-soft-warning">Em manutenção</span>
-                                </td>
-                                <td class="px-4 py-3 text-end">
-                                    <div class="d-flex justify-content-end gap-1">
-                                        <button class="btn-action" title="Ver Detalhes" data-bs-toggle="modal"
-                                            data-bs-target="#modalDetalhes"><i class="fa-regular fa-eye"></i></button>
-                                        <button class="btn-action text-danger" title="Remover" data-bs-toggle="modal"
-                                            data-bs-target="#modalRemover"><i
-                                                class="fa-solid fa-trash-can"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            </section>
         </div>
     </main>
 
@@ -600,9 +773,9 @@
     <!-- Modal Editar Equipamento -->
     <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content border-0 shadow-lg bg-backend">
 
-                <div class="modal-header border-bottom px-4 py-3">
+                <div class="modal-header border-bottom px-4 py-3 bg-white">
                     <div>
                         <h5 class="modal-title fw-bold text-dark mb-0" id="modalEditarLabel">Editar Equipamento</h5>
                         <p class="text-muted small mb-0 mt-1">Atualize a informação do equipamento</p>
@@ -613,225 +786,287 @@
                 <div class="modal-body p-4">
                     <form id="formEditar" action="#" method="POST">
 
-                        <div class="card dash-card mb-4">
-                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Identificação</h5>
-                            </div>
-                            <div class="card-body p-4 pt-2">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="internalCode" class="form-label small fw-medium mb-1">Código Interno
-                                            *</label>
-                                        <input type="text" id="internalCode" name="internalCode"
-                                            class="form-control shadow-sm" value="EQ-2024-001" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="name" class="form-label small fw-medium mb-1">Designação *</label>
-                                        <input type="text" id="name" name="name" class="form-control shadow-sm"
-                                            value="Monitor Multiparamétrico" required>
-                                    </div>
-                                    <div class="col-md-6 position-relative">
-                                        <label class="form-label small fw-medium mb-1">Categoria *</label>
-                                        <div class="dropdown">
-                                            <button
-                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                                <span>Monitorização</span>
-                                            </button>
-                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                <li><a class="dropdown-item py-2" href="#">Monitorização</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Ventilação</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Infusão</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Cardiologia</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Diagnóstico por Imagem</a>
-                                                </li>
-                                                <li><a class="dropdown-item py-2" href="#">Laboratório</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Bloco Operatório</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Pediatria</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Esterilização</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Pneumologia</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Outro</a></li>
-                                            </ul>
+                        <ul class="nav nav-tabs mb-4 border-bottom-0" id="editarTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active text-dark fw-medium" id="edit-step1-tab"
+                                    data-bs-toggle="tab" data-bs-target="#edit-step1-pane" type="button" role="tab"
+                                    aria-selected="true">
+                                    <span class="badge bg-brand text-white me-1 rounded-pill">1</span> Identificação
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="edit-step2-tab" data-bs-toggle="tab"
+                                    data-bs-target="#edit-step2-pane" type="button" role="tab" aria-selected="false">
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">2</span> Fabricante
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="edit-step3-tab" data-bs-toggle="tab"
+                                    data-bs-target="#edit-step3-pane" type="button" role="tab" aria-selected="false">
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">3</span> Aquisição
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="edit-step4-tab" data-bs-toggle="tab"
+                                    data-bs-target="#edit-step4-pane" type="button" role="tab" aria-selected="false">
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">4</span> Fornecedores
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="edit-step5-tab" data-bs-toggle="tab"
+                                    data-bs-target="#edit-step5-pane" type="button" role="tab" aria-selected="false">
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">5</span> Observações
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="card dash-card mb-0 p-0">
+                            <div class="tab-content" id="editarTabsContent">
+
+                                <div class="tab-pane fade show active" id="edit-step1-pane" role="tabpanel"
+                                    tabindex="0">
+                                    <div class="card-body p-4">
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Detalhes de
+                                            Identificação</h5>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="internalCode" class="form-label small fw-medium mb-1">Código
+                                                    Interno *</label>
+                                                <input type="text" id="internalCode" name="internalCode"
+                                                    class="form-control shadow-sm" value="EQ-2024-001" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="name" class="form-label small fw-medium mb-1">Designação
+                                                    *</label>
+                                                <input type="text" id="name" name="name" class="form-control shadow-sm"
+                                                    value="Monitor Multiparamétrico" required>
+                                            </div>
+                                            <div class="col-md-6 position-relative">
+                                                <label class="form-label small fw-medium mb-1">Categoria *</label>
+                                                <div class="dropdown">
+                                                    <button
+                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                        type="button" data-bs-toggle="dropdown"
+                                                        data-bs-display="static">
+                                                        <span>Monitorização</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                        <li><a class="dropdown-item py-2" href="#">Monitorização</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item py-2" href="#">Ventilação</a></li>
+                                                        <li><a class="dropdown-item py-2" href="#">Infusão</a></li>
+                                                        <li><a class="dropdown-item py-2" href="#">Diagnóstico por
+                                                                Imagem</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="serialNumber" class="form-label small fw-medium mb-1">Número
+                                                    de Série *</label>
+                                                <input type="text" id="serialNumber" name="serialNumber"
+                                                    class="form-control shadow-sm" value="SN-12345" required>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="serialNumber" class="form-label small fw-medium mb-1">Número de
-                                            Série *</label>
-                                        <input type="text" id="serialNumber" name="serialNumber"
-                                            class="form-control shadow-sm" value="SN-12345" required>
+                                    <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary px-4"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-brand px-4"
+                                            data-bs-wizard-step="#edit-step2-tab">
+                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="card dash-card mb-4">
-                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Fabricante e Modelo</h5>
-                            </div>
-                            <div class="card-body p-4 pt-2">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="brand" class="form-label small fw-medium mb-1">Marca *</label>
-                                        <input type="text" id="brand" name="brand" class="form-control shadow-sm"
-                                            value="Philips" required>
+                                <div class="tab-pane fade" id="edit-step2-pane" role="tabpanel" tabindex="0">
+                                    <div class="card-body p-4">
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Fabricante e
+                                            Modelo</h5>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="brand" class="form-label small fw-medium mb-1">Marca
+                                                    *</label>
+                                                <input type="text" id="brand" name="brand"
+                                                    class="form-control shadow-sm" value="Philips" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="model" class="form-label small fw-medium mb-1">Modelo
+                                                    *</label>
+                                                <input type="text" id="model" name="model"
+                                                    class="form-control shadow-sm" value="IntelliVue MX700" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="manufacturer"
+                                                    class="form-label small fw-medium mb-1">Fabricante *</label>
+                                                <input type="text" id="manufacturer" name="manufacturer"
+                                                    class="form-control shadow-sm" value="Philips Healthcare" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="manufacturingYear"
+                                                    class="form-label small fw-medium mb-1">Ano de Fabrico</label>
+                                                <input type="number" id="manufacturingYear" name="manufacturingYear"
+                                                    class="form-control shadow-sm" value="2024">
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="model" class="form-label small fw-medium mb-1">Modelo *</label>
-                                        <input type="text" id="model" name="model" class="form-control shadow-sm"
-                                            value="IntelliVue MX700" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="manufacturer" class="form-label small fw-medium mb-1">Fabricante
-                                            *</label>
-                                        <input type="text" id="manufacturer" name="manufacturer"
-                                            class="form-control shadow-sm" value="Philips Healthcare" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="manufacturingYear" class="form-label small fw-medium mb-1">Ano de
-                                            Fabrico</label>
-                                        <input type="number" id="manufacturingYear" name="manufacturingYear"
-                                            class="form-control shadow-sm" value="2024">
+                                    <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary px-4"
+                                            data-bs-wizard-step="#edit-step1-tab">
+                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                                        </button>
+                                        <button type="button" class="btn btn-brand px-4"
+                                            data-bs-wizard-step="#edit-step3-tab">
+                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="card dash-card mb-4">
-                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Aquisição e Classificação</h5>
-                            </div>
-                            <div class="card-body p-4 pt-2">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="acquisitionDate" class="form-label small fw-medium mb-1">Data de
-                                            Aquisição</label>
-                                        <input type="date" id="acquisitionDate" name="acquisitionDate"
-                                            class="form-control shadow-sm" value="2024-01-01">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="acquisitionCost" class="form-label small fw-medium mb-1">Custo de
-                                            Aquisição (EUR)</label>
-                                        <input type="number" id="acquisitionCost" name="acquisitionCost"
-                                            class="form-control shadow-sm" value="5000.00">
-                                    </div>
-                                    <div class="col-md-6 position-relative">
-                                        <label class="form-label small fw-medium mb-1">Tipo de Entrada *</label>
-                                        <div class="dropdown">
-                                            <button
-                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                                <span>Compra</span>
-                                            </button>
-                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                <li><a class="dropdown-item py-2" href="#">Compra</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Doação</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Aluguer</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Empréstimo</a></li>
-                                            </ul>
+                                <div class="tab-pane fade" id="edit-step3-pane" role="tabpanel" tabindex="0">
+                                    <div class="card-body p-4">
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Aquisição e
+                                            Classificação</h5>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="acquisitionDate"
+                                                    class="form-label small fw-medium mb-1">Data de Aquisição</label>
+                                                <input type="date" id="acquisitionDate" name="acquisitionDate"
+                                                    class="form-control shadow-sm" value="2024-01-01">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="acquisitionCost"
+                                                    class="form-label small fw-medium mb-1">Custo de Aquisição
+                                                    (EUR)</label>
+                                                <input type="number" id="acquisitionCost" name="acquisitionCost"
+                                                    class="form-control shadow-sm" value="5000.00">
+                                            </div>
+                                            <div class="col-md-6 position-relative">
+                                                <label class="form-label small fw-medium mb-1">Tipo de Entrada *</label>
+                                                <div class="dropdown">
+                                                    <button
+                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                        type="button" data-bs-toggle="dropdown"
+                                                        data-bs-display="static">
+                                                        <span>Compra</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                        <li><a class="dropdown-item py-2" href="#">Compra</a></li>
+                                                        <li><a class="dropdown-item py-2" href="#">Doação</a></li>
+                                                        <li><a class="dropdown-item py-2" href="#">Aluguer</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 position-relative">
+                                                <label class="form-label small fw-medium mb-1">Estado Atual *</label>
+                                                <div class="dropdown">
+                                                    <button
+                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                        type="button" data-bs-toggle="dropdown"
+                                                        data-bs-display="static">
+                                                        <span>Ativo</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                        <li><a class="dropdown-item py-2" href="#">Ativo</a></li>
+                                                        <li><a class="dropdown-item py-2" href="#">Em manutenção</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item py-2" href="#">Inativo</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 position-relative">
+                                                <label class="form-label small fw-medium mb-1">Criticidade Clínica
+                                                    *</label>
+                                                <div class="dropdown">
+                                                    <button
+                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                        type="button" data-bs-toggle="dropdown"
+                                                        data-bs-display="static">
+                                                        <span>Baixa</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                        <li><a class="dropdown-item py-2" href="#">Baixa</a></li>
+                                                        <li><a class="dropdown-item py-2" href="#">Média</a></li>
+                                                        <li><a class="dropdown-item py-2" href="#">Alta</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 position-relative">
+                                                <label class="form-label small fw-medium mb-1">Localização Atual</label>
+                                                <div class="dropdown">
+                                                    <button
+                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                        type="button" data-bs-toggle="dropdown"
+                                                        data-bs-display="static">
+                                                        <span>Sem localização</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                        <li><a class="dropdown-item py-2" href="#">Urgência — Edifício
+                                                                Principal (0º)</a></li>
+                                                        <li><a class="dropdown-item py-2" href="#">UCI — Edifício
+                                                                Principal (1º)</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 position-relative">
-                                        <label class="form-label small fw-medium mb-1">Estado Atual *</label>
-                                        <div class="dropdown">
-                                            <button
-                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                                <span>Ativo</span>
-                                            </button>
-                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                <li><a class="dropdown-item py-2" href="#">Ativo</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Em manutenção</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Inativo</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Em calibração</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Em quarentena</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Abatido</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 position-relative">
-                                        <label class="form-label small fw-medium mb-1">Criticidade Clínica *</label>
-                                        <div class="dropdown">
-                                            <button
-                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                                <span>Baixa</span>
-                                            </button>
-                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                <li><a class="dropdown-item py-2" href="#">Baixa</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Média</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Alta</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Suporte de vida</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 position-relative">
-                                        <label class="form-label small fw-medium mb-1">Localização</label>
-                                        <div class="dropdown">
-                                            <button
-                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                type="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                                <span>Sem localização</span>
-                                            </button>
-                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                <li><a class="dropdown-item py-2" href="#">Bloco Operatório — Edifício
-                                                        Principal (2º)</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Cardiologia — Edifício
-                                                        Principal (3º)</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Laboratório — Edifício C
-                                                        (0º)</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Pediatria — Edifício B
-                                                        (1º)</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Pneumologia — Edifício
-                                                        Principal (2º)</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Radiologia — Edifício B
-                                                        (0º)</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">UCI — Edifício Principal
-                                                        (1º)</a></li>
-                                                <li><a class="dropdown-item py-2" href="#">Urgência — Edifício Principal
-                                                        (0º)</a></li>
-                                            </ul>
-                                        </div>
+                                    <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary px-4"
+                                            data-bs-wizard-step="#edit-step2-tab">
+                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                                        </button>
+                                        <button type="button" class="btn btn-brand px-4"
+                                            data-bs-wizard-step="#edit-step4-tab">
+                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="card dash-card mb-4">
-                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Fornecedores Associados</h5>
-                            </div>
-                            <div class="card-body p-4 pt-2">
-                                <div class="d-flex align-items-center gap-3 p-3 rounded border">
-                                    <input class="form-check-input m-0" type="checkbox" checked>
-                                    <div>
-                                        <p class="fw-semibold small mb-0">Dräger Portugal</p>
-                                        <p class="text-muted small mb-0">Fabricante</p>
+                                <div class="tab-pane fade" id="edit-step4-pane" role="tabpanel" tabindex="0">
+                                    <div class="card-body p-4">
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Fornecedores
+                                            Associados</h5>
+                                        <div class="d-flex align-items-center gap-3 p-3 rounded border">
+                                            <input class="form-check-input m-0" type="checkbox" checked>
+                                            <div>
+                                                <p class="fw-semibold small mb-0">Dräger Portugal</p>
+                                                <p class="text-muted small mb-0">Fabricante</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary px-4"
+                                            data-bs-wizard-step="#edit-step3-tab">
+                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                                        </button>
+                                        <button type="button" class="btn btn-brand px-4"
+                                            data-bs-wizard-step="#edit-step5-tab">
+                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="card dash-card mb-2">
-                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-2">
-                                <h5 class="fw-semibold fs-6 mb-0 text-dark">Observações</h5>
-                            </div>
-                            <div class="card-body p-4 pt-2">
-                                <textarea name="observations" class="form-control shadow-sm" rows="3"
-                                    placeholder="Notas adicionais..."></textarea>
+                                <div class="tab-pane fade" id="edit-step5-pane" role="tabpanel" tabindex="0">
+                                    <div class="card-body p-4">
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Observações</h5>
+                                        <textarea name="observations" class="form-control shadow-sm" rows="5"
+                                            placeholder="Notas adicionais..."></textarea>
+                                    </div>
+                                    <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary px-4"
+                                            data-bs-wizard-step="#edit-step4-tab">
+                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
+                                        </button>
+                                        <button type="submit"
+                                            class="btn btn-brand d-inline-flex align-items-center gap-2 px-4 shadow-sm fw-bold">
+                                            <i class="fa-solid fa-save"></i> Guardar Alterações
+                                        </button>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
                     </form>
                 </div>
-
-                <div class="modal-footer px-4 py-3 border-top">
-                    <a href="#" class="btn btn-light border px-4" data-bs-dismiss="modal">Cancelar</a>
-                    <button type="submit" form="formEditar"
-                        class="btn btn-brand d-inline-flex align-items-center gap-2 px-4 shadow-sm">
-                        <i class="fa-solid fa-save"></i> Guardar Alterações
-                    </button>
-                </div>
-
             </div>
         </div>
     </div>
@@ -881,6 +1116,152 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Script para permitir que os botões "Próximo" e "Anterior" mudem a aba selecionada no topo
+            document.querySelectorAll('[data-bs-wizard-step]').forEach(button => {
+                button.addEventListener('click', function () {
+                    const targetTabId = this.getAttribute('data-bs-wizard-step');
+                    const targetTabElement = document.querySelector(targetTabId);
+                    if (targetTabElement) {
+                        const tab = new bootstrap.Tab(targetTabElement);
+                        tab.show();
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- MOTOR DE FILTROS E PESQUISA (SPA) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Elementos DOM
+            const sidebar = document.getElementById('filterSidebar');
+            const btnToggle = document.getElementById('btnToggleSidebar');
+            const txtToggle = document.getElementById('textToggleSidebar');
+            const searchInput = document.getElementById('inputPesquisa');
+            const checkboxes = document.querySelectorAll('.filter-check input[type="checkbox"]');
+            const tableRows = document.querySelectorAll('#tabelaEquipamentos tr:not(#noResultsRow)');
+            const noResultsRow = document.getElementById('noResultsRow');
+            const activePillsContainer = document.getElementById('activePillsContainer');
+            const badgeContador = document.getElementById('badgeContadorFiltros');
+            const btnLimpar = document.getElementById('btnLimparFiltros');
+            const countDisplay = document.getElementById('resultadosCount');
+
+            // 1. Toggle da Barra Lateral
+            btnToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    txtToggle.innerText = "Mostrar filtros";
+                    btnToggle.classList.replace('btn-light', 'btn-brand-subtle');
+                    btnToggle.classList.replace('text-secondary', 'text-brand');
+                } else {
+                    txtToggle.innerText = "Ocultar filtros";
+                    btnToggle.classList.replace('btn-brand-subtle', 'btn-light');
+                    btnToggle.classList.replace('text-brand', 'text-secondary');
+                }
+            });
+
+            // 2. Motor de Filtragem Principal
+            function aplicarFiltros() {
+                const termoPesquisa = searchInput.value.toLowerCase().trim();
+
+                // Mapear filtros ativos (Adicionado o Fornecedor)
+                const filtrosAtivos = {
+                    estado: [],
+                    criticidade: [],
+                    categoria: [],
+                    fornecedor: []
+                };
+
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        filtrosAtivos[cb.dataset.group].push(cb.value);
+                    }
+                });
+
+                const totalAtivos = filtrosAtivos.estado.length + filtrosAtivos.criticidade.length + filtrosAtivos.categoria.length + filtrosAtivos.fornecedor.length;
+
+                // Atualiza UI dos filtros (botão Limpar e Badges de quantidade)
+                atualizarUIFiltros(filtrosAtivos, totalAtivos);
+
+                let linhasVisiveis = 0;
+
+                // Iterar sobre cada linha da tabela
+                tableRows.forEach(row => {
+                    const rowTexto = row.innerText.toLowerCase();
+                    const dEstado = row.dataset.estado;
+                    const dCriticidade = row.dataset.criticidade;
+                    const dCategoria = row.dataset.categoria;
+                    const dFornecedor = row.dataset.fornecedor; // Nova variável
+
+                    // Lógica de compatibilidade (match)
+                    const matchPesquisa = rowTexto.includes(termoPesquisa);
+                    const matchEstado = filtrosAtivos.estado.length === 0 || filtrosAtivos.estado.includes(dEstado);
+                    const matchCriticidade = filtrosAtivos.criticidade.length === 0 || filtrosAtivos.criticidade.includes(dCriticidade);
+                    const matchCategoria = filtrosAtivos.categoria.length === 0 || filtrosAtivos.categoria.includes(dCategoria);
+                    const matchFornecedor = filtrosAtivos.fornecedor.length === 0 || filtrosAtivos.fornecedor.includes(dFornecedor);
+
+                    // Se tudo bater certo, mostra
+                    if (matchPesquisa && matchEstado && matchCriticidade && matchCategoria && matchFornecedor) {
+                        row.classList.remove('d-none');
+                        linhasVisiveis++;
+                    } else {
+                        row.classList.add('d-none');
+                    }
+                });
+
+                // Atualiza contador e mostra aviso se zero
+                countDisplay.innerText = `Mostrando ${linhasVisiveis} resultado${linhasVisiveis !== 1 ? 's' : ''}`;
+                if (linhasVisiveis === 0) {
+                    noResultsRow.classList.remove('d-none');
+                } else {
+                    noResultsRow.classList.add('d-none');
+                }
+            }
+
+            // 3. Atualizar a Interface Gráfica dos Filtros (Pills e Contadores)
+            function atualizarUIFiltros(filtrosAtivos, total) {
+                if (total > 0) {
+                    badgeContador.innerText = total;
+                    badgeContador.classList.remove('d-none');
+                    btnLimpar.classList.remove('d-none');
+                } else {
+                    badgeContador.classList.add('d-none');
+                    btnLimpar.classList.add('d-none');
+                }
+
+                activePillsContainer.innerHTML = '';
+                Object.keys(filtrosAtivos).forEach(grupo => {
+                    filtrosAtivos[grupo].forEach(valor => {
+                        const pill = document.createElement('span');
+                        pill.className = "badge bg-white border text-secondary d-flex align-items-center gap-2 py-2 px-3 shadow-sm";
+                        pill.style.fontSize = "0.75rem";
+                        pill.innerHTML = `${valor} <i class="fa-solid fa-xmark cursor-pointer text-danger ms-1" style="font-size:0.9rem;"></i>`;
+
+                        pill.querySelector('i').addEventListener('click', () => {
+                            document.querySelector(`input[data-group="${grupo}"][value="${valor}"]`).checked = false;
+                            aplicarFiltros();
+                        });
+                        activePillsContainer.appendChild(pill);
+                    });
+                });
+            }
+
+            // 4. Limpar todos os filtros
+            btnLimpar.addEventListener('click', () => {
+                checkboxes.forEach(cb => cb.checked = false);
+                searchInput.value = '';
+                aplicarFiltros();
+            });
+
+            // 5. Ativar Event Listeners
+            searchInput.addEventListener('input', aplicarFiltros);
+            checkboxes.forEach(cb => cb.addEventListener('change', aplicarFiltros));
+        });
+    </script>
 
     <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../../assets/js/1231184.js"></script>

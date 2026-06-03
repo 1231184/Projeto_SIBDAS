@@ -636,6 +636,281 @@ section[id] {
     flex-shrink: 0;
 }
 
+/* Efeitos para os cartões clicáveis das Localizações */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.card-hover {
+    transition: all 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Estilo para o cartão de "Adicionar" */
+.card-dashed {
+    border: 2px dashed #cbd5e1 !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.card-dashed:hover {
+    border-color: #1d8fdb !important;
+    background-color: rgba(29, 143, 219, 0.03) !important;
+}
+
+.btn-brand-subtle {
+    background-color: rgba(29, 143, 219, 0.1) !important;
+}
+.btn-brand-subtle:hover {
+    background-color: rgba(29, 143, 219, 0.2) !important;
+}
+
+/* ========================================== */
+/* ESTILOS PARA MÓDULO DE FORNECEDORES        */
+/* ========================================== */
+
+.badge-tipo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.badge-tipo .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.badge-fabricante { background-color: #eff8ff; color: #1d6fa4; }
+.badge-fabricante .dot { background-color: #3b9fdb; }
+
+.badge-assistencia { background-color: #f0fdf4; color: #15803d; }
+.badge-assistencia .dot { background-color: #22c55e; }
+
+.badge-distribuidor { background-color: #fff7ed; color: #c2410c; }
+.badge-distribuidor .dot { background-color: #f97316; }
+
+.badge-consumiveis { background-color: #fdf4ff; color: #7e22ce; }
+.badge-consumiveis .dot { background-color: #a855f7; }
+
+.btn-filter {
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    border-radius: 8px;
+    background-color: white;
+    transition: all 0.2s;
+}
+
+.btn-filter.active {
+    background-color: #eff8ff;
+    border-color: #1d8fdb;
+    color: #1d8fdb;
+}
+
+/* ============================================================
+/* MÓDULO EQUIPAMENTOS - FILTROS E BADGES     */
+/* ========================================== */
+
+/* Layout da Área Principal para ter scroll independente */
+.equipamentos-wrapper {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+    background-color: #f0f4f8;
+}
+
+/* Painel de Filtros Lateral */
+.filter-panel {
+    width: 250px;
+    background: #fff;
+    border-right: 1px solid #e2e8f0;
+    overflow-y: auto;
+    flex-shrink: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.filter-panel.collapsed {
+    width: 0;
+    padding: 0 !important;
+    border: none;
+    overflow: hidden;
+}
+
+/* Badges Base */
+.badge-eq {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.badge-eq .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+/* Cores de Estado */
+.st-ativo { background: #f0fdf4; color: #16a34a; } .st-ativo .dot { background: #22c55e; }
+.st-manutencao { background: #fffbeb; color: #d97706; } .st-manutencao .dot { background: #f59e0b; }
+.st-calibracao { background: #eff8ff; color: #1d6fa4; } .st-calibracao .dot { background: #3b9fdb; }
+.st-inativo { background: #fef2f2; color: #dc2626; } .st-inativo .dot { background: #ef4444; }
+.st-quarentena { background: #fdf4ff; color: #7e22ce; } .st-quarentena .dot { background: #a855f7; }
+.st-abatido { background: #f8fafc; color: #64748b; } .st-abatido .dot { background: #94a3b8; }
+
+/* Cores de Criticidade */
+.cr-vida { background: #fef2f2; color: #dc2626; }
+.cr-alta { background: #fff7ed; color: #ea580c; }
+.cr-media { background: #fefce8; color: #ca8a04; }
+.cr-baixa { background: #f0fdf4; color: #16a34a; }
+
+/* Checkboxes personalizadas dos filtros */
+.filter-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-bottom: 0;
+}
+.filter-check input {
+    display: none;
+}
+.filter-check .custom-box {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid #cbd5e1;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+.filter-check input:checked + .custom-box {
+    background: #1d8fdb;
+    border-color: #1d8fdb;
+}
+.filter-check input:checked + .custom-box::after {
+    content: '✓';
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+}
+.filter-check span.label-text {
+    font-size: 0.8rem;
+    color: #475569;
+}
+/* Estilos para o Acordeão de Filtros */
+.filter-accordion .accordion-item {
+    border: none;
+    border-bottom: 1px solid #f1f5f9;
+}
+.filter-accordion .accordion-button {
+    padding: 12px 16px;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    color: #64748b;
+}
+.filter-accordion .accordion-button:not(.collapsed) {
+    background-color: white;
+    color: #0d2137;
+    box-shadow: none;
+}
+.filter-accordion .accordion-button:focus {
+    box-shadow: none;
+}
+.filter-accordion .accordion-body {
+    padding: 0 16px 16px 16px;
+}
+
+/* ========================================== */
+/* MÓDULO DE DOCUMENTAÇÃO                     */
+/* ========================================== */
+
+/* Crachás (Badges) genéricos para Documentos */
+.badge-doc {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Tipos de Documento */
+.doc-tipo-manual { background-color: #eff8ff; color: #1d6fa4; }
+.doc-tipo-servico { background-color: #fff7ed; color: #c2410c; }
+.doc-tipo-calibracao { background-color: #fdf4ff; color: #7e22ce; }
+.doc-tipo-contrato { background-color: #f0fdf4; color: #15803d; }
+.doc-tipo-fatura { background-color: #fefce8; color: #ca8a04; }
+.doc-tipo-relatorio { background-color: #f8fafc; color: #475569; }
+
+/* Validades com "dot" */
+.doc-val-valido { background-color: #f0fdf4; color: #16a34a; }
+.doc-val-valido .dot { background-color: #22c55e; width: 6px; height: 6px; border-radius: 50%; }
+
+.doc-val-expirar { background-color: #fffbeb; color: #d97706; }
+.doc-val-expirar .dot { background-color: #f59e0b; width: 6px; height: 6px; border-radius: 50%; }
+
+.doc-val-expirado { background-color: #fef2f2; color: #dc2626; }
+.doc-val-expirado .dot { background-color: #ef4444; width: 6px; height: 6px; border-radius: 50%; }
+
+.doc-val-sem { background-color: #f8fafc; color: #64748b; }
+.doc-val-sem .dot { background-color: #cbd5e1; width: 6px; height: 6px; border-radius: 50%; }
+
+/* Cartões KPI Interativos */
+.kpi-doc-card {
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+.kpi-doc-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+}
+.kpi-doc-card.active-valido { border-color: #bbf7d0 !important; }
+.kpi-doc-card.active-expirar { border-color: #fde68a !important; }
+.kpi-doc-card.active-expirado { border-color: #fecaca !important; }
+
+/* Pills de Filtro de Tipo */
+.btn-doc-filter {
+    padding: 7px 12px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: #fff;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+.btn-doc-filter:hover { background: #f8fafc; }
+.btn-doc-filter.active { background: #eff8ff; border-color: #1d8fdb; color: #1d8fdb; }
+
 /* ============================================================
    RESPONSIVIDADE
 ============================================================ */
