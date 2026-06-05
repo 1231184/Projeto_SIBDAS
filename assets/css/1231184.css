@@ -911,6 +911,12 @@ section[id] {
 .btn-doc-filter:hover { background: #f8fafc; }
 .btn-doc-filter.active { background: #eff8ff; border-color: #1d8fdb; color: #1d8fdb; }
 
+/* Limitar altura dos dropdowns e adicionar scroll */
+.dropdown-menu-scrollable {
+    max-height: 200px; /* Podes ajustar este valor (ex: 150px ou 250px) */
+    overflow-y: auto;
+}
+
 /* ============================================================
    RESPONSIVIDADE
 ============================================================ */
