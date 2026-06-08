@@ -105,18 +105,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../alertas/alertas.html"
-                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
-                            <path d="M12 9v4"></path>
-                            <path d="M12 17h.01"></path>
-                        </svg>
-                        <span class="fw-medium">Alertas</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="../conteudo/conteudo.html"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <i class="fa-regular fa-pen-to-square"></i>
@@ -926,6 +914,91 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 1. Apanhar todos os formulários que estão dentro de modais
+            const formsModais = document.querySelectorAll('.modal form');
+
+            formsModais.forEach(form => {
+                // Truque Mágico: Adicionar o novalidate via Javascript
+                form.setAttribute('novalidate', true);
+
+                // 2. Quando o utilizador clica em "Criar" ou "Guardar"
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault(); 
+
+                    let tudoValido = true;
+
+                    // A) Validar se os campos obrigatórios (required) estão preenchidos
+                    const camposObrigatorios = form.querySelectorAll('input[required], select[required]');
+                    camposObrigatorios.forEach(campo => {
+                        if (!campo.value || campo.value.trim() === '') {
+                            campo.classList.add('is-invalid', 'border-danger');
+                            tudoValido = false;
+                        } else {
+                            campo.classList.remove('is-invalid', 'border-danger');
+                        }
+                    });
+
+                    // B) Validar regras numéricas
+                    const camposNumericos = form.querySelectorAll('input[type="number"]');
+                    camposNumericos.forEach(campo => {
+                        if (campo.value && campo.hasAttribute('min')) {
+                            const minVal = parseFloat(campo.getAttribute('min'));
+                            if (parseFloat(campo.value) < minVal) {
+                                campo.classList.add('is-invalid', 'border-danger');
+                                tudoValido = false;
+                            }
+                        }
+                    });
+
+                    if (!tudoValido) return; 
+
+                    // C) EFEITO VISUAL DE SUBMISSÃO E FECHO DO MODAL
+                    const formId = form.getAttribute('id');
+                    const btnSubmit = document.querySelector(`button[type="submit"][form="${formId}"]`);
+                    
+                    if (btnSubmit) {
+                        const originalText = btnSubmit.innerHTML;
+                        
+                        btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> A guardar...';
+                        btnSubmit.disabled = true;
+
+                        setTimeout(() => {
+                            alert("✅ Registo guardado com sucesso!");
+                            
+                            // 1. Encontrar o modal que contém este formulário
+                            const modalElement = form.closest('.modal');
+                            
+                            // 2. Fechar o modal usando a API do Bootstrap
+                            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                            if (modalInstance) {
+                                modalInstance.hide();
+                            }
+                            
+                            // 3. Voltar a pôr o botão ao normal (para quando o modal for aberto de novo)
+                            btnSubmit.innerHTML = originalText;
+                            btnSubmit.disabled = false;
+                            
+                            // 4. Limpar o formulário se for um modal de "Novo" (evita limpar nos de "Editar")
+                            if(formId.includes("Novo")) {
+                                form.reset();
+                            }
+
+                        }, 1000);
+                    }
+                });
+
+                // UX: Limpar a borda vermelha ao escrever
+                form.querySelectorAll('input, select').forEach(campo => {
+                    campo.addEventListener('input', function() {
+                        this.classList.remove('is-invalid', 'border-danger');
+                    });
+                });
+            });
+        });
+    </script>
 
     <script>
         function hideAllViews() {

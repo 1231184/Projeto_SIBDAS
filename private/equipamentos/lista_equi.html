@@ -106,18 +106,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../alertas/alertas.html"
-                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
-                            <path d="M12 9v4"></path>
-                            <path d="M12 17h.01"></path>
-                        </svg>
-                        <span class="fw-medium">Alertas</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="../conteudo/conteudo.html"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <i class="fa-regular fa-pen-to-square"></i>
@@ -300,6 +288,40 @@
                         </div>
                     </div>
 
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-bold text-uppercase shadow-none" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseServico">
+                                Serviço
+                            </button>
+                        </h2>
+                        <div id="collapseServico" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFiltros">
+                            <div class="accordion-body">
+                                <label class="filter-check"><input type="checkbox" value="Urgência Geral"
+                                        data-group="servico">
+                                    <div class="custom-box"></div><span class="label-text">Urgência Geral</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Imagiologia"
+                                        data-group="servico">
+                                    <div class="custom-box"></div><span class="label-text">Imagiologia</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox"
+                                        value="Unidade de Cuidados Intensivos (UCI)" data-group="servico">
+                                    <div class="custom-box"></div><span class="label-text">UCI</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Bloco Operatório"
+                                        data-group="servico">
+                                    <div class="custom-box"></div><span class="label-text">Bloco Operatório</span>
+                                </label>
+                                <label class="filter-check"><input type="checkbox" value="Medicina Interna"
+                                        data-group="servico">
+                                    <div class="custom-box"></div><span class="label-text">Medicina Interna</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </aside>
 
@@ -468,7 +490,6 @@
     </main>
 
     <!-- Modal Detalhes Equipamento -->
-    <!-- Modal Detalhes Equipamento -->
     <div class="modal fade" id="modalDetalhes" tabindex="-1" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content border-0 shadow-lg bg-backend">
@@ -508,37 +529,43 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active text-dark fw-medium" id="geral-tab" data-bs-toggle="tab"
                                     data-bs-target="#geral-pane" type="button" role="tab" aria-selected="true">
-                                    <i class="fa-solid fa-circle-info me-1"></i> Geral
+                                    Geral
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link text-muted fw-medium" id="localizacao-tab" data-bs-toggle="tab"
                                     data-bs-target="#localizacao-pane" type="button" role="tab" aria-selected="false">
-                                    <i class="fa-solid fa-map-pin me-1"></i> Localização
+                                    Localização
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link text-muted fw-medium" id="fornecedores-tab" data-bs-toggle="tab"
                                     data-bs-target="#fornecedores-pane" type="button" role="tab" aria-selected="false">
-                                    <i class="fa-solid fa-truck me-1"></i> Fornecedores
+                                    Fornecedores
                                     <span class="badge bg-secondary rounded-pill ms-1"
-                                        style="font-size: 0.65rem;">2</span>
+                                        style="font-size: 0.65rem;">3</span>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link text-muted fw-medium" id="garantias-tab" data-bs-toggle="tab"
                                     data-bs-target="#garantias-pane" type="button" role="tab" aria-selected="false">
-                                    <i class="fa-solid fa-shield-check me-1"></i> Garantias
-                                    <span class="badge bg-secondary rounded-pill ms-1"
-                                        style="font-size: 0.65rem;">1</span>
+                                    Garantias e Contratos
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link text-muted fw-medium" id="documentos-tab" data-bs-toggle="tab"
                                     data-bs-target="#documentos-pane" type="button" role="tab" aria-selected="false">
-                                    <i class="fa-regular fa-file-lines me-1"></i> Documentos
+                                    Documentos
                                     <span class="badge bg-secondary rounded-pill ms-1"
                                         style="font-size: 0.65rem;">3</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="acessorios-tab" data-bs-toggle="tab"
+                                    data-bs-target="#acessorios-pane" type="button" role="tab" aria-selected="false">
+                                    Acessórios
+                                    <span class="badge bg-secondary rounded-pill ms-1"
+                                        style="font-size: 0.65rem;">2</span>
                                 </button>
                             </li>
                         </ul>
@@ -550,12 +577,23 @@
 
                                     <!-- TAB 1: GERAL -->
                                     <div class="tab-pane fade show active" id="geral-pane" role="tabpanel" tabindex="0">
+
                                         <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Identificação e
                                             Fabrico</h5>
                                         <div class="row row-cols-2 row-cols-md-3 g-4 mb-4">
                                             <div class="col">
                                                 <p class="detail-label">Categoria</p>
                                                 <p class="detail-value">Monitorização</p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="detail-label">Criticidade Clínica</p>
+                                                <p class="detail-value"><span
+                                                        class="badge badge-soft-warning">Alta</span></p>
+                                            </div>
+                                            <div class="col">
+                                                <p class="detail-label">Estado Atual</p>
+                                                <p class="detail-value"><span class="badge badge-soft-success">Ativo /
+                                                        Operacional</span></p>
                                             </div>
                                             <div class="col">
                                                 <p class="detail-label">Marca</p>
@@ -580,8 +618,8 @@
                                             </div>
                                         </div>
 
-                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2 mt-4">Aquisição
-                                        </h5>
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2 mt-4">Receção e
+                                            Aquisição</h5>
                                         <div class="row row-cols-2 row-cols-md-3 g-4 mb-4">
                                             <div class="col">
                                                 <p class="detail-label">Tipo de Entrada</p>
@@ -617,15 +655,15 @@
                                             </div>
                                             <div class="col">
                                                 <p class="detail-label">Piso</p>
-                                                <p class="detail-value">1</p>
+                                                <p class="detail-value">Piso 1</p>
                                             </div>
                                             <div class="col">
                                                 <p class="detail-label">Serviço</p>
-                                                <p class="detail-value">UCI</p>
+                                                <p class="detail-value">Unidade de Cuidados Intensivos (UCI)</p>
                                             </div>
                                             <div class="col">
-                                                <p class="detail-label">Sala</p>
-                                                <p class="detail-value">Unidade A</p>
+                                                <p class="detail-label">Sala / Compartimento</p>
+                                                <p class="detail-value">Box 1</p>
                                             </div>
                                         </div>
                                     </div>
@@ -640,7 +678,7 @@
                                                     <div>
                                                         <p class="detail-value fw-medium">Philips Healthcare</p>
                                                         <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                            Distribuidor-Fornecedor Comercial</p>
+                                                            Fornecedor Comercial</p>
                                                     </div>
                                                     <div class="text-end d-none d-sm-block">
                                                         <p class="text-muted small mb-0" style="font-size: 0.75rem;">
@@ -653,10 +691,9 @@
                                             <a href="#" class="text-decoration-none text-dark">
                                                 <div class="list-box d-flex justify-content-between align-items-center">
                                                     <div>
-                                                        <p class="detail-value fw-medium">MedServ - Assistência Técnica
-                                                        </p>
+                                                        <p class="detail-value fw-medium">MedServ Técnica</p>
                                                         <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                            Empresa de Assistência Técnica</p>
+                                                            Assistência Técnica Oficial</p>
                                                     </div>
                                                     <div class="text-end d-none d-sm-block">
                                                         <p class="text-muted small mb-0" style="font-size: 0.75rem;">
@@ -666,34 +703,73 @@
                                                     </div>
                                                 </div>
                                             </a>
+                                            <a href="#" class="text-decoration-none text-dark">
+                                                <div class="list-box d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <p class="detail-value fw-medium">FarmaMed Consumíveis</p>
+                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                            Fornecedor de Consumíveis</p>
+                                                    </div>
+                                                    <div class="text-end d-none d-sm-block">
+                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                            +351 210 000 008</p>
+                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                            geral@farmamed.pt</p>
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
                                     </div>
 
-                                    <!-- TAB 4: GARANTIAS -->
+                                    <!-- TAB 4: GARANTIAS E CONTRATOS -->
                                     <div class="tab-pane fade" id="garantias-pane" role="tabpanel" tabindex="0">
-                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Coberturas Ativas
+
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">
+                                            <i class="fa-solid fa-shield-halved text-success me-2"></i> Garantia Legal
                                         </h5>
-                                        <div class="list-box list-box-light border-0 mt-3">
-                                            <div class="row row-cols-2 row-cols-md-4 g-3">
+                                        <div class="list-box list-box-light border-0 mb-4">
+                                            <div class="row row-cols-2 row-cols-md-3 g-3">
                                                 <div class="col">
-                                                    <p class="detail-label">Início</p>
+                                                    <p class="detail-label">Início da Garantia</p>
                                                     <p class="detail-value">15/01/2024</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p class="detail-label">Fim</p>
+                                                    <p class="detail-label">Fim da Garantia</p>
                                                     <p class="detail-value">15/01/2027</p>
                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">
+                                            <i class="fa-solid fa-file-contract text-muted me-2"></i> Contrato de
+                                            Manutenção
+                                        </h5>
+                                        <div class="list-box list-box-light border-0">
+                                            <div class="row row-cols-2 row-cols-md-3 g-3">
                                                 <div class="col">
-                                                    <p class="detail-label">Tipo</p>
-                                                    <p class="detail-value">Full Service</p>
+                                                    <p class="detail-label">Nº Referência</p>
+                                                    <p class="detail-value custom-monospace" style="font-size: 0.8rem;">
+                                                        CNT-2024-001</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p class="detail-label">Manutenção</p>
-                                                    <p class="detail-value">Sim (Anual)</p>
-                                                </div>
-                                                <div class="col-12 mt-2">
                                                     <p class="detail-label">Entidade Responsável</p>
-                                                    <p class="detail-value">Philips Healthcare</p>
+                                                    <p class="detail-value">MedServ Técnica</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="detail-label">Tipo de Contrato</p>
+                                                    <p class="detail-value">Full-Service</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="detail-label">Periodicidade</p>
+                                                    <p class="detail-value">Anual</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="detail-label">Início do Contrato</p>
+                                                    <p class="detail-value">15/01/2024</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="detail-label">Fim do Contrato</p>
+                                                    <p class="detail-value">15/01/2027</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -706,48 +782,107 @@
                                         <div class="d-flex flex-column gap-2 mt-3">
 
                                             <div
-                                                class="list-box list-box-light d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <p class="detail-value fw-medium">IntelliVue MX700 - Manual do
+                                                class="list-box list-box-light d-flex justify-content-between align-items-center gap-3">
+                                                <div class="flex-grow-1">
+                                                    <p class="detail-value fw-medium mb-0">IntelliVue MX700 - Manual do
                                                         Utilizador</p>
                                                     <p class="text-muted small mb-0" style="font-size: 0.75rem;">Manual
                                                         de Utilizador — 01/01/2023</p>
-                                                </div>
-                                                <div class="text-end">
                                                     <p class="text-muted custom-monospace small mb-0"
-                                                        style="font-size: 0.75rem;">intellivue_mx700_manual.pdf</p>
+                                                        style="font-size: 0.75rem;">
+                                                        <i
+                                                            class="fa-solid fa-file-pdf text-danger me-1"></i>intellivue_mx700_manual.pdf
+                                                    </p>
                                                 </div>
+                                                <a href="../../assets/docs/intellivue_mx700_manual.pdf" download
+                                                    class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 flex-shrink-0"
+                                                    title="Descarregar ficheiro">
+                                                    <i class="fa-solid fa-download"></i>
+                                                    <span class="d-none d-sm-inline">Download</span>
+                                                </a>
                                             </div>
 
-                                            <div class="list-box d-flex justify-content-between align-items-center"
+                                            <div class="list-box d-flex justify-content-between align-items-center gap-3"
                                                 style="background-color: rgba(254, 242, 242, 0.5); border-color: rgba(254, 202, 202, 0.5);">
-                                                <div>
-                                                    <p class="detail-value fw-medium">Certificado de Calibração -
+                                                <div class="flex-grow-1">
+                                                    <p class="detail-value fw-medium mb-0">Certificado de Calibração -
                                                         Monitor MX700</p>
                                                     <p class="text-muted small mb-0" style="font-size: 0.75rem;">
                                                         Certificado de Calibração — 01/06/2024</p>
+                                                    <p class="text-muted custom-monospace small mb-0"
+                                                        style="font-size: 0.75rem;">
+                                                        <i
+                                                            class="fa-solid fa-file-pdf text-danger me-1"></i>calib_monitor_2024.pdf
+                                                    </p>
+                                                    <p class="text-danger fw-medium small mb-0"
+                                                        style="font-size: 0.75rem;">
+                                                        <i class="fa-solid fa-circle-exclamation me-1"></i>Validade:
+                                                        01/06/2025 (Expirado)
+                                                    </p>
+                                                </div>
+                                                <a href="../../assets/docs/calib_monitor_2024.pdf" download
+                                                    class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 flex-shrink-0"
+                                                    title="Descarregar ficheiro">
+                                                    <i class="fa-solid fa-download"></i>
+                                                    <span class="d-none d-sm-inline">Download</span>
+                                                </a>
+                                            </div>
+
+                                            <div
+                                                class="list-box list-box-light d-flex justify-content-between align-items-center gap-3">
+                                                <div class="flex-grow-1">
+                                                    <p class="detail-value fw-medium mb-0">Contrato Full Service Philips
+                                                        2024-2027</p>
+                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                        Contrato de Manutenção — 15/01/2024</p>
+                                                    <p class="text-muted custom-monospace small mb-0"
+                                                        style="font-size: 0.75rem;">
+                                                        <i
+                                                            class="fa-solid fa-file-pdf text-danger me-1"></i>contrato_philips.pdf
+                                                    </p>
+                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                        Validade: 15/01/2027</p>
+                                                </div>
+                                                <a href="../../assets/docs/contrato_philips.pdf" download
+                                                    class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 flex-shrink-0"
+                                                    title="Descarregar ficheiro">
+                                                    <i class="fa-solid fa-download"></i>
+                                                    <span class="d-none d-sm-inline">Download</span>
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- TAB 6: ACESSÓRIOS -->
+                                    <div class="tab-pane fade" id="acessorios-pane" role="tabpanel" tabindex="0">
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Componentes e
+                                            Acessórios Associados</h5>
+                                        <div class="d-flex flex-column gap-2 mt-3">
+
+                                            <div
+                                                class="list-box list-box-light d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <p class="detail-value fw-medium">Cabo ECG 5 Vias</p>
+                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
+                                                        Acessório</p>
                                                 </div>
                                                 <div class="text-end">
-                                                    <p class="text-danger fw-medium small mb-0"
-                                                        style="font-size: 0.75rem;">Validade: 01/06/2025 (Expirado)</p>
                                                     <p class="text-muted custom-monospace small mb-0"
-                                                        style="font-size: 0.75rem;">calib_monitor_2024.pdf</p>
+                                                        style="font-size: 0.75rem;">SN-889900</p>
                                                 </div>
                                             </div>
 
                                             <div
                                                 class="list-box list-box-light d-flex justify-content-between align-items-center">
                                                 <div>
-                                                    <p class="detail-value fw-medium">Contrato Full Service Philips
-                                                        2024-2027</p>
+                                                    <p class="detail-value fw-medium">Braçadeira de Pressão Adulto</p>
                                                     <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        Contrato de Manutenção — 15/01/2024</p>
+                                                        Acessório</p>
                                                 </div>
                                                 <div class="text-end">
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        Validade: 15/01/2027</p>
-                                                    <p class="text-muted custom-monospace small mb-0"
-                                                        style="font-size: 0.75rem;">contrato_philips.pdf</p>
+                                                    <p class="text-muted custom-monospace small mb-0 fst-italic"
+                                                        style="font-size: 0.75rem;">Não definido</p>
                                                 </div>
                                             </div>
 
@@ -784,38 +919,46 @@
                 </div>
 
                 <div class="modal-body p-4">
-                    <form id="formEditar" action="#" method="POST">
+                    <form id="formEditar" action="#" method="POST" novalidate>
 
-                        <ul class="nav nav-tabs mb-4 border-bottom-0" id="editarTabs" role="tablist">
+                        <ul class="nav nav-tabs mb-4 border-bottom-0" id="editarTabs" role="tablist"
+                            style="pointer-events: none;">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active text-dark fw-medium" id="edit-step1-tab"
-                                    data-bs-toggle="tab" data-bs-target="#edit-step1-pane" type="button" role="tab"
-                                    aria-selected="true">
+                                    data-bs-target="#edit-step1-pane" type="button" role="tab" aria-selected="true">
                                     <span class="badge bg-brand text-white me-1 rounded-pill">1</span> Identificação
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link text-muted fw-medium" id="edit-step2-tab" data-bs-toggle="tab"
+                                <button class="nav-link text-muted fw-medium" id="edit-step2-tab"
                                     data-bs-target="#edit-step2-pane" type="button" role="tab" aria-selected="false">
-                                    <span class="badge bg-secondary text-white me-1 rounded-pill">2</span> Fabricante
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">2</span> Receção e
+                                    Localização
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link text-muted fw-medium" id="edit-step3-tab" data-bs-toggle="tab"
+                                <button class="nav-link text-muted fw-medium" id="edit-step3-tab"
                                     data-bs-target="#edit-step3-pane" type="button" role="tab" aria-selected="false">
-                                    <span class="badge bg-secondary text-white me-1 rounded-pill">3</span> Aquisição
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">3</span> Entidades e
+                                    Contratos
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link text-muted fw-medium" id="edit-step4-tab" data-bs-toggle="tab"
+                                <button class="nav-link text-muted fw-medium" id="edit-step4-tab"
                                     data-bs-target="#edit-step4-pane" type="button" role="tab" aria-selected="false">
-                                    <span class="badge bg-secondary text-white me-1 rounded-pill">4</span> Fornecedores
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">4</span> Documentação
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link text-muted fw-medium" id="edit-step5-tab" data-bs-toggle="tab"
+                                <button class="nav-link text-muted fw-medium" id="edit-step5-tab"
                                     data-bs-target="#edit-step5-pane" type="button" role="tab" aria-selected="false">
-                                    <span class="badge bg-secondary text-white me-1 rounded-pill">5</span> Observações
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">5</span> Acessórios
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link text-muted fw-medium" id="edit-step6-tab"
+                                    data-bs-target="#edit-step6-pane" type="button" role="tab" aria-selected="false">
+                                    <span class="badge bg-secondary text-white me-1 rounded-pill">6</span> Observações
                                 </button>
                             </li>
                         </ul>
@@ -829,233 +972,752 @@
                                         <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Detalhes de
                                             Identificação</h5>
                                         <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <label for="internalCode" class="form-label small fw-medium mb-1">Código
-                                                    Interno *</label>
-                                                <input type="text" id="internalCode" name="internalCode"
-                                                    class="form-control shadow-sm" value="EQ-2024-001" required>
+                                            <div class="col-md-3">
+                                                <label class="form-label small fw-medium mb-1">Código Interno *</label>
+                                                <input type="text" name="internalCode"
+                                                    class="form-control shadow-sm bg-light text-brand fw-bold"
+                                                    value="EQ-2024-001" readonly required>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label for="name" class="form-label small fw-medium mb-1">Designação
-                                                    *</label>
-                                                <input type="text" id="name" name="name" class="form-control shadow-sm"
-                                                    value="Monitor Multiparamétrico" required>
+                                            <div class="col-md-9">
+                                                <label class="form-label small fw-medium mb-1">Designação *</label>
+                                                <input type="text" name="name" class="form-control shadow-sm"
+                                                    value="Monitor Multiparamétrico IntelliVue MP5" required>
+                                                <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                                    obrigatório.</div>
                                             </div>
-                                            <div class="col-md-6 position-relative">
-                                                <label class="form-label small fw-medium mb-1">Categoria *</label>
+
+                                            <div class="col-md-4">
+                                                <label class="form-label small fw-medium mb-1">Marca *</label>
+                                                <input type="text" name="brand" class="form-control shadow-sm"
+                                                    value="Philips" required>
+                                                <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                                    obrigatório.</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label small fw-medium mb-1">Modelo *</label>
+                                                <input type="text" name="model" class="form-control shadow-sm"
+                                                    value="MP5" required>
+                                                <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                                    obrigatório.</div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label small fw-medium mb-1">Número de Série *</label>
+                                                <input type="text" name="serialNumber" class="form-control shadow-sm"
+                                                    value="SN-PH-2024-001" required>
+                                                <div class="invalid-feedback" id="edit-feedbackSerial"
+                                                    style="font-size: 0.70rem;">Campo obrigatório.</div>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <label class="form-label small fw-medium mb-1">Fabricante *</label>
                                                 <div class="dropdown">
+                                                    <input type="hidden" name="manufacturer" id="edit-inputManufacturer"
+                                                        value="Philips Healthcare PT" required>
                                                     <button
-                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                        type="button" data-bs-toggle="dropdown"
+                                                        class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm bg-white"
+                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                                         data-bs-display="static">
-                                                        <span>Monitorização</span>
+                                                        <span id="edit-textManufacturer" class="text-dark">Philips
+                                                            Healthcare PT</span>
                                                     </button>
-                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                        <li><a class="dropdown-item py-2" href="#">Monitorização</a>
+                                                    <ul
+                                                        class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                        <li class="px-2 pb-2 mb-2 border-bottom">
+                                                            <input type="text"
+                                                                class="form-control form-control-sm shadow-none bg-light"
+                                                                id="edit-searchManufacturer" placeholder="Pesquisar..."
+                                                                onkeyup="filtrarDropdown('edit-searchManufacturer', 'edit-listaManufacturer')"
+                                                                onclick="event.stopPropagation()">
                                                         </li>
-                                                        <li><a class="dropdown-item py-2" href="#">Ventilação</a></li>
-                                                        <li><a class="dropdown-item py-2" href="#">Infusão</a></li>
-                                                        <li><a class="dropdown-item py-2" href="#">Diagnóstico por
-                                                                Imagem</a></li>
+                                                        <div id="edit-listaManufacturer">
+                                                            <li><a class="dropdown-item py-1 small" href="#"
+                                                                    onclick="selecionarDropdownEdit('Manufacturer', 'Philips Healthcare PT')">Philips
+                                                                    Healthcare PT</a></li>
+                                                            <li><a class="dropdown-item py-1 small" href="#"
+                                                                    onclick="selecionarDropdownEdit('Manufacturer', 'Dräger Portugal')">Dräger
+                                                                    Portugal</a></li>
+                                                            <li><a class="dropdown-item py-1 small" href="#"
+                                                                    onclick="selecionarDropdownEdit('Manufacturer', 'Mindray')">Mindray</a>
+                                                            </li>
+                                                        </div>
                                                     </ul>
+                                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                                        obrigatório.</div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label for="serialNumber" class="form-label small fw-medium mb-1">Número
-                                                    de Série *</label>
-                                                <input type="text" id="serialNumber" name="serialNumber"
-                                                    class="form-control shadow-sm" value="SN-12345" required>
+                                            <div class="col-md-4">
+                                                <label class="form-label small fw-medium mb-1">Ano de Fabrico</label>
+                                                <input type="number" name="manufacturingYear"
+                                                    class="form-control form-control-sm shadow-sm" value="2023"
+                                                    min="1900">
+                                                <div class="invalid-feedback" id="edit-feedbackAno"
+                                                    style="font-size: 0.70rem;">Data inválida.</div>
                                             </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-medium mb-1">Categoria *</label>
+                                                <div class="dropdown">
+                                                    <input type="hidden" name="categoria" id="edit-inputCategoria"
+                                                        value="Monitorização" required>
+                                                    <button
+                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                                        data-bs-display="static">
+                                                        <span id="edit-textCategoria"
+                                                            class="text-dark">Monitorização</span>
+                                                    </button>
+                                                    <ul
+                                                        class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                        <li class="px-2 pb-2 mb-2 border-bottom">
+                                                            <input type="text"
+                                                                class="form-control form-control-sm shadow-none bg-light"
+                                                                id="edit-searchCategoria"
+                                                                placeholder="Escreva para pesquisar..."
+                                                                onkeyup="filtrarDropdown('edit-searchCategoria', 'edit-listaCategoria')"
+                                                                onclick="event.stopPropagation()">
+                                                        </li>
+                                                        <div id="edit-listaCategoria">
+                                                            <li><a class="dropdown-item py-2" href="#"
+                                                                    onclick="selecionarDropdownEdit('Categoria', 'Monitorização')">Monitorização</a>
+                                                            </li>
+                                                            <li><a class="dropdown-item py-2" href="#"
+                                                                    onclick="selecionarDropdownEdit('Categoria', 'Suporte de vida')">Suporte
+                                                                    de vida</a></li>
+                                                        </div>
+                                                    </ul>
+                                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                                        obrigatório.</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-medium mb-1">Criticidade Clínica
+                                                    *</label>
+                                                <div class="dropdown">
+                                                    <input type="hidden" name="criticidade" id="edit-inputCriticidade"
+                                                        value="Alta" required>
+                                                    <button
+                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                                        data-bs-display="static">
+                                                        <span id="edit-textCriticidade" class="text-dark">Alta</span>
+                                                    </button>
+                                                    <ul
+                                                        class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                        <li><a class="dropdown-item py-2" href="#"
+                                                                onclick="selecionarDropdownEdit('Criticidade', 'Baixa')">Baixa</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item py-2" href="#"
+                                                                onclick="selecionarDropdownEdit('Criticidade', 'Média')">Média</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item py-2" href="#"
+                                                                onclick="selecionarDropdownEdit('Criticidade', 'Alta')">Alta</a>
+                                                        </li>
+                                                        <li><a class="dropdown-item py-2" href="#"
+                                                                onclick="selecionarDropdownEdit('Criticidade', 'Suporte de vida')">Suporte
+                                                                de vida</a></li>
+                                                    </ul>
+                                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                                        obrigatório.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="edit-alertaPasso1"
+                                            class="alert alert-danger p-2 text-center mt-4 mb-0 shadow-sm d-none"
+                                            role="alert">
+                                            <i class="fa-solid fa-circle-exclamation me-1"></i> <strong>Erro:</strong>
+                                            Por favor, verifique os campos a vermelho antes de avançar.
                                         </div>
                                     </div>
                                     <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
                                         <button type="button" class="btn btn-outline-secondary px-4"
                                             data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-brand px-4"
-                                            data-bs-wizard-step="#edit-step2-tab">
-                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
-                                        </button>
+                                        <button type="button" class="btn btn-brand px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step2-tab">Próximo <i
+                                                class="fa-solid fa-arrow-right ms-1"></i></button>
                                     </div>
                                 </div>
 
                                 <div class="tab-pane fade" id="edit-step2-pane" role="tabpanel" tabindex="0">
                                     <div class="card-body p-4">
-                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Fabricante e
-                                            Modelo</h5>
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <label for="brand" class="form-label small fw-medium mb-1">Marca
-                                                    *</label>
-                                                <input type="text" id="brand" name="brand"
-                                                    class="form-control shadow-sm" value="Philips" required>
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Receção &
+                                            Localização</h5>
+                                        <div class="row g-5">
+                                            <div class="col-lg-6 border-end">
+                                                <h6 class="fw-bold text-dark mb-4">Entrada e Estado</h6>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-medium mb-1">Data de
+                                                            Aquisição</label>
+                                                        <input type="date" name="acquisitionDate"
+                                                            class="form-control shadow-sm" value="2024-01-15">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-medium mb-1">Custo (EUR)
+                                                            *</label>
+                                                        <input type="number" name="cost" class="form-control shadow-sm"
+                                                            value="18500.00" step="0.01" min="0" required>
+                                                        <div class="invalid-feedback" id="edit-feedbackCusto"
+                                                            style="font-size: 0.70rem;">Campo obrigatório.</div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-medium mb-1">Tipo de Entrada
+                                                            *</label>
+                                                        <select name="entryType" class="form-select shadow-sm text-dark"
+                                                            required>
+                                                            <option value="Compra" selected>Compra</option>
+                                                            <option value="Doação">Doação</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-medium mb-1">Estado Atual
+                                                            *</label>
+                                                        <select name="status"
+                                                            class="form-select shadow-sm text-dark border-warning bg-warning bg-opacity-10"
+                                                            required>
+                                                            <option value="Ativo" selected>Ativo / Operacional</option>
+                                                            <option value="Em Manutenção">Em Manutenção</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label for="model" class="form-label small fw-medium mb-1">Modelo
-                                                    *</label>
-                                                <input type="text" id="model" name="model"
-                                                    class="form-control shadow-sm" value="IntelliVue MX700" required>
+
+                                            <div class="col-lg-6">
+                                                <h6 class="fw-bold text-dark mb-4">Localização Hierárquica</h6>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-medium mb-1">Edifício
+                                                            *</label>
+                                                        <div class="dropdown">
+                                                            <input type="hidden" name="edificio" id="edit-inputEdificio"
+                                                                value="Edifício Principal" required>
+                                                            <button id="edit-btnEdificio"
+                                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                                type="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false" data-bs-display="static">
+                                                                <span id="edit-textEdificio" class="text-dark">Edifício
+                                                                    Principal</span>
+                                                            </button>
+                                                            <ul
+                                                                class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                                <li class="px-2 pb-2 mb-2 border-bottom">
+                                                                    <input type="text"
+                                                                        class="form-control form-control-sm shadow-none bg-light"
+                                                                        id="edit-searchEdificio"
+                                                                        placeholder="Pesquisar..."
+                                                                        onkeyup="filtrarDropdown('edit-searchEdificio', 'edit-listaEdificio')"
+                                                                        onclick="event.stopPropagation()">
+                                                                </li>
+                                                                <div id="edit-listaEdificio">
+                                                                    <li><a class="dropdown-item py-2" href="#"
+                                                                            onclick="selecionarLocalizacaoEdit('Edificio', 'Edifício Principal', 'Piso')">Edifício
+                                                                            Principal</a></li>
+                                                                </div>
+                                                            </ul>
+                                                            <div class="invalid-feedback" style="font-size: 0.70rem;">
+                                                                Campo obrigatório.</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label small fw-medium mb-1">Piso *</label>
+                                                        <div class="dropdown">
+                                                            <input type="hidden" name="piso" id="edit-inputPiso"
+                                                                value="Piso 1" required>
+                                                            <button id="edit-btnPiso"
+                                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                                type="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false" data-bs-display="static">
+                                                                <span id="edit-textPiso" class="text-dark">Piso 1</span>
+                                                            </button>
+                                                            <ul
+                                                                class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                                <div id="edit-listaPiso">
+                                                                    <li><a class="dropdown-item py-2" href="#"
+                                                                            onclick="selecionarLocalizacaoEdit('Piso', 'Piso 1', 'Servico')">Piso
+                                                                            1</a></li>
+                                                                </div>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label class="form-label small fw-medium mb-1">Serviço *</label>
+                                                        <div class="dropdown">
+                                                            <input type="hidden" name="servico" id="edit-inputServico"
+                                                                value="Unidade de Cuidados Intensivos (UCI)" required>
+                                                            <button id="edit-btnServico"
+                                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                                type="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false" data-bs-display="static">
+                                                                <span id="edit-textServico" class="text-dark">Unidade de
+                                                                    Cuidados Intensivos (UCI)</span>
+                                                            </button>
+                                                            <ul
+                                                                class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                                <div id="edit-listaServico">
+                                                                    <li><a class="dropdown-item py-2" href="#"
+                                                                            onclick="selecionarLocalizacaoEdit('Servico', 'Unidade de Cuidados Intensivos (UCI)', 'Sala')">Unidade
+                                                                            de Cuidados Intensivos (UCI)</a></li>
+                                                                </div>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12">
+                                                        <label class="form-label small fw-medium mb-1">Sala /
+                                                            Compartimento (Opcional)</label>
+                                                        <div class="dropdown">
+                                                            <input type="hidden" name="sala" id="edit-inputSala"
+                                                                value="Box 1">
+                                                            <button id="edit-btnSala"
+                                                                class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                                type="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false" data-bs-display="static">
+                                                                <span id="edit-textSala" class="text-dark">Box 1</span>
+                                                            </button>
+                                                            <ul
+                                                                class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                                <div id="edit-listaSala">
+                                                                    <li><a class="dropdown-item py-2" href="#"
+                                                                            onclick="selecionarLocalizacaoEdit('Sala', 'Box 1', null)">Box
+                                                                            1</a></li>
+                                                                </div>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label for="manufacturer"
-                                                    class="form-label small fw-medium mb-1">Fabricante *</label>
-                                                <input type="text" id="manufacturer" name="manufacturer"
-                                                    class="form-control shadow-sm" value="Philips Healthcare" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="manufacturingYear"
-                                                    class="form-label small fw-medium mb-1">Ano de Fabrico</label>
-                                                <input type="number" id="manufacturingYear" name="manufacturingYear"
-                                                    class="form-control shadow-sm" value="2024">
-                                            </div>
+                                        </div>
+
+                                        <div class="alert alert-danger p-2 text-center mt-4 mb-0 shadow-sm d-none edit-alertaGlobal"
+                                            role="alert">
+                                            <i class="fa-solid fa-circle-exclamation me-1"></i> <strong>Erro:</strong>
+                                            Por favor, verifique os campos a vermelho antes de avançar.
                                         </div>
                                     </div>
                                     <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
-                                        <button type="button" class="btn btn-outline-secondary px-4"
-                                            data-bs-wizard-step="#edit-step1-tab">
-                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
-                                        </button>
-                                        <button type="button" class="btn btn-brand px-4"
-                                            data-bs-wizard-step="#edit-step3-tab">
-                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
-                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step1-tab"><i
+                                                class="fa-solid fa-arrow-left me-1"></i> Anterior</button>
+                                        <button type="button" class="btn btn-brand px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step3-tab">Próximo <i
+                                                class="fa-solid fa-arrow-right ms-1"></i></button>
                                     </div>
                                 </div>
 
                                 <div class="tab-pane fade" id="edit-step3-pane" role="tabpanel" tabindex="0">
-                                    <div class="card-body p-4">
-                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Aquisição e
-                                            Classificação</h5>
+                                    <div class="card-body p-3 p-md-4">
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Contratos &
+                                            Entidades Associadas</h5>
                                         <div class="row g-3">
                                             <div class="col-md-6">
-                                                <label for="acquisitionDate"
-                                                    class="form-label small fw-medium mb-1">Data de Aquisição</label>
-                                                <input type="date" id="acquisitionDate" name="acquisitionDate"
-                                                    class="form-control shadow-sm" value="2024-01-01">
+                                                <div class="p-3 border rounded-3 h-100 bg-light">
+                                                    <h6 class="fw-bold text-dark mb-3">Entidades</h6>
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-medium mb-1">Fornecedor
+                                                            Comercial *</label>
+                                                        <div class="dropdown">
+                                                            <input type="hidden" name="fornecedor"
+                                                                id="edit-inputFornecedor" value="Philips Healthcare PT"
+                                                                required>
+                                                            <button
+                                                                class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                                type="button" data-bs-toggle="dropdown">
+                                                                <span id="edit-textFornecedor" class="text-dark">Philips
+                                                                    Healthcare PT</span>
+                                                            </button>
+                                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                                <li><a class="dropdown-item py-1 small" href="#"
+                                                                        onclick="selecionarDropdownEdit('Fornecedor', 'Philips Healthcare PT')">Philips
+                                                                        Healthcare PT</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-medium mb-1">Assistência
+                                                            Técnica Oficial *</label>
+                                                        <div class="dropdown">
+                                                            <input type="hidden" name="assistencia"
+                                                                id="edit-inputAssistencia" value="MedServ Técnica"
+                                                                required>
+                                                            <button
+                                                                class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                                type="button" data-bs-toggle="dropdown">
+                                                                <span id="edit-textAssistencia"
+                                                                    class="text-dark">MedServ Técnica</span>
+                                                            </button>
+                                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                                <li><a class="dropdown-item py-1 small" href="#"
+                                                                        onclick="selecionarDropdownEdit('Assistencia', 'MedServ Técnica')">MedServ
+                                                                        Técnica</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label small fw-medium mb-1">Fornecedor de
+                                                            Consumíveis (Opcional)</label>
+                                                        <div class="dropdown">
+                                                            <input type="hidden" name="consumiveis"
+                                                                id="edit-inputConsumiveis">
+                                                            <button
+                                                                class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm"
+                                                                type="button" data-bs-toggle="dropdown">
+                                                                <span id="edit-textConsumiveis"
+                                                                    class="text-muted">Selecionar fornecedor...</span>
+                                                            </button>
+                                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
+                                                                <li><a class="dropdown-item py-1 small" href="#"
+                                                                        onclick="selecionarDropdownEdit('Consumiveis', 'FarmaMed Consumíveis')">FarmaMed
+                                                                        Consumíveis</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+
                                             <div class="col-md-6">
-                                                <label for="acquisitionCost"
-                                                    class="form-label small fw-medium mb-1">Custo de Aquisição
-                                                    (EUR)</label>
-                                                <input type="number" id="acquisitionCost" name="acquisitionCost"
-                                                    class="form-control shadow-sm" value="5000.00">
-                                            </div>
-                                            <div class="col-md-6 position-relative">
-                                                <label class="form-label small fw-medium mb-1">Tipo de Entrada *</label>
-                                                <div class="dropdown">
-                                                    <button
-                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                        type="button" data-bs-toggle="dropdown"
-                                                        data-bs-display="static">
-                                                        <span>Compra</span>
-                                                    </button>
-                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                        <li><a class="dropdown-item py-2" href="#">Compra</a></li>
-                                                        <li><a class="dropdown-item py-2" href="#">Doação</a></li>
-                                                        <li><a class="dropdown-item py-2" href="#">Aluguer</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 position-relative">
-                                                <label class="form-label small fw-medium mb-1">Estado Atual *</label>
-                                                <div class="dropdown">
-                                                    <button
-                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                        type="button" data-bs-toggle="dropdown"
-                                                        data-bs-display="static">
-                                                        <span>Ativo</span>
-                                                    </button>
-                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                        <li><a class="dropdown-item py-2" href="#">Ativo</a></li>
-                                                        <li><a class="dropdown-item py-2" href="#">Em manutenção</a>
-                                                        </li>
-                                                        <li><a class="dropdown-item py-2" href="#">Inativo</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 position-relative">
-                                                <label class="form-label small fw-medium mb-1">Criticidade Clínica
-                                                    *</label>
-                                                <div class="dropdown">
-                                                    <button
-                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                        type="button" data-bs-toggle="dropdown"
-                                                        data-bs-display="static">
-                                                        <span>Baixa</span>
-                                                    </button>
-                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                        <li><a class="dropdown-item py-2" href="#">Baixa</a></li>
-                                                        <li><a class="dropdown-item py-2" href="#">Média</a></li>
-                                                        <li><a class="dropdown-item py-2" href="#">Alta</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 position-relative">
-                                                <label class="form-label small fw-medium mb-1">Localização Atual</label>
-                                                <div class="dropdown">
-                                                    <button
-                                                        class="form-select text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                        type="button" data-bs-toggle="dropdown"
-                                                        data-bs-display="static">
-                                                        <span>Sem localização</span>
-                                                    </button>
-                                                    <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                        <li><a class="dropdown-item py-2" href="#">Urgência — Edifício
-                                                                Principal (0º)</a></li>
-                                                        <li><a class="dropdown-item py-2" href="#">UCI — Edifício
-                                                                Principal (1º)</a></li>
-                                                    </ul>
+                                                <div
+                                                    class="p-3 border border-success-subtle bg-success bg-opacity-10 rounded-3 h-100">
+                                                    <h6 class="fw-bold text-dark mb-2">Cobertura Legal</h6>
+
+                                                    <div class="mb-2 pb-2 border-bottom border-success-subtle">
+                                                        <div class="form-check form-switch mb-1">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="edit-temGarantia"
+                                                                onchange="toggleCamposEdit('edit-temGarantia', 'edit-camposGarantia')"
+                                                                checked>
+                                                            <label class="form-check-label fw-bold text-dark small"
+                                                                for="edit-temGarantia">Dentro da Garantia Legal</label>
+                                                        </div>
+                                                        <div id="edit-camposGarantia" class="row g-2">
+                                                            <div class="col-6">
+                                                                <label
+                                                                    class="form-label small fw-medium text-dark mb-1">Início
+                                                                    da Garantia *</label>
+                                                                <input type="date" name="garantiaInicio"
+                                                                    class="form-control shadow-sm form-control-sm bg-white"
+                                                                    value="2024-01-15" required>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label
+                                                                    class="form-label small fw-medium text-dark mb-1">Fim
+                                                                    da Garantia *</label>
+                                                                <input type="date" name="garantiaFim"
+                                                                    class="form-control shadow-sm form-control-sm border-warning bg-white"
+                                                                    value="2027-01-15" required>
+                                                                <div class="invalid-feedback" id="edit-erroDataGarantia"
+                                                                    style="font-size: 0.70rem;">Inválido.</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div class="form-check form-switch mb-1">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="edit-temContrato"
+                                                                onchange="toggleCamposEdit('edit-temContrato', 'edit-camposContrato')"
+                                                                checked>
+                                                            <label class="form-check-label fw-bold text-dark small"
+                                                                for="edit-temContrato">Possui Contrato de
+                                                                Manutenção</label>
+                                                        </div>
+                                                        <div id="edit-camposContrato" class="row g-2">
+                                                            <div class="col-5">
+                                                                <label class="form-label small text-dark mb-1">Nº
+                                                                    Referência *</label>
+                                                                <input type="text" name="referenciaContrato"
+                                                                    class="form-control shadow-sm form-control-sm bg-white"
+                                                                    value="CNT-2024-883" required>
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <label class="form-label small text-dark mb-1">Entidade
+                                                                    Responsável *</label>
+                                                                <select name="entidadeContrato"
+                                                                    class="form-select form-select-sm shadow-sm bg-white"
+                                                                    required>
+                                                                    <option value="Philips Healthcare PT" selected>
+                                                                        Philips Healthcare PT</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-6 mt-1">
+                                                                <label class="form-label small text-dark mb-1">Tipo de
+                                                                    Contrato *</label>
+                                                                <select name="tipoContrato"
+                                                                    class="form-select form-select-sm shadow-sm text-dark bg-white"
+                                                                    required>
+                                                                    <option value="Full-Service" selected>Full-Service
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-6 mt-1">
+                                                                <label
+                                                                    class="form-label small text-dark mb-1">Periodicidade
+                                                                    *</label>
+                                                                <select name="periodicidadeContrato"
+                                                                    class="form-select form-select-sm shadow-sm text-dark bg-white"
+                                                                    required>
+                                                                    <option value="Anual" selected>Anual</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-6 mt-1">
+                                                                <label class="form-label small text-dark mb-1">Início
+                                                                    *</label>
+                                                                <input type="date" name="contratoInicio"
+                                                                    class="form-control shadow-sm form-control-sm bg-white"
+                                                                    value="2024-01-15" required>
+                                                            </div>
+                                                            <div class="col-6 mt-1">
+                                                                <label class="form-label small text-dark mb-1">Fim
+                                                                    *</label>
+                                                                <input type="date" name="contratoFim"
+                                                                    class="form-control shadow-sm form-control-sm border-warning bg-white"
+                                                                    value="2027-01-15" required>
+                                                                <div class="invalid-feedback" id="edit-erroDataContrato"
+                                                                    style="font-size: 0.70rem;">Inválido.</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="alert alert-danger p-2 text-center mt-4 mb-0 shadow-sm d-none edit-alertaGlobal"
+                                            role="alert">
+                                            <i class="fa-solid fa-circle-exclamation me-1"></i> <strong>Erro:</strong>
+                                            Por favor, verifique os campos a vermelho antes de avançar.
+                                        </div>
                                     </div>
                                     <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
-                                        <button type="button" class="btn btn-outline-secondary px-4"
-                                            data-bs-wizard-step="#edit-step2-tab">
-                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
-                                        </button>
-                                        <button type="button" class="btn btn-brand px-4"
-                                            data-bs-wizard-step="#edit-step4-tab">
-                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
-                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step2-tab"><i
+                                                class="fa-solid fa-arrow-left me-1"></i> Anterior</button>
+                                        <button type="button" class="btn btn-brand px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step4-tab">Próximo <i
+                                                class="fa-solid fa-arrow-right ms-1"></i></button>
                                     </div>
                                 </div>
 
                                 <div class="tab-pane fade" id="edit-step4-pane" role="tabpanel" tabindex="0">
-                                    <div class="card-body p-4">
-                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Fornecedores
-                                            Associados</h5>
-                                        <div class="d-flex align-items-center gap-3 p-3 rounded border">
-                                            <input class="form-check-input m-0" type="checkbox" checked>
-                                            <div>
-                                                <p class="fw-semibold small mb-0">Dräger Portugal</p>
-                                                <p class="text-muted small mb-0">Fabricante</p>
+                                    <div class="card-body p-3 p-md-4">
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Documentação
+                                            Técnica e Legal</h5>
+
+                                        <div
+                                            class="mb-4 p-3 border border-warning-subtle bg-warning bg-opacity-10 rounded-3">
+                                            <label class="form-label small fw-bold text-dark mb-2">Documentação
+                                                Obrigatória em Falta</label>
+                                            <div class="d-flex flex-wrap gap-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input border-warning" type="checkbox"
+                                                        id="edit-faltaCE" value="Declaração CE">
+                                                    <label class="form-check-label small fw-medium text-dark"
+                                                        for="edit-faltaCE">Declaração CE</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input border-warning" type="checkbox"
+                                                        id="edit-faltaManual" value="Manual Utilizador">
+                                                    <label class="form-check-label small fw-medium text-dark"
+                                                        for="edit-faltaManual">Manual de Utilizador</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input border-warning" type="checkbox"
+                                                        id="edit-faltaFatura" value="Fatura">
+                                                    <label class="form-check-label small fw-medium text-dark"
+                                                        for="edit-faltaFatura">Fatura / Guia</label>
+                                                </div>
                                             </div>
+                                        </div>
+
+                                        <div class="bg-light p-3 rounded-3 border mb-4">
+                                            <h6 class="fw-bold text-dark small mb-3 border-bottom pb-2">Anexar Novo
+                                                Documento</h6>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-md-4">
+                                                    <label class="form-label small text-dark mb-1">Tipo de Documento
+                                                        *</label>
+                                                    <select id="edit-inputTipoDocumento"
+                                                        class="form-select form-select-sm shadow-sm bg-white"
+                                                        onchange="verificarValidadeDocEdit(this.value)">
+                                                        <option value="" selected disabled>Selecionar tipo...</option>
+                                                        <option value="Manual de utilizador">Manual de utilizador
+                                                        </option>
+                                                        <option value="Certificado de calibração">Certificado de
+                                                            calibração</option>
+                                                        <option value="Contrato de manutenção">Contrato de manutenção
+                                                        </option>
+                                                        <option value="Fatura ou guia de aquisição">Fatura ou guia de
+                                                            aquisição</option>
+                                                        <option value="Declaração de conformidade">Declaração de
+                                                            conformidade</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label small text-dark mb-1">Título
+                                                        (Opcional)</label>
+                                                    <input type="text" id="edit-docTitulo"
+                                                        class="form-control form-control-sm shadow-sm bg-white"
+                                                        placeholder="Ex: Manual v2.0">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label small text-dark mb-1">Data Emissão</label>
+                                                    <input type="date" id="edit-docEmissao"
+                                                        class="form-control form-control-sm shadow-sm bg-white">
+                                                </div>
+                                            </div>
+                                            <div class="row g-2">
+                                                <div class="col-md-3">
+                                                    <label class="form-label small text-dark mb-1">Validade</label>
+                                                    <input type="date" id="edit-dataValidadeDoc"
+                                                        class="form-control form-control-sm shadow-sm" disabled>
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <label class="form-label small text-dark mb-1">Ficheiro (PDF, JPG)
+                                                        *</label>
+                                                    <input type="file" id="edit-docFicheiro"
+                                                        class="form-control form-control-sm shadow-sm bg-white">
+                                                </div>
+                                                <div class="col-md-2 d-flex align-items-end">
+                                                    <button type="button" id="edit-btnAnexarDoc"
+                                                        class="btn btn-sm btn-brand fw-bold shadow-sm w-100">
+                                                        <i class="fa-solid fa-plus"></i> Anexar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="border rounded-3 overflow-hidden shadow-sm">
+                                            <div class="table-responsive bg-white"
+                                                style="max-height: 180px; overflow-y: auto;">
+                                                <table class="table table-hover mb-0 text-start align-middle"
+                                                    style="position: relative;">
+                                                    <thead
+                                                        class="table-light text-muted small text-uppercase sticky-top"
+                                                        style="font-size: 0.75rem; z-index: 1;">
+                                                        <tr>
+                                                            <th class="fw-semibold px-3 py-2 border-bottom">Documento
+                                                            </th>
+                                                            <th class="fw-semibold py-2 border-bottom">Validade</th>
+                                                            <th class="fw-semibold py-2 border-bottom">Ficheiro</th>
+                                                            <th class="fw-semibold text-end px-3 py-2 border-bottom">
+                                                                Ação</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="edit-tabelaDocsBody">
+                                                        <tr>
+                                                            <td class="px-3 py-2 small fw-medium text-dark"><span
+                                                                    class="badge bg-secondary mb-1 d-inline-block edit-tipo-doc-anexado">Manual
+                                                                    de utilizador</span><br>Manual Base</td>
+                                                            <td class="py-2 small text-muted">N/A</td>
+                                                            <td class="py-2 small text-muted"><i
+                                                                    class="fa-solid fa-file-pdf text-danger me-1"></i>
+                                                                manual_v1.pdf</td>
+                                                            <td class="text-end px-3 py-2"><button type="button"
+                                                                    class="btn btn-sm text-danger btn-remover-doc"><i
+                                                                        class="fa-solid fa-trash-can"></i></button></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="px-3 py-2 small fw-medium text-dark"><span
+                                                                    class="badge bg-secondary mb-1 d-inline-block edit-tipo-doc-anexado">Contrato
+                                                                    de manutenção</span><br>Contrato Philips</td>
+                                                            <td class="py-2 small text-warning fw-bold">2027-01-15</td>
+                                                            <td class="py-2 small text-muted"><i
+                                                                    class="fa-solid fa-file-pdf text-danger me-1"></i>
+                                                                contrato.pdf</td>
+                                                            <td class="text-end px-3 py-2"><button type="button"
+                                                                    class="btn btn-sm text-danger btn-remover-doc"><i
+                                                                        class="fa-solid fa-trash-can"></i></button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div id="edit-alertaPasso4"
+                                            class="alert alert-danger p-2 text-center mt-4 mb-0 shadow-sm d-none"
+                                            role="alert">
+                                            <i class="fa-solid fa-circle-exclamation me-1"></i>
+                                            <strong>Atenção:</strong> <span id="edit-textoAlertaPasso4"></span>
                                         </div>
                                     </div>
                                     <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
-                                        <button type="button" class="btn btn-outline-secondary px-4"
-                                            data-bs-wizard-step="#edit-step3-tab">
-                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
-                                        </button>
-                                        <button type="button" class="btn btn-brand px-4"
-                                            data-bs-wizard-step="#edit-step5-tab">
-                                            Próximo <i class="fa-solid fa-arrow-right ms-1"></i>
-                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step3-tab"><i
+                                                class="fa-solid fa-arrow-left me-1"></i> Anterior</button>
+                                        <button type="button" class="btn btn-brand px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step5-tab">Próximo <i
+                                                class="fa-solid fa-arrow-right ms-1"></i></button>
                                     </div>
                                 </div>
 
                                 <div class="tab-pane fade" id="edit-step5-pane" role="tabpanel" tabindex="0">
                                     <div class="card-body p-4">
-                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Observações</h5>
-                                        <textarea name="observations" class="form-control shadow-sm" rows="5"
-                                            placeholder="Notas adicionais..."></textarea>
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Acessórios
+                                            Associados</h5>
+                                        <div class="row g-3 mb-4 bg-light p-3 rounded-3 border">
+                                            <div class="col-md-5">
+                                                <label class="form-label small fw-medium mb-1">Designação *</label>
+                                                <input type="text" id="edit-acessorioDesignacao"
+                                                    class="form-control form-control-sm shadow-sm bg-white"
+                                                    placeholder="Ex: Cabo ECG">
+                                            </div>
+                                            <div class="col-md-5">
+                                                <label class="form-label small fw-medium mb-1">Nº Série
+                                                    (Opcional)</label>
+                                                <input type="text" id="edit-acessorioSerie"
+                                                    class="form-control form-control-sm shadow-sm bg-white">
+                                            </div>
+                                            <div class="col-md-2 d-flex align-items-end">
+                                                <button type="button" id="edit-btnAdicionarAcessorio"
+                                                    class="btn btn-sm btn-brand fw-bold shadow-sm w-100"><i
+                                                        class="fa-solid fa-plus"></i> Adicionar</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="border rounded-3 overflow-hidden shadow-sm">
+                                            <table class="table table-hover mb-0 align-middle">
+                                                <thead class="table-light text-muted small text-uppercase"
+                                                    style="font-size: 0.75rem;">
+                                                    <tr>
+                                                        <th class="px-3 py-2">Designação</th>
+                                                        <th class="py-2">Referência / Série</th>
+                                                        <th class="text-end px-3 py-2">Ação</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="edit-tabelaAcessoriosBody">
+                                                    <tr>
+                                                        <td class="px-3 py-2 small fw-medium text-dark">Módulo
+                                                            Capnografia</td>
+                                                        <td class="py-2 small text-muted">SN-999-444</td>
+                                                        <td class="text-end px-3 py-2"><button type="button"
+                                                                class="btn btn-sm text-danger btn-remover-acessorio"><i
+                                                                    class="fa-solid fa-trash-can"></i></button></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                     <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
-                                        <button type="button" class="btn btn-outline-secondary px-4"
-                                            data-bs-wizard-step="#edit-step4-tab">
-                                            <i class="fa-solid fa-arrow-left me-1"></i> Anterior
-                                        </button>
-                                        <button type="submit"
+                                        <button type="button" class="btn btn-outline-secondary px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step4-tab"><i
+                                                class="fa-solid fa-arrow-left me-1"></i> Anterior</button>
+                                        <button type="button" class="btn btn-brand px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step6-tab">Próximo <i
+                                                class="fa-solid fa-arrow-right ms-1"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="edit-step6-pane" role="tabpanel" tabindex="0">
+                                    <div class="card-body p-4">
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Observações</h5>
+                                        <textarea name="observations" class="form-control shadow-sm"
+                                            rows="5">Equipamento transferido da Urgência para a UCI em fevereiro.</textarea>
+                                    </div>
+                                    <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
+                                        <button type="button" class="btn btn-outline-secondary px-4 btn-edit-wizard"
+                                            data-bs-wizard-step="#edit-step5-tab"><i
+                                                class="fa-solid fa-arrow-left me-1"></i> Anterior</button>
+                                        <button type="submit" id="btnGuardarEdicao"
                                             class="btn btn-brand d-inline-flex align-items-center gap-2 px-4 shadow-sm fw-bold">
                                             <i class="fa-solid fa-save"></i> Guardar Alterações
                                         </button>
@@ -1173,7 +1835,8 @@
                     estado: [],
                     criticidade: [],
                     categoria: [],
-                    fornecedor: []
+                    fornecedor: [],
+                    servico: []
                 };
 
                 checkboxes.forEach(cb => {
@@ -1182,7 +1845,8 @@
                     }
                 });
 
-                const totalAtivos = filtrosAtivos.estado.length + filtrosAtivos.criticidade.length + filtrosAtivos.categoria.length + filtrosAtivos.fornecedor.length;
+                const totalAtivos = filtrosAtivos.estado.length + filtrosAtivos.criticidade.length + filtrosAtivos.categoria.length + filtrosAtivos.fornecedor.length+ 
+                    filtrosAtivos.servico.length;
 
                 // Atualiza UI dos filtros (botão Limpar e Badges de quantidade)
                 atualizarUIFiltros(filtrosAtivos, totalAtivos);
@@ -1195,7 +1859,8 @@
                     const dEstado = row.dataset.estado;
                     const dCriticidade = row.dataset.criticidade;
                     const dCategoria = row.dataset.categoria;
-                    const dFornecedor = row.dataset.fornecedor; // Nova variável
+                    const dFornecedor = row.dataset.fornecedor;
+                    const dServico = row.dataset.servico;
 
                     // Lógica de compatibilidade (match)
                     const matchPesquisa = rowTexto.includes(termoPesquisa);
@@ -1203,9 +1868,10 @@
                     const matchCriticidade = filtrosAtivos.criticidade.length === 0 || filtrosAtivos.criticidade.includes(dCriticidade);
                     const matchCategoria = filtrosAtivos.categoria.length === 0 || filtrosAtivos.categoria.includes(dCategoria);
                     const matchFornecedor = filtrosAtivos.fornecedor.length === 0 || filtrosAtivos.fornecedor.includes(dFornecedor);
+                    const matchServico = filtrosAtivos.servico.length === 0 || filtrosAtivos.servico.includes(dServico);
 
                     // Se tudo bater certo, mostra
-                    if (matchPesquisa && matchEstado && matchCriticidade && matchCategoria && matchFornecedor) {
+                    if (matchPesquisa && matchEstado && matchCriticidade && matchCategoria && matchFornecedor && matchServico) {
                         row.classList.remove('d-none');
                         linhasVisiveis++;
                     } else {
@@ -1260,6 +1926,257 @@
             // 5. Ativar Event Listeners
             searchInput.addEventListener('input', aplicarFiltros);
             checkboxes.forEach(cb => cb.addEventListener('change', aplicarFiltros));
+        });
+    </script>
+
+    <script>
+        // Funções Auxiliares para o modal de Edição (Dropwdowns)
+        function selecionarDropdownEdit(campoSufixo, valor) {
+            const span = document.getElementById('edit-text' + campoSufixo);
+            const input = document.getElementById('edit-input' + campoSufixo);
+            if (span) { span.innerText = valor; span.classList.add('text-dark'); }
+            if (input) input.value = valor;
+        }
+
+        function selecionarLocalizacaoEdit(nivelAtual, valor, proximoNivel) {
+            selecionarDropdownEdit(nivelAtual, valor);
+            if (nivelAtual === 'Edificio') {
+                desativarNivelLocalizacaoEdit('Servico', 'Aguardando piso...');
+                desativarNivelLocalizacaoEdit('Sala', 'Aguardando serviço...');
+            } else if (nivelAtual === 'Piso') {
+                desativarNivelLocalizacaoEdit('Sala', 'Aguardando serviço...');
+            }
+            if (proximoNivel) {
+                document.getElementById('edit-btn' + proximoNivel).classList.remove('disabled');
+                desativarNivelLocalizacaoEdit(proximoNivel, 'Selecionar...', false);
+                const lista = document.getElementById('edit-lista' + proximoNivel);
+                const items = lista.getElementsByTagName('li');
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].getAttribute('data-parent') === valor) items[i].style.display = "";
+                    else items[i].style.display = "none";
+                }
+            }
+        }
+
+        function desativarNivelLocalizacaoEdit(nivel, placeholder, bloquear = true) {
+            const btn = document.getElementById('edit-btn' + nivel);
+            const span = document.getElementById('edit-text' + nivel);
+            if (bloquear) btn.classList.add('disabled');
+            span.innerText = placeholder;
+            span.classList.add('text-muted');
+            span.classList.remove('text-dark');
+            document.getElementById('edit-input' + nivel).value = '';
+        }
+
+        function toggleCamposEdit(switchId, containerId) {
+            const checkBox = document.getElementById(switchId);
+            const container = document.getElementById(containerId);
+            if (checkBox.checked) container.classList.remove('d-none');
+            else container.classList.add('d-none');
+        }
+
+        function verificarValidadeDocEdit(valor) {
+            const campo = document.getElementById('edit-dataValidadeDoc');
+            if (valor === 'Certificado de calibração') {
+                campo.disabled = false;
+                campo.classList.add('bg-white', 'border-warning');
+            } else {
+                campo.disabled = true;
+                campo.value = '';
+                campo.classList.remove('bg-white', 'border-warning');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Reativar a remoção manual de linhas pré-existentes na tabela (ex: documentos e acessórios já guardados)
+            document.querySelectorAll('#modalEditar .btn-remover-doc').forEach(btn => {
+                btn.addEventListener('click', function () { this.closest('tr').remove(); });
+            });
+            document.querySelectorAll('#modalEditar .btn-remover-acessorio').forEach(btn => {
+                btn.addEventListener('click', function () { this.closest('tr').remove(); });
+            });
+
+            // LÓGICA ANEXAR DOC (Edição)
+            const btnAnexarDocEdit = document.getElementById('edit-btnAnexarDoc');
+            if (btnAnexarDocEdit) {
+                btnAnexarDocEdit.addEventListener('click', function () {
+                    const tipo = document.getElementById('edit-inputTipoDocumento').value;
+                    const titulo = document.getElementById('edit-docTitulo').value;
+                    const emissao = document.getElementById('edit-docEmissao').value;
+                    const validade = document.getElementById('edit-dataValidadeDoc').value;
+                    const ficheiroInput = document.getElementById('edit-docFicheiro');
+                    const ficheiro = ficheiroInput.value;
+
+                    if (!tipo || !ficheiro) { alert("Selecione o Tipo e escolha um Ficheiro."); return; }
+                    if (document.getElementById('edit-dataValidadeDoc').disabled === false && !validade) { alert("Validade é obrigatória para calibração."); return; }
+                    if (emissao && validade && new Date(validade) < new Date(emissao)) { alert("Validade não pode ser anterior à Emissão."); return; }
+
+                    const tbody = document.getElementById('edit-tabelaDocsBody');
+                    const fileName = ficheiro.split('\\').pop();
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="px-3 py-2 small fw-medium text-dark"><span class="badge bg-secondary mb-1 edit-tipo-doc-anexado">${tipo}</span><br>${titulo || 'Documento Base'}</td>
+                        <td class="py-2 small ${validade ? 'text-warning fw-bold' : 'text-muted'}">${validade || 'N/A'}</td>
+                        <td class="py-2 small text-muted"><i class="fa-solid fa-file-pdf text-danger me-1"></i> ${fileName}</td>
+                        <td class="text-end px-3 py-2"><button type="button" class="btn btn-sm text-danger btn-remover-doc"><i class="fa-solid fa-trash-can"></i></button></td>
+                    `;
+                    tbody.appendChild(tr);
+                    tr.querySelector('.btn-remover-doc').addEventListener('click', () => tr.remove());
+
+                    // Limpa formulário
+                    document.getElementById('edit-inputTipoDocumento').value = '';
+                    document.getElementById('edit-docTitulo').value = '';
+                    document.getElementById('edit-docEmissao').value = '';
+                    document.getElementById('edit-dataValidadeDoc').value = '';
+                    ficheiroInput.value = '';
+                });
+            }
+
+            // LÓGICA ANEXAR ACESSÓRIO (Edição)
+            const btnAdcAcc = document.getElementById('edit-btnAdicionarAcessorio');
+            if (btnAdcAcc) {
+                btnAdcAcc.addEventListener('click', function () {
+                    const des = document.getElementById('edit-acessorioDesignacao').value.trim();
+                    const ser = document.getElementById('edit-acessorioSerie').value.trim();
+                    if (!des) { document.getElementById('edit-acessorioDesignacao').classList.add('is-invalid'); return; }
+                    document.getElementById('edit-acessorioDesignacao').classList.remove('is-invalid');
+
+                    const tbody = document.getElementById('edit-tabelaAcessoriosBody');
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td class="px-3 py-2 small fw-medium text-dark">${des}</td><td class="py-2 small text-muted">${ser || 'N/A'}</td><td class="text-end px-3 py-2"><button type="button" class="btn btn-sm text-danger btn-remover-acessorio"><i class="fa-solid fa-trash-can"></i></button></td>`;
+                    tbody.appendChild(tr);
+                    tr.querySelector('.btn-remover-acessorio').addEventListener('click', () => tr.remove());
+
+                    document.getElementById('edit-acessorioDesignacao').value = '';
+                    document.getElementById('edit-acessorioSerie').value = '';
+                });
+            }
+
+            // MOTOR DE VALIDAÇÃO WIZARD (EDIÇÃO)
+            document.querySelectorAll('#modalEditar .btn-edit-wizard').forEach(button => {
+                button.addEventListener('click', function () {
+                    const painelAtual = document.querySelector('#modalEditar .tab-pane.active');
+                    if (this.innerText.toLowerCase().includes("anterior")) {
+                        mudarSeparadorEdit(this.getAttribute('data-bs-wizard-step'));
+                        return;
+                    }
+
+                    let tudoValido = true;
+                    const alertasGerais = painelAtual.querySelectorAll('.edit-alertaGlobal');
+                    alertasGerais.forEach(a => a.classList.add('d-none'));
+
+                    // Reset
+                    const fAno = document.getElementById('edit-feedbackAno'); if (fAno) fAno.innerText = "Data inválida.";
+                    const fCusto = document.getElementById('edit-feedbackCusto'); if (fCusto) fCusto.innerText = "Campo obrigatório.";
+
+                    // Validar Required
+                    painelAtual.querySelectorAll('input[required], select[required]').forEach(campo => {
+                        if (campo.closest('.d-none')) return;
+                        let elemento = campo.type === 'hidden' ? campo.nextElementSibling : campo;
+                        if (!campo.value || campo.value.trim() === '') {
+                            elemento.classList.add('is-invalid', 'border-danger');
+                            tudoValido = false;
+                        } else {
+                            elemento.classList.remove('is-invalid', 'border-danger');
+                        }
+                    });
+
+                    // Datas Contrato e Garantia
+                    const cGar = document.getElementById('edit-camposGarantia');
+                    if (cGar && !cGar.classList.contains('d-none')) {
+                        const dIni = painelAtual.querySelector('input[name="garantiaInicio"]');
+                        const dFim = painelAtual.querySelector('input[name="garantiaFim"]');
+                        if (dIni && dFim && dIni.value && dFim.value && new Date(dFim.value) <= new Date(dIni.value)) {
+                            dFim.classList.add('is-invalid', 'border-danger');
+                            document.getElementById('edit-erroDataGarantia').innerText = "Posterior ao início.";
+                            tudoValido = false;
+                        }
+                    }
+                    const cCont = document.getElementById('edit-camposContrato');
+                    if (cCont && !cCont.classList.contains('d-none')) {
+                        const dIni = painelAtual.querySelector('input[name="contratoInicio"]');
+                        const dFim = painelAtual.querySelector('input[name="contratoFim"]');
+                        if (dIni && dFim && dIni.value && dFim.value && new Date(dFim.value) <= new Date(dIni.value)) {
+                            dFim.classList.add('is-invalid', 'border-danger');
+                            document.getElementById('edit-erroDataContrato').innerText = "Posterior ao início.";
+                            tudoValido = false;
+                        }
+                    }
+
+                    // Validação de Documentos (Passo 4)
+                    if (painelAtual.id === 'edit-step4-pane') {
+                        const alerta = document.getElementById('edit-alertaPasso4');
+                        const texto = document.getElementById('edit-textoAlertaPasso4');
+                        const docsTabela = Array.from(painelAtual.querySelectorAll('.edit-tipo-doc-anexado')).map(span => span.innerText);
+                        let msg = "";
+
+                        if (document.getElementById('edit-temContrato').checked && !docsTabela.includes('Contrato de manutenção')) {
+                            msg += "Falta o <strong>Contrato de manutenção</strong>.<br>"; tudoValido = false;
+                        }
+                        if (!document.getElementById('edit-faltaCE').checked && !docsTabela.includes('Declaração de conformidade')) {
+                            msg += "Falta <strong>Declaração CE</strong> (ou marque em falta).<br>"; tudoValido = false;
+                        }
+                        if (!document.getElementById('edit-faltaManual').checked && !docsTabela.includes('Manual de utilizador')) {
+                            msg += "Falta <strong>Manual</strong> (ou marque em falta).<br>"; tudoValido = false;
+                        }
+                        if (!document.getElementById('edit-faltaFatura').checked && !docsTabela.includes('Fatura ou guia de aquisição')) {
+                            msg += "Falta <strong>Fatura/Guia</strong> (ou marque em falta).<br>"; tudoValido = false;
+                        }
+
+                        if (!tudoValido) { texto.innerHTML = msg; alerta.classList.remove('d-none'); }
+                        else { alerta.classList.add('d-none'); }
+                    }
+
+                    // Ano e Custo
+                    const anoInp = painelAtual.querySelector('input[name="manufacturingYear"]');
+                    if (anoInp && anoInp.value && (parseInt(anoInp.value) < 1900 || parseInt(anoInp.value) > new Date().getFullYear())) {
+                        anoInp.classList.add('is-invalid'); tudoValido = false;
+                    }
+                    const custoInp = painelAtual.querySelector('input[name="cost"]');
+                    if (custoInp && custoInp.value && parseFloat(custoInp.value) < 0) {
+                        custoInp.classList.add('is-invalid'); tudoValido = false;
+                    }
+
+                    // Sucesso
+                    if (tudoValido) mudarSeparadorEdit(this.getAttribute('data-bs-wizard-step'));
+                    else alertasGerais.forEach(a => a.classList.remove('d-none'));
+                });
+            });
+
+            function mudarSeparadorEdit(target) {
+                new bootstrap.Tab(document.querySelector(target)).show();
+                const tabCerta = target.replace('-pane', '-tab').replace('#', '');
+                document.querySelectorAll('#editarTabs .nav-link').forEach(nav => {
+                    const badge = nav.querySelector('.badge');
+                    if (nav.id === tabCerta) {
+                        nav.classList.replace('text-muted', 'text-dark');
+                        nav.classList.add('active');
+                        badge.classList.replace('bg-secondary', 'bg-brand');
+                    } else {
+                        nav.classList.replace('text-dark', 'text-muted');
+                        nav.classList.remove('active');
+                        badge.classList.replace('bg-brand', 'bg-secondary');
+                    }
+                });
+            }
+
+            // SUBMETER EDIÇÃO (Passo 6)
+            const formEdicao = document.getElementById('formEditar');
+            if (formEdicao) {
+                formEdicao.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const btn = document.getElementById('btnGuardarEdicao');
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> A guardar...';
+                    btn.disabled = true;
+
+                    setTimeout(() => {
+                        alert("✅ Alterações guardadas com sucesso!");
+                        window.location.reload();
+                    }, 1000);
+                });
+            }
         });
     </script>
 

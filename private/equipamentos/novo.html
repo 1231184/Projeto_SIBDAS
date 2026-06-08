@@ -106,18 +106,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../alertas/alertas.html"
-                        class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
-                            <path d="M12 9v4"></path>
-                            <path d="M12 17h.01"></path>
-                        </svg>
-                        <span class="fw-medium">Alertas</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="../conteudo/conteudo.html"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3">
                         <i class="fa-regular fa-pen-to-square"></i>
@@ -169,43 +157,37 @@
             </div>
         </div>
 
-        <form action="lista_equi.html" method="GET" style="max-width: 1024px;">
+        <form action="lista_equi.html" method="GET" style="max-width: 1024px;" novalidate>
 
             <!-- SEPARADORES (WIZARD STEPS) -->
-            <ul class="nav nav-tabs mb-4 border-bottom-0" id="equipamentoTabs" role="tablist">
+            <ul class="nav nav-tabs mb-4 border-bottom-0" id="equipamentoTabs" role="tablist" style="pointer-events: none;">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active text-dark fw-medium" id="step1-tab" data-bs-toggle="tab"
-                        data-bs-target="#step1-pane" type="button" role="tab" aria-selected="true">
+                    <button class="nav-link active text-dark fw-medium" id="step1-tab" data-bs-target="#step1-pane" type="button" role="tab" aria-selected="true">
                         <span class="badge bg-brand text-white me-1 rounded-pill">1</span> Identificação
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link text-muted fw-medium" id="step2-tab" data-bs-toggle="tab"
-                        data-bs-target="#step2-pane" type="button" role="tab" aria-selected="false">
-                        <span class="badge bg-secondary text-white me-1 rounded-pill">2</span> Fabricante
+                    <button class="nav-link text-muted fw-medium" id="step2-tab" data-bs-target="#step2-pane" type="button" role="tab" aria-selected="false">
+                        <span class="badge bg-secondary text-white me-1 rounded-pill">2</span> Receção
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link text-muted fw-medium" id="step3-tab" data-bs-toggle="tab"
-                        data-bs-target="#step3-pane" type="button" role="tab" aria-selected="false">
-                        <span class="badge bg-secondary text-white me-1 rounded-pill">3</span> Aquisição
+                    <button class="nav-link text-muted fw-medium" id="step3-tab" data-bs-target="#step3-pane" type="button" role="tab" aria-selected="false">
+                        <span class="badge bg-secondary text-white me-1 rounded-pill">3</span> Entidades e Contratos
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link text-muted fw-medium" id="step4-tab" data-bs-toggle="tab"
-                        data-bs-target="#step4-pane" type="button" role="tab" aria-selected="false">
+                    <button class="nav-link text-muted fw-medium" id="step4-tab" data-bs-target="#step4-pane" type="button" role="tab" aria-selected="false">
                         <span class="badge bg-secondary text-white me-1 rounded-pill">4</span> Documentação
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link text-muted fw-medium" id="step5-tab" data-bs-toggle="tab"
-                        data-bs-target="#step5-pane" type="button" role="tab" aria-selected="false">
+                    <button class="nav-link text-muted fw-medium" id="step5-tab" data-bs-target="#step5-pane" type="button" role="tab" aria-selected="false">
                         <span class="badge bg-secondary text-white me-1 rounded-pill">5</span> Acessórios
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link text-muted fw-medium" id="step6-tab" data-bs-toggle="tab"
-                        data-bs-target="#step6-pane" type="button" role="tab" aria-selected="false">
+                    <button class="nav-link text-muted fw-medium" id="step6-tab" data-bs-target="#step6-pane" type="button" role="tab" aria-selected="false">
                         <span class="badge bg-secondary text-white me-1 rounded-pill">6</span> Observações
                     </button>
                 </li>
@@ -505,7 +487,7 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="p-3 border rounded-3 h-100 bg-light">
-                                        <h6 class="fw-bold text-dark mb-3"></i> Entidades</h6>
+                                        <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-truck text-muted me-2"></i> Entidades</h6>
                                         
                                         <div class="mb-3">
                                             <label class="form-label small fw-medium mb-1">Fornecedor Comercial *</label>
@@ -524,10 +506,11 @@
                                                         <li><a class="dropdown-item py-1 small" href="#" onclick="selecionarDropdown('fornecedor', 'TechMed Solutions')">TechMed Solutions</a></li>
                                                     </div>
                                                 </ul>
+                                                <div class="invalid-feedback" style="font-size: 0.70rem;">Campo obrigatório.</div>
                                             </div>
                                         </div>
 
-                                        <div>
+                                        <div class="mb-3">
                                             <label class="form-label small fw-medium mb-1">Assistência Técnica Oficial *</label>
                                             <div class="dropdown">
                                                 <input type="hidden" name="assistencia" id="inputAssistencia" required>
@@ -544,6 +527,7 @@
                                                         <li><a class="dropdown-item py-1 small" href="#" onclick="selecionarDropdown('assistencia', 'Philips Healthcare PT')">Philips Healthcare PT</a></li>
                                                     </div>
                                                 </ul>
+                                                <div class="invalid-feedback" style="font-size: 0.70rem;">Campo obrigatório.</div>
                                             </div>
                                         </div>
 
@@ -572,7 +556,7 @@
                                 <div class="col-md-6">
                                     <div class="p-3 border border-success-subtle bg-success bg-opacity-10 rounded-3 h-100">
                                         <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h6 class="fw-bold text-dark mb-0"></i> Cobertura Legal</h6>
+                                            <h6 class="fw-bold text-dark mb-0"><i class="fa-solid fa-shield-halved text-success me-2"></i> Cobertura Legal</h6>
                                         </div>
                                         
                                         <div class="mb-2 pb-2 border-bottom border-success-subtle">
@@ -583,12 +567,14 @@
                                             
                                             <div id="camposGarantia" class="row g-2">
                                                 <div class="col-6">
-                                                    <label class="form-label small fw-medium text-dark mb-1">Início da Garantia</label>
-                                                    <input type="date" name="garantiaInicio" class="form-control shadow-sm form-control-sm bg-white">
+                                                    <label class="form-label small fw-medium text-dark mb-1">Início da Garantia *</label>
+                                                    <input type="date" name="garantiaInicio" class="form-control shadow-sm form-control-sm bg-white" required>
+                                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Obrigatório.</div>
                                                 </div>
                                                 <div class="col-6">
-                                                    <label class="form-label small fw-medium text-dark mb-1">Fim da Garantia</label>
-                                                    <input type="date" name="garantiaFim" class="form-control shadow-sm form-control-sm border-warning bg-white">
+                                                    <label class="form-label small fw-medium text-dark mb-1">Fim da Garantia *</label>
+                                                    <input type="date" name="garantiaFim" class="form-control shadow-sm form-control-sm border-warning bg-white" required>
+                                                    <div class="invalid-feedback" id="erroDataGarantia" style="font-size: 0.70rem;">Inválido.</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -601,13 +587,14 @@
                                             
                                             <div id="camposContrato" class="row g-2">
                                                 <div class="col-5">
-                                                    <label class="form-label small text-dark mb-1">Nº Referência do Contrato</label>
-                                                    <input type="text" name="referenciaContrato" class="form-control shadow-sm form-control-sm bg-white" placeholder="Ex: CNT-2024-883">
+                                                    <label class="form-label small text-dark mb-1">Nº Referência *</label>
+                                                    <input type="text" name="referenciaContrato" class="form-control shadow-sm form-control-sm bg-white" placeholder="Ex: CNT-2024" required>
+                                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Obrigatório.</div>
                                                 </div>
                                                 <div class="col-7">
-                                                    <label class="form-label small text-dark mb-1">Entidade Responsável</label>
+                                                    <label class="form-label small text-dark mb-1">Entidade Responsável *</label>
                                                     <div class="dropdown">
-                                                        <input type="hidden" name="entidadeContrato" id="inputEntidadeContrato">
+                                                        <input type="hidden" name="entidadeContrato" id="inputEntidadeContrato" required>
                                                         <button class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm bg-white" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                                                             <span id="textEntidadeContrato" class="text-muted">Selecionar entidade...</span>
                                                         </button>
@@ -620,39 +607,49 @@
                                                                 <li><a class="dropdown-item py-1 small" href="#" onclick="selecionarDropdown('entidadeContrato', 'IberiaMed Serviços')">IberiaMed Serviços</a></li>
                                                             </div>
                                                         </ul>
+                                                        <div class="invalid-feedback" style="font-size: 0.70rem;">Obrigatório.</div>
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-6">
-                                                    <label class="form-label small text-dark mb-1">Tipo de Contrato</label>
-                                                    <select name="tipoContrato" class="form-select form-select-sm shadow-sm text-dark bg-white">
+                                                <div class="col-6 mt-1">
+                                                    <label class="form-label small text-dark mb-1">Tipo de Contrato *</label>
+                                                    <select name="tipoContrato" class="form-select form-select-sm shadow-sm text-dark bg-white" required>
+                                                        <option value="" selected disabled>Selecione...</option>
                                                         <option value="Full-Service">Full-Service</option>
                                                         <option value="Apenas Preventiva">Apenas Preventiva</option>
                                                         <option value="Peças e Mão de Obra">Peças e Mão de Obra</option>
                                                     </select>
+                                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Obrigatório.</div>
                                                 </div>
-                                                <div class="col-6">
-                                                    <label class="form-label small text-dark mb-1">Periodicidade</label>
-                                                    <select name="periodicidadeContrato" class="form-select form-select-sm shadow-sm text-dark bg-white">
+                                                <div class="col-6 mt-1">
+                                                    <label class="form-label small text-dark mb-1">Periodicidade *</label>
+                                                    <select name="periodicidadeContrato" class="form-select form-select-sm shadow-sm text-dark bg-white" required>
+                                                        <option value="" selected disabled>Selecione...</option>
                                                         <option value="Anual">Anual</option>
                                                         <option value="Semestral">Semestral</option>
                                                         <option value="Trimestral">Trimestral</option>
-                                                        <option value="Não Aplicável">Não Aplicável</option>
                                                     </select>
+                                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Obrigatório.</div>
                                                 </div>
-                                                <div class="col-6">
-                                                    <label class="form-label small text-dark mb-1">Início do Contrato</label>
-                                                    <input type="date" name="contratoInicio" class="form-control shadow-sm form-control-sm bg-white">
+                                                <div class="col-6 mt-1">
+                                                    <label class="form-label small text-dark mb-1">Início do Contrato *</label>
+                                                    <input type="date" name="contratoInicio" class="form-control shadow-sm form-control-sm bg-white" required>
+                                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Obrigatório.</div>
                                                 </div>
-                                                <div class="col-6">
-                                                    <label class="form-label small text-dark mb-1">Fim do Contrato</label>
-                                                    <input type="date" name="contratoFim" class="form-control shadow-sm form-control-sm border-warning bg-white">
+                                                <div class="col-6 mt-1">
+                                                    <label class="form-label small text-dark mb-1">Fim do Contrato *</label>
+                                                    <input type="date" name="contratoFim" class="form-control shadow-sm form-control-sm border-warning bg-white" required>
+                                                    <div class="invalid-feedback" id="erroDataContrato" style="font-size: 0.70rem;">Inválido.</div>
                                                 </div>
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="alert alert-danger p-2 text-center mt-4 mb-0 shadow-sm d-none" role="alert">
+                                <i class="fa-solid fa-circle-exclamation me-1"></i> <strong>Erro:</strong> Por favor, verifique os campos a vermelho antes de avançar.
                             </div>
 
                         </div>
@@ -666,6 +663,7 @@
                         </div>
                     </div>
 
+                    <!-- PASSO 4: Documentação -->
                     <div class="tab-pane fade" id="step4-pane" role="tabpanel" tabindex="0">
                         <div class="card-body p-3 p-md-4">
                             <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Documentação Técnica e Legal</h5>
@@ -695,8 +693,8 @@
                                     <div class="col-md-4">
                                         <label class="form-label small text-dark mb-1">Tipo de Documento *</label>
                                         <div class="dropdown">
-                                            <input type="hidden" name="tipoDocumento" id="inputTipoDocumento" required>
-                                            <button class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm bg-white" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                                            <input type="hidden" name="tipoDocumento" id="inputTipoDocumento">
+                                            <button id="btnTipoDocumento" class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm bg-white" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                                                 <span id="textTipoDocumento" class="text-muted">Selecionar tipo...</span>
                                             </button>
                                             <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
@@ -713,7 +711,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label small text-dark mb-1">Título do Documento (Opcional)</label>
-                                        <input type="text" class="form-control form-control-sm shadow-sm bg-white" placeholder="Ex: Manual de Operação v2.0">
+                                        <input type="text" id="docTitulo" class="form-control form-control-sm shadow-sm bg-white" placeholder="Ex: Manual de Operação v2.0">
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label small text-dark mb-1">Entidade / Fornecedor (Opcional)</label>
@@ -739,7 +737,7 @@
                                 <div class="row g-2">
                                     <div class="col-md-3">
                                         <label class="form-label small text-dark mb-1">Data Emissão</label>
-                                        <input type="date" class="form-control form-control-sm shadow-sm bg-white">
+                                        <input type="date" id="docEmissao" class="form-control form-control-sm shadow-sm bg-white">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label small text-dark mb-1">Validade <i class="fa-solid fa-circle-info text-muted ms-1" title="Aplicável a Certificados de Calibração"></i></label>
@@ -747,10 +745,10 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label small text-dark mb-1">Ficheiro (PDF, JPG) *</label>
-                                        <input class="form-control form-control-sm shadow-sm bg-white" type="file">
+                                        <input type="file" id="docFicheiro" class="form-control form-control-sm shadow-sm bg-white">
                                     </div>
                                     <div class="col-md-2 d-flex align-items-end">
-                                        <button type="button" class="btn btn-sm btn-brand fw-bold shadow-sm w-100">
+                                        <button type="button" id="btnAnexarDoc" class="btn btn-sm btn-brand fw-bold shadow-sm w-100">
                                             <i class="fa-solid fa-plus me-1"></i> Anexar
                                         </button>
                                     </div>
@@ -768,22 +766,20 @@
                                                 <th class="fw-semibold text-end px-3 py-2 border-bottom">Ação</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="px-3 py-2 small fw-medium text-dark"><span class="badge bg-secondary mb-1 d-inline-block">Manual de utilizador</span><br>Manual Base</td>
-                                                <td class="py-2 small text-muted">N/A</td>
-                                                <td class="py-2 small text-muted"><i class="fa-solid fa-file-pdf text-danger me-1"></i> manual_v1.pdf</td>
-                                                <td class="text-end px-3 py-2"><button class="btn btn-sm text-danger"><i class="fa-solid fa-trash-can"></i></button></td>
+                                        <tbody id="tabelaDocsBody">
+                                            <tr id="emptyDocRow">
+                                                <td colspan="4" class="text-center text-muted small py-4">
+                                                    <i class="fa-regular fa-folder-open fs-4 d-block mb-2 text-secondary"></i>
+                                                    Nenhum documento anexado ainda.
+                                                </td>
                                             </tr>
-                                            <tr>
-                                                <td class="px-3 py-2 small fw-medium text-dark"><span class="badge bg-secondary mb-1 d-inline-block">Certificado de calibração</span><br>Calibração Inicial</td>
-                                                <td class="py-2 small text-warning fw-bold">2025-06-05</td>
-                                                <td class="py-2 small text-muted"><i class="fa-solid fa-file-pdf text-danger me-1"></i> cert_calib.pdf</td>
-                                                <td class="text-end px-3 py-2"><button class="btn btn-sm text-danger"><i class="fa-solid fa-trash-can"></i></button></td>
-                                            </tr>
-                                            </tbody>
+                                        </tbody>
                                     </table>
                                 </div>
+                            </div>
+                            
+                            <div id="alertaPasso4" class="alert alert-danger p-2 text-center mt-4 mb-0 shadow-sm d-none" role="alert">
+                                <i class="fa-solid fa-circle-exclamation me-1"></i> <strong>Atenção:</strong> <span id="textoAlertaPasso4">Falta anexar documentação obrigatória.</span>
                             </div>
 
                         </div>
@@ -802,44 +798,43 @@
                         <div class="card-body p-4">
                             <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Componentes e Acessórios Associados</h5>
 
-                            <div class="alert alert-secondary border-0 small mb-4">
-                                Este passo é <strong>opcional</strong>. Adicione pás, cabos, transdutores, baterias ou outros periféricos rastreáveis que fazem parte deste equipamento principal.
-                            </div>
-
                             <div class="row g-3 mb-4 bg-light p-3 rounded-3 border">
                                 <div class="col-md-5">
-                                    <label class="form-label small fw-medium mb-1">Designação do Acessório</label>
-                                    <input type="text" class="form-control form-control-sm shadow-sm bg-white" placeholder="Ex: Cabo ECG 5 Vias">
+                                    <label class="form-label small fw-medium mb-1">Designação do Acessório *</label>
+                                    <input type="text" id="acessorioDesignacao" class="form-control form-control-sm shadow-sm bg-white" placeholder="Ex: Cabo ECG 5 Vias">
+                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Introduza o nome do acessório para o adicionar.</div>
                                 </div>
                                 <div class="col-md-5">
                                     <label class="form-label small fw-medium mb-1">Nº Série / Lote (Opcional)</label>
-                                    <input type="text" class="form-control form-control-sm shadow-sm bg-white" placeholder="Ex: SN-889900">
+                                    <input type="text" id="acessorioSerie" class="form-control form-control-sm shadow-sm bg-white" placeholder="Ex: SN-889900">
                                 </div>
                                 <div class="col-md-2 d-flex align-items-end">
-                                    <button type="button" class="btn btn-sm btn-brand fw-bold shadow-sm w-100">
+                                    <button type="button" id="btnAdicionarAcessorio" class="btn btn-sm btn-brand fw-bold shadow-sm w-100">
                                         <i class="fa-solid fa-plus me-1"></i> Adicionar
                                     </button>
                                 </div>
                             </div>
 
                             <div class="border rounded-3 overflow-hidden shadow-sm">
-                                <table class="table table-hover mb-0 text-start align-middle">
-                                    <thead class="table-light text-muted small text-uppercase" style="font-size: 0.75rem;">
-                                        <tr>
-                                            <th class="fw-semibold px-3 py-2">Designação</th>
-                                            <th class="fw-semibold py-2">Referência / Nº Série</th>
-                                            <th class="fw-semibold text-end px-3 py-2">Ação</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="3" class="text-center text-muted small py-4">
-                                                <i class="fa-solid fa-puzzle-piece fs-4 d-block mb-2 text-secondary"></i>
-                                                Nenhum componente associado.
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive bg-white" style="max-height: 180px; overflow-y: auto;">
+                                    <table class="table table-hover mb-0 text-start align-middle" style="position: relative;">
+                                        <thead class="table-light text-muted small text-uppercase sticky-top" style="font-size: 0.75rem; z-index: 1;">
+                                            <tr>
+                                                <th class="fw-semibold px-3 py-2 border-bottom">Designação</th>
+                                                <th class="fw-semibold py-2 border-bottom">Referência / Nº Série</th>
+                                                <th class="fw-semibold text-end px-3 py-2 border-bottom">Ação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabelaAcessoriosBody">
+                                            <tr id="emptyAcessorioRow">
+                                                <td colspan="3" class="text-center text-muted small py-4">
+                                                    <i class="fa-solid fa-puzzle-piece fs-4 d-block mb-2 text-secondary"></i>
+                                                    Nenhum componente associado.
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
@@ -856,17 +851,20 @@
                     <div class="tab-pane fade" id="step6-pane" role="tabpanel" tabindex="0">
                         <div class="card-body p-4">
                             <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Notas e Observações</h5>
-                            <textarea name="observations" class="form-control shadow-sm" rows="6"
-                                placeholder="Insira notas adicionais sobre o equipamento, detalhes de instalação, ou informações relevantes..."></textarea>
+                            
+                            <div class="alert alert-secondary border-0 small mb-4">
+                                Utilize este espaço para registar qualquer anomalia detetada na receção, detalhes específicos sobre a instalação ou recomendações para os utilizadores. (Opcional)
+                            </div>
+
+                            <textarea name="observations" class="form-control shadow-sm" rows="6" placeholder="Insira notas adicionais sobre o equipamento, detalhes de instalação, ou informações relevantes..."></textarea>
                         </div>
+                        
                         <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
-                            <button type="button" class="btn btn-outline-secondary px-4"
-                                data-bs-wizard-step="#step4-tab">
+                            <button type="button" class="btn btn-outline-secondary px-4" data-bs-wizard-step="#step5-tab">
                                 <i class="fa-solid fa-arrow-left me-1"></i> Anterior
                             </button>
 
-                            <!-- BOTÃO FINAL AQUI -->
-                            <button type="submit" class="btn btn-brand px-4 shadow-sm fw-bold">
+                            <button type="submit" id="btnRegistarEquipamento" class="btn btn-brand px-4 shadow-sm fw-bold">
                                 <i class="fa-solid fa-save me-1"></i> Registar Equipamento
                             </button>
                         </div>
@@ -888,7 +886,132 @@
                 campoData.value = hoje;
             }
 
-            // 2. Lógica Inteligente dos Botões "Próximo" e "Anterior"
+            // =========================================================================
+            // LÓGICA DO BOTÃO "ANEXAR" (PASSO 4)
+            // =========================================================================
+            const btnAnexar = document.getElementById('btnAnexarDoc');
+            if (btnAnexar) {
+                btnAnexar.addEventListener('click', function() {
+                    const tipo = document.getElementById('inputTipoDocumento').value;
+                    const titulo = document.getElementById('docTitulo').value;
+                    const emissao = document.getElementById('docEmissao').value;
+                    const validade = document.getElementById('dataValidadeDoc').value;
+                    const ficheiroInput = document.getElementById('docFicheiro');
+                    const ficheiro = ficheiroInput.value; 
+
+                    // Validações antes de anexar
+                    if (!tipo || !ficheiro) {
+                        alert("Por favor, selecione o Tipo de Documento e escolha um Ficheiro para anexar.");
+                        return;
+                    }
+
+                    if (document.getElementById('dataValidadeDoc').disabled === false && !validade) {
+                         alert("Atenção: Para certificados de calibração, a Data de Validade é obrigatória!");
+                         return;
+                    }
+
+                    // A TUA SUGESTÃO APLICADA AQUI: Validação de Datas do Documento
+                    if (emissao && validade) {
+                        if (new Date(validade) < new Date(emissao)) {
+                            alert("Atenção: A Data de Validade não pode ser anterior à Data de Emissão.");
+                            return; // Interrompe e não adiciona à tabela
+                        }
+                    }
+
+                    // Limpar a linha de "Nenhum documento"
+                    const tbody = document.getElementById('tabelaDocsBody');
+                    const emptyRow = document.getElementById('emptyDocRow');
+                    if (emptyRow) emptyRow.remove();
+
+                    // Obter só o nome do ficheiro (ex: manual.pdf)
+                    const fileName = ficheiro.split('\\').pop(); 
+
+                    // Criar a nova linha
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="px-3 py-2 small fw-medium text-dark">
+                            <span class="badge bg-secondary mb-1 d-inline-block tipo-doc-anexado">${tipo}</span><br>${titulo || 'Documento Base'}
+                        </td>
+                        <td class="py-2 small ${validade ? 'text-warning fw-bold' : 'text-muted'}">${validade || 'N/A'}</td>
+                        <td class="py-2 small text-muted"><i class="fa-solid fa-file-pdf text-danger me-1"></i> ${fileName}</td>
+                        <td class="text-end px-3 py-2"><button type="button" class="btn btn-sm text-danger btn-remover-doc"><i class="fa-solid fa-trash-can"></i></button></td>
+                    `;
+                    tbody.appendChild(tr);
+
+                    // Adicionar evento ao botão do lixo para remover a linha
+                    tr.querySelector('.btn-remover-doc').addEventListener('click', function() {
+                        tr.remove();
+                        if (tbody.children.length === 0) {
+                            tbody.innerHTML = `<tr id="emptyDocRow"><td colspan="4" class="text-center text-muted small py-4"><i class="fa-regular fa-folder-open fs-4 d-block mb-2 text-secondary"></i>Nenhum documento anexado ainda.</td></tr>`;
+                        }
+                    });
+
+                    // Limpar os campos depois de anexar para estar pronto para o próximo
+                    document.getElementById('docTitulo').value = '';
+                    document.getElementById('docEmissao').value = '';
+                    document.getElementById('dataValidadeDoc').value = '';
+                    ficheiroInput.value = '';
+                    desativarNivelLocalizacao('tipoDocumento', 'Selecionar tipo...', false); // Reinicia o dropdown
+                    document.getElementById('dataValidadeDoc').disabled = true;
+                    document.getElementById('dataValidadeDoc').classList.remove('bg-white', 'border-warning');
+                    document.getElementById('dataValidadeDoc').classList.add('bg-light');
+                });
+            }
+
+            // =========================================================================
+            // LÓGICA DO BOTÃO "ADICIONAR ACESSÓRIO" (PASSO 5)
+            // =========================================================================
+            const btnAdicionarAcessorio = document.getElementById('btnAdicionarAcessorio');
+            if (btnAdicionarAcessorio) {
+                btnAdicionarAcessorio.addEventListener('click', function() {
+                    const designacaoInput = document.getElementById('acessorioDesignacao');
+                    const serieInput = document.getElementById('acessorioSerie');
+                    
+                    const designacao = designacaoInput.value.trim();
+                    const serie = serieInput.value.trim();
+
+                    // Validação: Designação é obrigatória para adicionar
+                    if (!designacao) {
+                        designacaoInput.classList.add('is-invalid', 'border-danger');
+                        return; // Pára aqui e não adiciona à tabela
+                    } else {
+                        designacaoInput.classList.remove('is-invalid', 'border-danger');
+                    }
+
+                    // Remover a linha de "Nenhum componente associado" se existir
+                    const tbody = document.getElementById('tabelaAcessoriosBody');
+                    const emptyRow = document.getElementById('emptyAcessorioRow');
+                    if (emptyRow) emptyRow.remove();
+
+                    // Criar a nova linha na tabela
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="px-3 py-2 small fw-medium text-dark">${designacao}</td>
+                        <td class="py-2 small text-muted">${serie || '<span class="fst-italic text-secondary">Não definido</span>'}</td>
+                        <td class="text-end px-3 py-2">
+                            <button type="button" class="btn btn-sm text-danger btn-remover-acessorio"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+
+                    // Adicionar evento para remover esta linha
+                    tr.querySelector('.btn-remover-acessorio').addEventListener('click', function() {
+                        tr.remove();
+                        // Se a tabela ficar vazia de novo, volta a colocar a mensagem original
+                        if (tbody.children.length === 0) {
+                            tbody.innerHTML = `<tr id="emptyAcessorioRow"><td colspan="3" class="text-center text-muted small py-4"><i class="fa-solid fa-puzzle-piece fs-4 d-block mb-2 text-secondary"></i>Nenhum componente associado.</td></tr>`;
+                        }
+                    });
+
+                    // Limpar os campos para a próxima inserção
+                    designacaoInput.value = '';
+                    serieInput.value = '';
+                });
+            }
+
+            // =========================================================================
+            // LÓGICA INTELIGENTE DOS BOTÕES "PRÓXIMO" E "ANTERIOR"
+            // =========================================================================
             document.querySelectorAll('[data-bs-wizard-step]').forEach(button => {
                 button.addEventListener('click', function (e) {
                     
@@ -901,25 +1024,32 @@
                         return;
                     }
 
-                    // --- INÍCIO DA VALIDAÇÃO ---
+                    // --- INÍCIO DA VALIDAÇÃO GERAL ---
                     let tudoValido = true;
                     
                     const alertaGlobal = painelAtual.querySelector('.alert-danger');
                     if (alertaGlobal) alertaGlobal.classList.add('d-none');
 
-                    // A) Reset aos textos de erro dinâmicos
+                    // Reset aos textos de erro dinâmicos 
                     const feedbackSerial = document.getElementById('feedbackSerial');
                     if (feedbackSerial) feedbackSerial.innerText = "Campo obrigatório.";
-                    
                     const feedbackAno = document.getElementById('feedbackAno');
                     if (feedbackAno) feedbackAno.innerText = "Data inválida.";
+                    const feedbackCusto = document.getElementById('feedbackCusto');
+                    if (feedbackCusto) feedbackCusto.innerText = "Campo obrigatório.";
+                    const erroDataGarantia = document.getElementById('erroDataGarantia');
+                    if (erroDataGarantia) erroDataGarantia.innerText = "Obrigatório.";
+                    const erroDataContrato = document.getElementById('erroDataContrato');
+                    if (erroDataContrato) erroDataContrato.innerText = "Obrigatório.";
 
-                    // B) Verificar os vazios
+                    // B) Verificar os vazios (Inputs normais e Dropdowns hidden)
                     const camposObrigatorios = painelAtual.querySelectorAll('input[required], select[required]');
                     camposObrigatorios.forEach(campo => {
+                        if (campo.closest('.d-none')) return;
+
                         let elementoParaPintar = campo;
                         if (campo.type === 'hidden') {
-                            elementoParaPintar = campo.nextElementSibling; // Pinta o botão do dropdown
+                            elementoParaPintar = campo.nextElementSibling;
                         }
 
                         if (!campo.value || campo.value.trim() === '') {
@@ -930,32 +1060,94 @@
                         }
                     });
 
-                    // C) Lógica Específica: Número de Série Duplicado
+                    // C) Lógica Específica (Passo 3): Datas
+                    const contGarantia = document.getElementById('camposGarantia');
+                    if (contGarantia && !contGarantia.classList.contains('d-none')) {
+                        const dIniG = painelAtual.querySelector('input[name="garantiaInicio"]');
+                        const dFimG = painelAtual.querySelector('input[name="garantiaFim"]');
+                        if (dIniG && dFimG && dIniG.value && dFimG.value) {
+                            if (new Date(dFimG.value) <= new Date(dIniG.value)) {
+                                dFimG.classList.add('is-invalid', 'border-danger');
+                                if(erroDataGarantia) erroDataGarantia.innerText = "Fim deve ser posterior ao início.";
+                                tudoValido = false;
+                            }
+                        }
+                    }
+
+                    const contContrato = document.getElementById('camposContrato');
+                    if (contContrato && !contContrato.classList.contains('d-none')) {
+                        const dIniC = painelAtual.querySelector('input[name="contratoInicio"]');
+                        const dFimC = painelAtual.querySelector('input[name="contratoFim"]');
+                        if (dIniC && dFimC && dIniC.value && dFimC.value) {
+                            if (new Date(dFimC.value) <= new Date(dIniC.value)) {
+                                dFimC.classList.add('is-invalid', 'border-danger');
+                                if(erroDataContrato) erroDataContrato.innerText = "Fim deve ser posterior ao início.";
+                                tudoValido = false;
+                            }
+                        }
+                    }
+
+                    // D) Lógica Específica (Passo 4): Validação de Documentos Cruzada
+                    if (painelAtual.id === 'step4-pane') {
+                        const alertaPasso4 = document.getElementById('alertaPasso4');
+                        const textoAlertaPasso4 = document.getElementById('textoAlertaPasso4');
+                        
+                        const spansTipos = Array.from(painelAtual.querySelectorAll('.tipo-doc-anexado'));
+                        const docsNaTabela = spansTipos.map(span => span.innerText);
+                        
+                        let mensagemErroDocs = "";
+
+                        // Validação 1: O Contrato (Se disse que tinha no Passo 3)
+                        const temContrato = document.getElementById('temContrato');
+                        if (temContrato && temContrato.checked && !docsNaTabela.includes('Contrato de manutenção')) {
+                            mensagemErroDocs += "Como indicou no Passo 3 que possui Contrato, tem de anexar o <strong>Contrato de manutenção</strong>.<br>";
+                            tudoValido = false;
+                        }
+
+                        // Validação 2: A Declaração CE
+                        if (!document.getElementById('faltaCE').checked && !docsNaTabela.includes('Declaração de conformidade')) {
+                            mensagemErroDocs += "Anexe a <strong>Declaração de conformidade</strong> ou assinale-a como em falta.<br>";
+                            tudoValido = false;
+                        }
+
+                        // Validação 3: O Manual de Utilizador
+                        if (!document.getElementById('faltaManual').checked && !docsNaTabela.includes('Manual de utilizador')) {
+                            mensagemErroDocs += "Anexe o <strong>Manual de utilizador</strong> ou assinale-o como em falta.<br>";
+                            tudoValido = false;
+                        }
+
+                        // Validação 4: A Fatura
+                        if (!document.getElementById('faltaFatura').checked && !docsNaTabela.includes('Fatura ou guia de aquisição')) {
+                            mensagemErroDocs += "Anexe a <strong>Fatura ou guia de aquisição</strong> ou assinale-a como em falta.<br>";
+                            tudoValido = false;
+                        }
+
+                        if (!tudoValido) {
+                            textoAlertaPasso4.innerHTML = mensagemErroDocs;
+                            alertaPasso4.classList.remove('d-none');
+                        } else {
+                            alertaPasso4.classList.add('d-none');
+                        }
+                    }
+
+                    // E) Lógicas dos Passos 1 e 2 (Série, Ano e Custo)
                     const serialInput = painelAtual.querySelector('input[name="serialNumber"]');
                     if (serialInput && serialInput.value.trim() !== '') {
-                        // SIMULAÇÃO: "SN-12345" já existe na base de dados
                         if (serialInput.value.trim().toUpperCase() === "SN-12345") {
                             serialInput.classList.add('is-invalid', 'border-danger');
                             if (feedbackSerial) feedbackSerial.innerText = "Este número de série já existe.";
                             tudoValido = false;
                         }
                     }
-
-                    // D) Lógica Específica: Ano de Fabrico não pode ser no futuro
                     const anoInput = painelAtual.querySelector('input[name="manufacturingYear"]');
                     if (anoInput && anoInput.value) {
                         const ano = parseInt(anoInput.value);
-                        const anoAtual = new Date().getFullYear();
-                        if (ano < 1900 || ano > anoAtual) {
+                        if (ano < 1900 || ano > new Date().getFullYear()) {
                             anoInput.classList.add('is-invalid', 'border-danger');
                             if (feedbackAno) feedbackAno.innerText = "Data inválida.";
                             tudoValido = false;
-                        } else {
-                            anoInput.classList.remove('is-invalid', 'border-danger');
                         }
                     }
-
-                    // E) Lógica Específica (Passo 2): Custo não pode ser negativo
                     const custoInput = painelAtual.querySelector('input[name="cost"]');
                     if (custoInput && custoInput.value.trim() !== '') {
                         if (parseFloat(custoInput.value) < 0) {
@@ -969,37 +1161,62 @@
                     if (tudoValido) {
                         mudarDeSeparador(this.getAttribute('data-bs-wizard-step'));
                     } else {
-                        if (alertaGlobal) alertaGlobal.classList.remove('d-none');
+                        if (alertaGlobal && painelAtual.id !== 'step4-pane') {
+                            alertaGlobal.classList.remove('d-none');
+                        }
                     }
                 });
             });
 
+            // Função que troca os painéis E pinta a aba correta
             function mudarDeSeparador(targetTabId) {
                 const targetTabElement = document.querySelector(targetTabId);
                 if (targetTabElement) {
                     const tab = new bootstrap.Tab(targetTabElement);
                     tab.show();
                 }
-                // 2. Atualizar as cores das abas de navegação lá em cima
+
                 document.querySelectorAll('#equipamentoTabs .nav-link').forEach(navLink => {
-                    // Descobre a pequena bolinha (badge) dentro do botão
                     const badge = navLink.querySelector('.badge');
-                    
-                    // Se for o botão para onde vamos (targetTabId tem o '#' no início, ex: #step2-pane, o ID do botão é step2-tab)
                     const tabIdDoBotao = navLink.getAttribute('id');
                     const tabAlvoCorrigido = targetTabId.replace('-pane', '-tab').replace('#', '');
 
                     if (tabIdDoBotao === tabAlvoCorrigido) {
-                        // Pintar de "Ativo" (Texto escuro, bolinha com a cor da marca)
                         navLink.classList.remove('text-muted');
                         navLink.classList.add('active', 'text-dark');
                         badge.classList.replace('bg-secondary', 'bg-brand');
                     } else {
-                        // Pintar de "Inativo" (Texto cinzento, bolinha cinzenta)
                         navLink.classList.remove('active', 'text-dark');
                         navLink.classList.add('text-muted');
                         badge.classList.replace('bg-brand', 'bg-secondary');
                     }
+                });
+            }
+
+            // =========================================================================
+            // LÓGICA FINAL: SUBMISSÃO DO FORMULÁRIO (PASSO 6)
+            // =========================================================================
+            const formEquipamento = document.querySelector('form');
+            if (formEquipamento) {
+                formEquipamento.addEventListener('submit', function(e) {
+                    // Impede o formulário de fazer o refresh automático da página
+                    e.preventDefault(); 
+
+                    const btnSubmit = document.getElementById('btnRegistarEquipamento');
+                    
+                    // Efeito visual: Muda o botão para "A registar..." e põe o ícone a rodar
+                    const textoOriginal = btnSubmit.innerHTML;
+                    btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> A registar...';
+                    btnSubmit.disabled = true;
+
+                    // SIMULAÇÃO: Espera 1 segundo (fingindo que está a falar com a Base de Dados)
+                    setTimeout(() => {
+                        // Mostra o alerta de sucesso
+                        alert("Equipamento registado com sucesso no MedStock!");
+                        
+                        // Redireciona o utilizador de volta para a tabela de equipamentos
+                        window.location.href = "lista_equi.html"; 
+                    }, 1000);
                 });
             }
         });
