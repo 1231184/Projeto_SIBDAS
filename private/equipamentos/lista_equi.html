@@ -507,6 +507,10 @@
                         <p class="text-muted custom-monospace small mb-0">EQ-2024-001</p>
                     </div>
                     <div class="d-flex align-items-center gap-2">
+                        <button class="btn-action-custom bg-white border text-dark"
+                            onclick="alert('🖨️ Comando enviado! A etiqueta com o código de barras do equipamento EQ-2024-001 foi gerada com sucesso.')">
+                            <i class="fa-solid fa-barcode me-1"></i> Etiqueta
+                        </button>
                         <button class="btn-action-custom py-2 px-3" data-bs-toggle="modal" data-bs-target="#modalEditar"
                             data-bs-dismiss="modal">
                             <i class="fa-solid fa-pencil me-2"></i> Editar
@@ -644,9 +648,8 @@
 
                                     <!-- TAB 2: LOCALIZAÇÃO -->
                                     <div class="tab-pane fade" id="localizacao-pane" role="tabpanel" tabindex="0">
-                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Localização Atual
-                                        </h5>
-                                        <div class="row row-cols-2 row-cols-md-4 g-4">
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Localização Atual</h5>
+                                        <div class="row row-cols-2 row-cols-md-4 g-4 mb-4">
                                             <div class="col">
                                                 <p class="detail-label">Edifício</p>
                                                 <p class="detail-value d-flex align-items-center gap-1">
@@ -664,6 +667,40 @@
                                             <div class="col">
                                                 <p class="detail-label">Sala / Compartimento</p>
                                                 <p class="detail-value">Box 1</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="card dash-card shadow-sm border-0 bg-light">
+                                            <div class="card-header border-0 bg-transparent pt-3 px-4 pb-2 d-flex align-items-center gap-2">
+                                                <i class="fa-solid fa-clock-rotate-left text-muted" style="font-size: 1rem;"></i>
+                                                <h6 class="card-title-custom mb-0">Histórico de Movimentações</h6>
+                                            </div>
+                                            <div class="card-body px-4 pb-4 pt-0">
+                                                <div class="d-flex flex-column gap-2">
+
+                                                    <div class="list-box bg-white border d-flex justify-content-between align-items-center py-2">
+                                                        <div>
+                                                            <span class="fw-bold text-dark small">Transferência de Serviço</span>
+                                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Movido de: Serviço de Urgência &rarr; UCI (Unidade A)</p>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">15/01/2024</p>
+                                                            <p class="text-muted small mb-0" style="font-size: 0.65rem;">Por: admin</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="list-box bg-white border d-flex justify-content-between align-items-center py-2">
+                                                        <div>
+                                                            <span class="fw-bold text-dark small">Entrada em Inventário</span>
+                                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Registo inicial e instalação física no Serviço de Urgência</p>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <p class="text-muted small mb-0" style="font-size: 0.75rem;">10/01/2024</p>
+                                                            <p class="text-muted small mb-0" style="font-size: 0.65rem;">Por: admin</p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1845,7 +1882,7 @@
                     }
                 });
 
-                const totalAtivos = filtrosAtivos.estado.length + filtrosAtivos.criticidade.length + filtrosAtivos.categoria.length + filtrosAtivos.fornecedor.length+ 
+                const totalAtivos = filtrosAtivos.estado.length + filtrosAtivos.criticidade.length + filtrosAtivos.categoria.length + filtrosAtivos.fornecedor.length +
                     filtrosAtivos.servico.length;
 
                 // Atualiza UI dos filtros (botão Limpar e Badges de quantidade)
