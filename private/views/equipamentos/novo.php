@@ -1,6 +1,6 @@
-<?php include '../includes/header.php'; ?>
+<?php include '../../includes/header.php'; ?>
 
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
 
     <main class="flex-grow-1 overflow-auto p-4 p-md-5">
 
@@ -15,7 +15,7 @@
 
         <!-- Título da Página -->
         <div class="d-flex align-items-center gap-3 mb-4" style="max-width: 1024px;">
-            <a href="lista_equi.html"
+            <a href="lista_equi.php"
                 class="btn btn-light border shadow-sm d-flex align-items-center justify-content-center"
                 style="width: 36px; height: 36px;">
                 <i class="fa-solid fa-arrow-left"></i>
@@ -1658,4 +1658,4 @@
     </script>
 
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../../includes/footer.php'; ?>

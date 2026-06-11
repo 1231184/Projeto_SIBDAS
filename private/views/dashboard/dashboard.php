@@ -1,13 +1,13 @@
-<?php include '../includes/header.php'; ?>
+<?php include '../../includes/header.php'; ?>
 
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
 
     <!-- MAIN -->
     <main class="flex-grow-1 overflow-auto p-4 p-md-5 bg-backend">
 
         <header class="d-md-none d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
             <div class="d-flex align-items-center gap-2">
-                <img src="../../assets/img/logotipo.png" alt="MedStock Logo" style="height: 45px; width: auto;">
+                <img src="/projeto_SIBDAS/assets/img/logotipo.png" alt="MedStock Logo" style="height: 45px; width: auto;">
             </div>
             <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
         </header>
@@ -273,4 +273,4 @@
     </script>
 
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../../includes/footer.php'; ?>

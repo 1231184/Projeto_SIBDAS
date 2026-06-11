@@ -1,7 +1,7 @@
-<?php include '../includes/header.php'; ?>
+<?php include '../../includes/header.php'; ?>
 
 
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
 
     <main class="d-flex flex-column flex-grow-1 overflow-hidden bg-backend">
 
@@ -19,7 +19,7 @@
                 <h1 class="h4 fw-bold text-dark mb-1">Equipamentos</h1>
                 <div class="text-muted small" id="totalRegistos">4 equipamentos registados</div>
             </div>
-            <a href="novo.html" class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm fw-bold">
+            <a href="novo.php" class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm fw-bold">
                 <i class="fa-solid fa-plus"></i> Novo Equipamento
             </a>
         </div>
@@ -2146,4 +2146,4 @@
         });
     </script>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../../includes/footer.php'; ?>

@@ -1,22 +1,32 @@
-<!DOCTYPE html>
-<html lang="pt-PT">
+<?php
+// Inicia a sessão (necessário para usar $_SESSION)
+session_start();
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - MedStock</title>
+// Inicializa as variáveis de erro
+$validation_errors = [];
+$server_error = [];
 
-    <link rel="stylesheet" href="../assets/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/fontawesome/all.min.css">
-    <link rel="stylesheet" href="../assets/css/1231184.css">
-</head>
+// Recolhe erros de validação da sessão (se existirem)
+if (!empty($_SESSION['validation_errors'])) {
+    $validation_errors = $_SESSION['validation_errors'];
+    unset($_SESSION['validation_errors']);
+}
 
-<body class="bg-login-page d-flex flex-column align-items-center justify-content-center min-vh-100 p-3">
+// Recolhe erros de servidor da sessão (se existirem)
+if (!empty($_SESSION['server_error'])) {
+    $server_error = $_SESSION['server_error'];
+    unset($_SESSION['server_error']);
+}
+
+$pagina = 'login';
+?>
+
+<?php include '../private/includes/header.php'; ?>
 
     <div class="w-100" style="max-width: 384px;">
 
         <div class="mb-4">
-            <a href="../public/index.html"
+            <a href="../public/index.php"
                 class="text-white-50 text-decoration-none small d-inline-flex align-items-center gap-2 hover-text-white transition-all">
                 <i class="fa-solid fa-arrow-left"></i> Voltar ao início
             </a>
@@ -41,18 +51,18 @@
                     <p class="text-muted small mb-0">Introduza as suas credenciais para continuar</p>
                 </div>
 
-                <form action="../private/dashboard/dashboard.html" method="get">
+                <form action="../private/processa_login.php" method="post" autocomplete="off">
 
                     <div class="mb-3">
-                        <label class="form-label fw-medium text-dark small mb-2">Utilizador *</label>
-                        <input type="text" class="form-control px-3 py-2 shadow-sm rounded-2" placeholder="utilizador"
+                        <label class="form-label fw-medium text-dark small mb-2">Utilizador</label>
+                        <input type="text" name="text_username" class="form-control px-3 py-2 shadow-sm rounded-2" placeholder="utilizador"
                             required>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-medium text-dark small mb-2">Palavra-passe *</label>
+                        <label class="form-label fw-medium text-dark small mb-2">Palavra-passe</label>
                         <div class="input-group shadow-sm rounded-2">
-                            <input type="password" id="passwordInput" class="form-control px-3 py-2 border-end-0"
+                            <input type="password" name="text_password" id="passwordInput" class="form-control px-3 py-2 border-end-0"
                                 placeholder="••••••••" required>
                             <button type="button" id="togglePassword"
                                 class="input-group-text bg-white border-start-0 text-muted">
@@ -64,6 +74,22 @@
                     <button type="submit" class="btn btn-brand w-100 rounded-2 py-2 fw-medium mt-1">
                         Entrar
                     </button>
+
+                    <!-- Mensagens de erro de validação -->
+                    <?php if (!empty($validation_errors)) : ?>
+                        <div class="alert alert-danger p-2 text-center mt-3">
+                            <?php foreach ($validation_errors as $error) : ?>
+                                <div><?= htmlspecialchars($error) ?></div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Mensagem de erro de servidor -->
+                    <?php if (!empty($server_error)) : ?>
+                        <div class="alert alert-danger p-2 text-center mt-3">
+                            <div><?= htmlspecialchars($server_error) ?></div>
+                        </div>
+                    <?php endif; ?>
 
                 </form>
 
@@ -80,7 +106,6 @@
 
     </div>
 
-    <script src="../assets/bootstrap/bootstrap.bundle.min.js"></script>
     <script>
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('passwordInput');
@@ -91,6 +116,5 @@
             this.innerHTML = type === 'password' ? '<i class="fa-regular fa-eye"></i>' : '<i class="fa-regular fa-eye-slash"></i>';
         });
     </script>
-</body>
 
-</html>
+<?php include '../private/includes/footer.php'; ?>

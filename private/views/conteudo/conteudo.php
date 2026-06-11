@@ -1,6 +1,6 @@
-<?php include '../includes/header.php'; ?>
+<?php include '../../includes/header.php'; ?>
 
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
 
     <!-- MAIN -->
     <main class="flex-grow-1 overflow-auto p-4 p-md-5">
@@ -199,8 +199,4 @@
         </form>
     </main>
 
-
-    <script src="../../assets/bootstrap/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+<?php include '../../includes/footer.php'; ?>

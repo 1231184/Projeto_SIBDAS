@@ -1,6 +1,6 @@
-<?php include '../includes/header.php'; ?>
+<?php include '../../includes/header.php'; ?>
 
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
 
     <main class="flex-grow-1 overflow-auto p-4 p-md-5">
 
@@ -933,4 +933,4 @@
         }
     </script>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../../includes/footer.php'; ?>

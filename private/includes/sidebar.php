@@ -10,7 +10,7 @@
         <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
             <ul class="nav flex-column gap-1">
                 <li class="nav-item">
-                    <a href="/projeto_SIBDAS/private/dashboard/dashboard.php"
+                    <a href="/projeto_SIBDAS/private/views/dashboard/dashboard.php"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3 <?php echo (strpos($_SERVER['PHP_SELF'], '/dashboard/') !== false) ? 'active' : ''; ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -23,7 +23,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/projeto_SIBDAS/private/equipamentos/lista_equi.php"
+                    <a href="/projeto_SIBDAS/private/views/equipamentos/lista_equi.php"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3 <?php echo (strpos($_SERVER['PHP_SELF'], '/equipamentos/') !== false) ? 'active' : ''; ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -37,7 +37,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/projeto_SIBDAS/private/localizacoes/lista_loc.php"
+                    <a href="/projeto_SIBDAS/private/views/localizacoes/lista_loc.php"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3 <?php echo (strpos($_SERVER['PHP_SELF'], '/localizacoes/') !== false) ? 'active' : ''; ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -50,7 +50,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/projeto_SIBDAS/private/fornecedores/lista_fornecedores.php"
+                    <a href="/projeto_SIBDAS/private/views/fornecedores/lista_fornecedores.php"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3 <?php echo (strpos($_SERVER['PHP_SELF'], '/fornecedores/') !== false) ? 'active' : ''; ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -65,7 +65,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/projeto_SIBDAS/private/documentacao/lista_docs.php"
+                    <a href="/projeto_SIBDAS/private/views/documentacao/lista_docs.php"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3 <?php echo (strpos($_SERVER['PHP_SELF'], '/documentacao/') !== false) ? 'active' : ''; ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -79,7 +79,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/projeto_SIBDAS/private/garantias/lista_garantias.php"
+                    <a href="/projeto_SIBDAS/private/views/garantias/lista_garantias.php"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3 <?php echo (strpos($_SERVER['PHP_SELF'], '/garantias/') !== false) ? 'active' : ''; ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -93,7 +93,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/projeto_SIBDAS/private/conteudo/conteudo.php"
+                    <a href="/projeto_SIBDAS/private/views/conteudo/conteudo.php"
                         class="nav-link sidebar-item d-flex align-items-center gap-2 py-2 px-3 <?php echo (strpos($_SERVER['PHP_SELF'], '/conteudo/') !== false) ? 'active' : ''; ?>">
                         <i class="fa-regular fa-pen-to-square"></i>
                         <span class="fw-medium">
