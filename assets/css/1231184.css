@@ -918,6 +918,98 @@ section[id] {
 }
 
 /* ============================================================
+   MELHORIAS INSTITUCIONAIS (index público)
+============================================================ */
+
+/* Badge de destaque acima do título do hero */
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #e2e8f0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+}
+.hero-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brand-color);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
+}
+
+/* Botões do hero */
+.hero-cta-primary {
+    background-color: #fff;
+    color: var(--hero-bg-start);
+    font-weight: 700;
+    padding: 0.7rem 1.6rem;
+    border-radius: 0.7rem;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hero-cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    color: var(--brand-hover);
+}
+.hero-cta-ghost {
+    background: transparent;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.7rem 1.6rem;
+    border-radius: 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+.hero-cta-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    color: #fff;
+}
+
+/* Animação de entrada suave (aparece ao carregar) */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+    animation: fadeUp 0.7s ease both;
+}
+.fade-up-delay-1 { animation-delay: 0.15s; }
+.fade-up-delay-2 { animation-delay: 0.3s; }
+
+/* Número de métrica com sublinhado de marca */
+.metric-value {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.4rem;
+}
+.metric-value::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 3px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Respeitar quem prefere menos movimento (acessibilidade) */
+@media (prefers-reduced-motion: reduce) {
+    .fade-up { animation: none; }
+    .card-hover-elevate:hover { transform: none; }
+}
+
+/* ============================================================
    RESPONSIVIDADE
 ============================================================ */
 

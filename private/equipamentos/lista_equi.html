@@ -897,12 +897,11 @@
                                             Acessórios Associados</h5>
                                         <div class="d-flex flex-column gap-2 mt-3">
 
-                                            <div
-                                                class="list-box list-box-light d-flex justify-content-between align-items-center">
+                                            <div class="list-box list-box-light d-flex justify-content-between align-items-center">
                                                 <div>
                                                     <p class="detail-value fw-medium">Cabo ECG 5 Vias</p>
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        Acessório</p>
+                                                    <p class="text-brand small fw-bold mb-0" style="font-size: 0.75rem;">
+                                                        04.002.01</p>
                                                 </div>
                                                 <div class="text-end">
                                                     <p class="text-muted custom-monospace small mb-0"
@@ -910,12 +909,11 @@
                                                 </div>
                                             </div>
 
-                                            <div
-                                                class="list-box list-box-light d-flex justify-content-between align-items-center">
+                                            <div class="list-box list-box-light d-flex justify-content-between align-items-center">
                                                 <div>
                                                     <p class="detail-value fw-medium">Braçadeira de Pressão Adulto</p>
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        Acessório</p>
+                                                    <p class="text-brand small fw-bold mb-0" style="font-size: 0.75rem;">
+                                                        04.002.02</p>
                                                 </div>
                                                 <div class="text-end">
                                                     <p class="text-muted custom-monospace small mb-0 fst-italic"
@@ -1011,9 +1009,10 @@
                                         <div class="row g-3">
                                             <div class="col-md-3">
                                                 <label class="form-label small fw-medium mb-1">Código Interno *</label>
-                                                <input type="text" name="internalCode"
-                                                    class="form-control shadow-sm bg-light text-brand fw-bold"
-                                                    value="EQ-2024-001" readonly required>
+                                                <input type="text" name="internalCode" class="form-control shadow-sm bg-white"
+                                                    value="04.002" required>
+                                                <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                                    obrigatório.</div>
                                             </div>
                                             <div class="col-md-9">
                                                 <label class="form-label small fw-medium mb-1">Designação *</label>
@@ -1692,15 +1691,20 @@
                                         <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Acessórios
                                             Associados</h5>
                                         <div class="row g-3 mb-4 bg-light p-3 rounded-3 border">
-                                            <div class="col-md-5">
+                                            <div class="col-md-3">
+                                                <label class="form-label small fw-medium mb-1">Código *</label>
+                                                <input type="text" id="edit-acessorioCodigo"
+                                                    class="form-control form-control-sm shadow-sm bg-white"
+                                                    placeholder="Ex: 04.002.01">
+                                            </div>
+                                            <div class="col-md-4">
                                                 <label class="form-label small fw-medium mb-1">Designação *</label>
                                                 <input type="text" id="edit-acessorioDesignacao"
                                                     class="form-control form-control-sm shadow-sm bg-white"
-                                                    placeholder="Ex: Cabo ECG">
+                                                    placeholder="Ex: Sonda Linear">
                                             </div>
-                                            <div class="col-md-5">
-                                                <label class="form-label small fw-medium mb-1">Nº Série
-                                                    (Opcional)</label>
+                                            <div class="col-md-3">
+                                                <label class="form-label small fw-medium mb-1">Nº Série (Opcional)</label>
                                                 <input type="text" id="edit-acessorioSerie"
                                                     class="form-control form-control-sm shadow-sm bg-white">
                                             </div>
@@ -1716,15 +1720,16 @@
                                                 <thead class="table-light text-muted small text-uppercase"
                                                     style="font-size: 0.75rem;">
                                                     <tr>
-                                                        <th class="px-3 py-2">Designação</th>
+                                                        <th class="px-3 py-2">Código</th>
+                                                        <th class="py-2">Designação</th>
                                                         <th class="py-2">Referência / Série</th>
                                                         <th class="text-end px-3 py-2">Ação</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="edit-tabelaAcessoriosBody">
                                                     <tr>
-                                                        <td class="px-3 py-2 small fw-medium text-dark">Módulo
-                                                            Capnografia</td>
+                                                        <td class="px-3 py-2 small fw-bold text-brand">04.002.01</td>
+                                                        <td class="py-2 small fw-medium text-dark">Módulo Capnografia</td>
                                                         <td class="py-2 small text-muted">SN-999-444</td>
                                                         <td class="text-end px-3 py-2"><button type="button"
                                                                 class="btn btn-sm text-danger btn-remover-acessorio"><i
@@ -2075,17 +2080,33 @@
             const btnAdcAcc = document.getElementById('edit-btnAdicionarAcessorio');
             if (btnAdcAcc) {
                 btnAdcAcc.addEventListener('click', function () {
+                    const cod = document.getElementById('edit-acessorioCodigo').value.trim();
                     const des = document.getElementById('edit-acessorioDesignacao').value.trim();
                     const ser = document.getElementById('edit-acessorioSerie').value.trim();
-                    if (!des) { document.getElementById('edit-acessorioDesignacao').classList.add('is-invalid'); return; }
-                    document.getElementById('edit-acessorioDesignacao').classList.remove('is-invalid');
+                    
+                    let hasError = false;
+
+                    if (!cod) { document.getElementById('edit-acessorioCodigo').classList.add('is-invalid'); hasError = true; }
+                    else { document.getElementById('edit-acessorioCodigo').classList.remove('is-invalid'); }
+
+                    if (!des) { document.getElementById('edit-acessorioDesignacao').classList.add('is-invalid'); hasError = true; }
+                    else { document.getElementById('edit-acessorioDesignacao').classList.remove('is-invalid'); }
+
+                    if (hasError) return;
 
                     const tbody = document.getElementById('edit-tabelaAcessoriosBody');
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td class="px-3 py-2 small fw-medium text-dark">${des}</td><td class="py-2 small text-muted">${ser || 'N/A'}</td><td class="text-end px-3 py-2"><button type="button" class="btn btn-sm text-danger btn-remover-acessorio"><i class="fa-solid fa-trash-can"></i></button></td>`;
+                    tr.innerHTML = `
+                        <td class="px-3 py-2 small fw-bold text-brand">${cod}</td>
+                        <td class="py-2 small fw-medium text-dark">${des}</td>
+                        <td class="py-2 small text-muted">${ser || 'N/A'}</td>
+                        <td class="text-end px-3 py-2"><button type="button" class="btn btn-sm text-danger btn-remover-acessorio"><i class="fa-solid fa-trash-can"></i></button></td>
+                    `;
                     tbody.appendChild(tr);
                     tr.querySelector('.btn-remover-acessorio').addEventListener('click', () => tr.remove());
 
+                    // Limpa formulário
+                    document.getElementById('edit-acessorioCodigo').value = '';
                     document.getElementById('edit-acessorioDesignacao').value = '';
                     document.getElementById('edit-acessorioSerie').value = '';
                 });
