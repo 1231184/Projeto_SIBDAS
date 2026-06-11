@@ -893,31 +893,26 @@
 
                                     <!-- TAB 6: ACESSÓRIOS -->
                                     <div class="tab-pane fade" id="acessorios-pane" role="tabpanel" tabindex="0">
-                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Componentes e
-                                            Acessórios Associados</h5>
+                                        <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Componentes e Acessórios Associados</h5>
                                         <div class="d-flex flex-column gap-2 mt-3">
 
                                             <div class="list-box list-box-light d-flex justify-content-between align-items-center">
                                                 <div>
                                                     <p class="detail-value fw-medium">Cabo ECG 5 Vias</p>
-                                                    <p class="text-brand small fw-bold mb-0" style="font-size: 0.75rem;">
-                                                        04.002.01</p>
+                                                    <p class="text-brand small fw-bold mb-0" style="font-size: 0.75rem;">EQ-0001.01</p>
                                                 </div>
                                                 <div class="text-end">
-                                                    <p class="text-muted custom-monospace small mb-0"
-                                                        style="font-size: 0.75rem;">SN-889900</p>
+                                                    <p class="text-muted custom-monospace small mb-0" style="font-size: 0.75rem;">SN-889900</p>
                                                 </div>
                                             </div>
 
                                             <div class="list-box list-box-light d-flex justify-content-between align-items-center">
                                                 <div>
                                                     <p class="detail-value fw-medium">Braçadeira de Pressão Adulto</p>
-                                                    <p class="text-brand small fw-bold mb-0" style="font-size: 0.75rem;">
-                                                        04.002.02</p>
+                                                    <p class="text-brand small fw-bold mb-0" style="font-size: 0.75rem;">EQ-0001.02</p>
                                                 </div>
                                                 <div class="text-end">
-                                                    <p class="text-muted custom-monospace small mb-0 fst-italic"
-                                                        style="font-size: 0.75rem;">Não definido</p>
+                                                    <p class="text-muted custom-monospace small mb-0 fst-italic" style="font-size: 0.75rem;">Não definido</p>
                                                 </div>
                                             </div>
 
@@ -1008,11 +1003,8 @@
                                             Identificação</h5>
                                         <div class="row g-3">
                                             <div class="col-md-3">
-                                                <label class="form-label small fw-medium mb-1">Código Interno *</label>
-                                                <input type="text" name="internalCode" class="form-control shadow-sm bg-white"
-                                                    value="04.002" required>
-                                                <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
-                                                    obrigatório.</div>
+                                                <label class="form-label small fw-medium mb-1">Código Interno <i class="fa-solid fa-lock text-muted ms-1" style="font-size: 0.7rem;" title="Gerado automaticamente"></i></label>
+                                                <input type="text" name="internalCode" class="form-control shadow-sm bg-light fw-bold text-muted" value="EQ-0001" readonly>
                                             </div>
                                             <div class="col-md-9">
                                                 <label class="form-label small fw-medium mb-1">Designação *</label>
@@ -1688,37 +1680,29 @@
 
                                 <div class="tab-pane fade" id="edit-step5-pane" role="tabpanel" tabindex="0">
                                     <div class="card-body p-4">
-                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Acessórios
-                                            Associados</h5>
+                                        <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Acessórios Associados</h5>
+                                        
                                         <div class="row g-3 mb-4 bg-light p-3 rounded-3 border">
                                             <div class="col-md-3">
-                                                <label class="form-label small fw-medium mb-1">Código *</label>
-                                                <input type="text" id="edit-acessorioCodigo"
-                                                    class="form-control form-control-sm shadow-sm bg-white"
-                                                    placeholder="Ex: 04.002.01">
+                                                <label class="form-label small fw-medium mb-1">Cód. Componente <i class="fa-solid fa-lock text-muted ms-1" style="font-size: 0.7rem;" title="Gerado automaticamente"></i></label>
+                                                <input type="text" id="edit-acessorioCodigo" class="form-control form-control-sm shadow-sm bg-light fw-bold text-muted" readonly>
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label small fw-medium mb-1">Designação *</label>
-                                                <input type="text" id="edit-acessorioDesignacao"
-                                                    class="form-control form-control-sm shadow-sm bg-white"
-                                                    placeholder="Ex: Sonda Linear">
+                                                <input type="text" id="edit-acessorioDesignacao" class="form-control form-control-sm shadow-sm bg-white" placeholder="Ex: Sensor Oximetria">
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="form-label small fw-medium mb-1">Nº Série (Opcional)</label>
-                                                <input type="text" id="edit-acessorioSerie"
-                                                    class="form-control form-control-sm shadow-sm bg-white">
+                                                <input type="text" id="edit-acessorioSerie" class="form-control form-control-sm shadow-sm bg-white">
                                             </div>
                                             <div class="col-md-2 d-flex align-items-end">
-                                                <button type="button" id="edit-btnAdicionarAcessorio"
-                                                    class="btn btn-sm btn-brand fw-bold shadow-sm w-100"><i
-                                                        class="fa-solid fa-plus"></i> Adicionar</button>
+                                                <button type="button" id="edit-btnAdicionarAcessorio" class="btn btn-sm btn-brand fw-bold shadow-sm w-100"><i class="fa-solid fa-plus"></i> Adicionar</button>
                                             </div>
                                         </div>
 
                                         <div class="border rounded-3 overflow-hidden shadow-sm">
                                             <table class="table table-hover mb-0 align-middle">
-                                                <thead class="table-light text-muted small text-uppercase"
-                                                    style="font-size: 0.75rem;">
+                                                <thead class="table-light text-muted small text-uppercase" style="font-size: 0.75rem;">
                                                     <tr>
                                                         <th class="px-3 py-2">Código</th>
                                                         <th class="py-2">Designação</th>
@@ -1728,24 +1712,24 @@
                                                 </thead>
                                                 <tbody id="edit-tabelaAcessoriosBody">
                                                     <tr>
-                                                        <td class="px-3 py-2 small fw-bold text-brand">04.002.01</td>
-                                                        <td class="py-2 small fw-medium text-dark">Módulo Capnografia</td>
-                                                        <td class="py-2 small text-muted">SN-999-444</td>
-                                                        <td class="text-end px-3 py-2"><button type="button"
-                                                                class="btn btn-sm text-danger btn-remover-acessorio"><i
-                                                                    class="fa-solid fa-trash-can"></i></button></td>
+                                                        <td class="px-3 py-2 small fw-bold text-brand">EQ-0001.01</td>
+                                                        <td class="py-2 small fw-medium text-dark">Cabo ECG 5 Vias</td>
+                                                        <td class="py-2 small text-muted">SN-889900</td>
+                                                        <td class="text-end px-3 py-2"><button type="button" class="btn btn-sm text-danger btn-remover-acessorio"><i class="fa-solid fa-trash-can"></i></button></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="px-3 py-2 small fw-bold text-brand">EQ-0001.02</td>
+                                                        <td class="py-2 small fw-medium text-dark">Braçadeira de Pressão</td>
+                                                        <td class="py-2 small text-muted fst-italic">Não definido</td>
+                                                        <td class="text-end px-3 py-2"><button type="button" class="btn btn-sm text-danger btn-remover-acessorio"><i class="fa-solid fa-trash-can"></i></button></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                     <div class="card-footer bg-light p-3 border-top d-flex justify-content-between">
-                                        <button type="button" class="btn btn-outline-secondary px-4 btn-edit-wizard"
-                                            data-bs-wizard-step="#edit-step4-tab"><i
-                                                class="fa-solid fa-arrow-left me-1"></i> Anterior</button>
-                                        <button type="button" class="btn btn-brand px-4 btn-edit-wizard"
-                                            data-bs-wizard-step="#edit-step6-tab">Próximo <i
-                                                class="fa-solid fa-arrow-right ms-1"></i></button>
+                                        <button type="button" class="btn btn-outline-secondary px-4 btn-edit-wizard" data-bs-wizard-step="#edit-step4-tab"><i class="fa-solid fa-arrow-left me-1"></i> Anterior</button>
+                                        <button type="button" class="btn btn-brand px-4 btn-edit-wizard" data-bs-wizard-step="#edit-step6-tab">Próximo <i class="fa-solid fa-arrow-right ms-1"></i></button>
                                     </div>
                                 </div>
 
@@ -2076,23 +2060,71 @@
                 });
             }
 
-            // LÓGICA ANEXAR ACESSÓRIO (Edição)
+            // =========================================================================
+            // LÓGICA ANEXAR ACESSÓRIO (Edição) - COM AUTO-INCREMENTO
+            // =========================================================================
+            
+            function atualizarCodigoEdicaoAcessorio() {
+                const tbody = document.getElementById('edit-tabelaAcessoriosBody');
+                let numeros = [];
+                
+                // 1. Guarda todos os números
+                for(let tr of tbody.children) {
+                    const tdCode = tr.querySelector('td:first-child');
+                    if(tdCode && tdCode.innerText.includes('.')) {
+                        const partes = tdCode.innerText.split('.');
+                        if(partes.length === 2) {
+                            numeros.push(parseInt(partes[1], 10));
+                        }
+                    }
+                }
+                
+                // 2. Ordena
+                numeros.sort((a, b) => a - b);
+                
+                // 3. Procura a primeira lacuna livre
+                let proximoNum = 1;
+                for (let i = 0; i < numeros.length; i++) {
+                    if (numeros[i] === proximoNum) {
+                        proximoNum++;
+                    } else if (numeros[i] > proximoNum) {
+                        break;
+                    }
+                }
+                
+                // 4. Aplica
+                const proximoNumStr = proximoNum.toString().padStart(2, '0');
+                
+                // Vai buscar o código do equipamento que está a ser editado (Passo 1 do modal)
+                const codigoPrincipal = document.querySelector('input[name="internalCode"]').value || 'EQ-0001';
+                
+                document.getElementById('edit-acessorioCodigo').value = `${codigoPrincipal}.${proximoNumStr}`;
+            }
+
             const btnAdcAcc = document.getElementById('edit-btnAdicionarAcessorio');
             if (btnAdcAcc) {
+                // Calcula logo o próximo número ao abrir (ex: EQ-0001.03)
+                atualizarCodigoEdicaoAcessorio();
+
+                // Permitir que os botões de lixo que já vêm no HTML também recalculem o código
+                document.querySelectorAll('#edit-tabelaAcessoriosBody .btn-remover-acessorio').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        this.closest('tr').remove();
+                        atualizarCodigoEdicaoAcessorio();
+                    });
+                });
+
                 btnAdcAcc.addEventListener('click', function () {
-                    const cod = document.getElementById('edit-acessorioCodigo').value.trim();
+                    const cod = document.getElementById('edit-acessorioCodigo').value;
                     const des = document.getElementById('edit-acessorioDesignacao').value.trim();
                     const ser = document.getElementById('edit-acessorioSerie').value.trim();
-                    
-                    let hasError = false;
 
-                    if (!cod) { document.getElementById('edit-acessorioCodigo').classList.add('is-invalid'); hasError = true; }
-                    else { document.getElementById('edit-acessorioCodigo').classList.remove('is-invalid'); }
-
-                    if (!des) { document.getElementById('edit-acessorioDesignacao').classList.add('is-invalid'); hasError = true; }
-                    else { document.getElementById('edit-acessorioDesignacao').classList.remove('is-invalid'); }
-
-                    if (hasError) return;
+                    if (!des) { 
+                        document.getElementById('edit-acessorioDesignacao').classList.add('is-invalid'); 
+                        return; 
+                    } else { 
+                        document.getElementById('edit-acessorioDesignacao').classList.remove('is-invalid'); 
+                    }
 
                     const tbody = document.getElementById('edit-tabelaAcessoriosBody');
                     const tr = document.createElement('tr');
@@ -2103,12 +2135,18 @@
                         <td class="text-end px-3 py-2"><button type="button" class="btn btn-sm text-danger btn-remover-acessorio"><i class="fa-solid fa-trash-can"></i></button></td>
                     `;
                     tbody.appendChild(tr);
-                    tr.querySelector('.btn-remover-acessorio').addEventListener('click', () => tr.remove());
+                    
+                    tr.querySelector('.btn-remover-acessorio').addEventListener('click', () => {
+                        tr.remove();
+                        atualizarCodigoEdicaoAcessorio(); // Recalcula se apagarmos
+                    });
 
                     // Limpa formulário
-                    document.getElementById('edit-acessorioCodigo').value = '';
                     document.getElementById('edit-acessorioDesignacao').value = '';
                     document.getElementById('edit-acessorioSerie').value = '';
+                    
+                    // Gera o próximo código imediatamente!
+                    atualizarCodigoEdicaoAcessorio();
                 });
             }
 

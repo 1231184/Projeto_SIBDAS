@@ -212,9 +212,8 @@
 
                             <div class="row g-3">
                                 <div class="col-md-3">
-                                    <label class="form-label small fw-medium mb-1">Código Interno *</label>
-                                    <input type="text" name="internalCode" class="form-control shadow-sm bg-white" placeholder="Ex: 04.002" required>
-                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Campo obrigatório.</div>
+                                    <label class="form-label small fw-medium mb-1">Código Interno <i class="fa-solid fa-lock text-muted ms-1" style="font-size: 0.7rem;" title="Gerado automaticamente pelo sistema"></i></label>
+                                    <input type="text" id="equipamentoCodigoPrincipal" name="internalCode" class="form-control shadow-sm bg-light fw-bold text-muted" value="EQ-0002" readonly>
                                 </div>
                                 <div class="col-md-9">
                                     <label class="form-label small fw-medium mb-1">Designação *</label>
@@ -1140,9 +1139,8 @@
 
                             <div class="row g-3 mb-4 bg-light p-3 rounded-3 border">
                                 <div class="col-md-3">
-                                    <label class="form-label small fw-medium mb-1">Código (Hierárquico) *</label>
-                                    <input type="text" id="acessorioCodigo" class="form-control form-control-sm shadow-sm bg-white" placeholder="Ex: 04.002.01">
-                                    <div class="invalid-feedback" style="font-size: 0.70rem;">Obrigatório.</div>
+                                    <label class="form-label small fw-medium mb-1">Cód. Componente <i class="fa-solid fa-lock text-muted ms-1" style="font-size: 0.7rem;" title="Gerado automaticamente"></i></label>
+                                    <input type="text" id="acessorioCodigo" class="form-control form-control-sm shadow-sm bg-light fw-bold text-muted" value="EQ-0002.01" readonly>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label small fw-medium mb-1">Designação do Acessório *</label>
@@ -1309,45 +1307,71 @@
             }
 
             // =========================================================================
-            // LÓGICA DO BOTÃO "ADICIONAR ACESSÓRIO" (PASSO 5)
+            // LÓGICA DO BOTÃO "ADICIONAR ACESSÓRIO" (PASSO 5) - COM AUTO-INCREMENTO E LEITURA DINÂMICA
             // =========================================================================
+            
+            function atualizarCodigoNovoAcessorio() {
+                const tbody = document.getElementById('tabelaAcessoriosBody');
+                let numeros = [];
+                
+                // 1. Guarda todos os números atuais (.XX) num array
+                for(let tr of tbody.children) {
+                    if(tr.id !== 'emptyAcessorioRow') {
+                        const tdCode = tr.querySelector('td:first-child');
+                        if(tdCode && tdCode.innerText.includes('.')) {
+                            const partes = tdCode.innerText.split('.');
+                            if(partes.length === 2) {
+                                numeros.push(parseInt(partes[1], 10));
+                            }
+                        }
+                    }
+                }
+                
+                // 2. Ordena os números do menor para o maior
+                numeros.sort((a, b) => a - b);
+                
+                // 3. Descobre o primeiro número em falta (A lacuna)
+                let proximoNum = 1;
+                for (let i = 0; i < numeros.length; i++) {
+                    if (numeros[i] === proximoNum) {
+                        proximoNum++; // O número existe, vamos testar o próximo
+                    } else if (numeros[i] > proximoNum) {
+                        break; // Encontrámos um buraco!
+                    }
+                }
+                
+                // 4. Formata e aplica (Ex: 01, 02...)
+                const proximoNumStr = proximoNum.toString().padStart(2, '0');
+                const codigoPrincipal = document.getElementById('equipamentoCodigoPrincipal').value || 'EQ-0002';
+                
+                document.getElementById('acessorioCodigo').value = `${codigoPrincipal}.${proximoNumStr}`;
+            }
+
             const btnAdicionarAcessorio = document.getElementById('btnAdicionarAcessorio');
             if (btnAdicionarAcessorio) {
+                // Ao carregar a página, garante que o código está certo
+                atualizarCodigoNovoAcessorio();
+
                 btnAdicionarAcessorio.addEventListener('click', function() {
                     const codigoInput = document.getElementById('acessorioCodigo');
                     const designacaoInput = document.getElementById('acessorioDesignacao');
                     const serieInput = document.getElementById('acessorioSerie');
                     
-                    const codigo = codigoInput.value.trim();
+                    const codigo = codigoInput.value;
                     const designacao = designacaoInput.value.trim();
                     const serie = serieInput.value.trim();
 
-                    let hasError = false;
-
-                    // Validação: Código é obrigatório
-                    if (!codigo) {
-                        codigoInput.classList.add('is-invalid', 'border-danger');
-                        hasError = true;
-                    } else {
-                        codigoInput.classList.remove('is-invalid', 'border-danger');
-                    }
-
-                    // Validação: Designação é obrigatória
                     if (!designacao) {
                         designacaoInput.classList.add('is-invalid', 'border-danger');
-                        hasError = true;
+                        return;
                     } else {
                         designacaoInput.classList.remove('is-invalid', 'border-danger');
                     }
 
-                    if (hasError) return; // Pára aqui e não adiciona à tabela se houver erros
-
-                    // Remover a linha de "Nenhum componente associado" se existir
                     const tbody = document.getElementById('tabelaAcessoriosBody');
                     const emptyRow = document.getElementById('emptyAcessorioRow');
                     if (emptyRow) emptyRow.remove();
 
-                    // Criar a nova linha na tabela
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="px-3 py-2 small fw-bold text-brand">${codigo}</td>
@@ -1359,19 +1383,19 @@
                     `;
                     tbody.appendChild(tr);
 
-                    // Adicionar evento para remover esta linha
                     tr.querySelector('.btn-remover-acessorio').addEventListener('click', function() {
                         tr.remove();
-                        // Se a tabela ficar vazia de novo, volta a colocar a mensagem original com colspan="4"
                         if (tbody.children.length === 0) {
                             tbody.innerHTML = `<tr id="emptyAcessorioRow"><td colspan="4" class="text-center text-muted small py-4"><i class="fa-solid fa-puzzle-piece fs-4 d-block mb-2 text-secondary"></i>Nenhum componente associado.</td></tr>`;
                         }
+                        atualizarCodigoNovoAcessorio(); // Atualiza se removermos um
                     });
 
-                    // Limpar os campos para a próxima inserção
-                    codigoInput.value = '';
                     designacaoInput.value = '';
                     serieInput.value = '';
+                    
+                    // Gera imediatamente o próximo código!
+                    atualizarCodigoNovoAcessorio();
                 });
             }
 
