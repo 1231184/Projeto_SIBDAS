@@ -1,8 +1,11 @@
 <?php
 require_once __DIR__ . '/../../includes/funcoes.php';
-require_once __DIR__ . '/../../../config/config.php';
 redirect_if_not_logged();
-start_session();
+
+$mensagem_sucesso = "";
+if (isset($_GET['sucesso']) && $_GET['sucesso'] == "1") {
+    $mensagem_sucesso = "Equipamento registado com sucesso!";
+}
 
 // --- INÍCIO DA LIGAÇÃO À BASE DE DADOS ---
 try {
@@ -50,7 +53,35 @@ $ligacao = null;
         class="bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between flex-shrink-0 z-1">
         <div>
             <h1 class="h4 fw-bold text-dark mb-1">Equipamentos</h1>
-            <div class="text-muted small" id="totalRegistos">4 equipamentos registados</div>
+            <?php if (!empty($mensagem_sucesso)): ?>
+                <div id="alertaSucesso" class="alert alert-success alert-dismissible fade show shadow position-fixed top-0 start-50 translate-middle-x mt-4 d-flex align-items-center" role="alert" style="z-index: 1080; min-width: 360px; max-width: 600px;">
+                    <i class="fa-solid fa-circle-check me-2 fs-5"></i>
+                    <span class="fw-medium"><?= htmlspecialchars($mensagem_sucesso) ?></span>
+                    <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+
+                <script>
+                    // Limpar o ?sucesso=1 do URL para que F5 não volte a mostrar a mensagem
+                    if (window.history.replaceState) {
+                        const urlLimpa = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                        window.history.replaceState({
+                            path: urlLimpa
+                        }, '', urlLimpa);
+                    }
+
+                    // Auto-fechar a mensagem ao fim de 4 segundos com fade suave
+                    setTimeout(function() {
+                        const alerta = document.getElementById('alertaSucesso');
+                        if (alerta) {
+                            const bsAlert = bootstrap.Alert.getOrCreateInstance(alerta);
+                            bsAlert.close();
+                        }
+                    }, 4000);
+                </script>
+            <?php endif; ?>
+            <div class="text-muted small" id="totalRegistos">
+                <?= count($resultados) ?> <?= count($resultados) == 1 ? 'equipamento registado' : 'equipamentos registados' ?>
+            </div>
         </div>
         <a href="novo.php" class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm fw-bold">
             <i class="fa-solid fa-plus"></i> Novo Equipamento
@@ -334,8 +365,13 @@ $ligacao = null;
                                         </td>
                                         <td class="px-3 py-3 text-end">
                                             <div class="d-flex justify-content-end gap-1">
-                                                <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none" data-bs-toggle="modal" data-bs-target="#modalDetalhes" style="font-size: 1.0rem;">Ver</button>
-                                                <button class="btn btn-sm btn-light border text-danger shadow-none" data-bs-toggle="modal" data-bs-target="#modalRemover" title="Remover">
+                                                <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none btn-ver-eq"
+                                                    data-id="<?= $equip->id_equipamento ?>" style="font-size: 1.0rem;">
+                                                    Ver
+                                                </button>
+
+                                                <button class="btn btn-sm btn-light border text-danger shadow-none btn-remover-eq"
+                                                    data-id="<?= $equip->id_equipamento ?>" title="Remover">
                                                     <i class="fa-solid fa-trash-can"></i>
                                                 </button>
                                             </div>
