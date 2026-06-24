@@ -118,6 +118,125 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao']) && $_POST['aca
 }
 
 // =======================================================
+// FICHA 13: ATUALIZAR FORNECEDOR (MÉTODO POST)
+// =======================================================
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao']) && $_POST['acao'] == 'editar_fornecedor') {
+
+    $id_editar            = (int)($_POST['id_fornecedor'] ?? 0);
+    $nome_empresa         = trim($_POST["edit_nome_empresa"] ?? "");
+    $nif                  = trim($_POST["edit_nif"] ?? "");
+    $tipo_fornecedor      = trim($_POST["edit_tipo_fornecedor"] ?? "");
+    $morada               = trim($_POST["edit_morada"] ?? "");
+    $website              = trim($_POST["edit_website"] ?? "");
+    $telefone_geral       = trim($_POST["edit_telefone_geral"] ?? "");
+    $email_geral          = trim($_POST["edit_email_geral"] ?? "");
+    $nome_responsavel     = trim($_POST["edit_nome_responsavel"] ?? "");
+    $telefone_responsavel = trim($_POST["edit_telefone_responsavel"] ?? "");
+    $email_responsavel    = trim($_POST["edit_email_responsavel"] ?? "");
+    $observacoes          = trim($_POST["edit_observacoes"] ?? "");
+
+    $erros_editar = [];
+    if (empty($nome_empresa))   $erros_editar[] = "O nome da empresa é obrigatório.";
+    if (empty($telefone_geral)) $erros_editar[] = "O telefone geral é obrigatório.";
+    if (empty($email_geral))    $erros_editar[] = "O email geral é obrigatório.";
+
+    $tipos_permitidos = ['Fabricante', 'Distribuidor', 'Assistência Técnica', 'Consumíveis'];
+    if (empty($tipo_fornecedor) || !in_array($tipo_fornecedor, $tipos_permitidos)) {
+        $erros_editar[] = "Selecione um tipo de fornecedor válido.";
+    }
+    if (!empty($nif) && !preg_match('/^[0-9]{9}$/', $nif)) {
+        $erros_editar[] = "O NIF deve conter 9 dígitos numéricos.";
+    }
+    if (!empty($telefone_geral) && !preg_match('/^[0-9]{9}$/', $telefone_geral)) {
+        $erros_editar[] = "Introduza 9 dígitos numéricos no telefone geral.";
+    }
+    if (!empty($email_geral) && !filter_var($email_geral, FILTER_VALIDATE_EMAIL)) {
+        $erros_editar[] = "Introduza um email geral válido.";
+    }
+
+    if (empty($erros_editar) && $id_editar > 0) {
+        try {
+            $ligacao = new PDO(
+                "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
+                MYSQL_USERNAME,
+                MYSQL_PASSWORD
+            );
+            $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $sql = "UPDATE fornecedores SET
+                        nome_empresa         = :nome,
+                        nif                  = :nif,
+                        tipo_fornecedor      = :tipo,
+                        telefone_geral       = :tel_geral,
+                        email_geral          = :email_geral,
+                        morada               = :morada,
+                        website              = :site,
+                        nome_responsavel     = :nome_resp,
+                        telefone_responsavel = :tel_resp,
+                        email_responsavel    = :email_resp,
+                        observacoes          = :obs
+                    WHERE id_fornecedor = :id";
+
+            $stmt = $ligacao->prepare($sql);
+            $stmt->execute([
+                ':nome'        => $nome_empresa,
+                ':nif'         => !empty($nif) ? $nif : null,
+                ':tipo'        => $tipo_fornecedor,
+                ':tel_geral'   => $telefone_geral,
+                ':email_geral' => $email_geral,
+                ':morada'      => !empty($morada) ? $morada : null,
+                ':site'        => !empty($website) ? $website : null,
+                ':nome_resp'   => !empty($nome_responsavel) ? $nome_responsavel : null,
+                ':tel_resp'    => !empty($telefone_responsavel) ? $telefone_responsavel : null,
+                ':email_resp'  => !empty($email_responsavel) ? $email_responsavel : null,
+                ':obs'         => !empty($observacoes) ? $observacoes : null,
+                ':id'          => $id_editar
+            ]);
+
+            $ligacao = null;
+            header("Location: lista_fornecedores.php?sucesso=2");
+            exit;
+        } catch (PDOException $e) {
+            $erro_sistema = "Erro ao atualizar: " . $e->getMessage();
+        }
+    }
+}
+
+// =======================================================
+// FICHA 13: REMOVER FORNECEDOR (MÉTODO POST)
+// =======================================================
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['acao']) && $_POST['acao'] == 'remover_fornecedor') {
+
+    $id_remover = (int)($_POST['id_fornecedor'] ?? 0);
+
+    if ($id_remover > 0) {
+        try {
+            $ligacao = new PDO(
+                "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
+                MYSQL_USERNAME,
+                MYSQL_PASSWORD
+            );
+            $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $stmt = $ligacao->prepare("DELETE FROM fornecedores WHERE id_fornecedor = :id");
+            $stmt->bindParam(':id', $id_remover, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $ligacao = null;
+            header("Location: lista_fornecedores.php?sucesso=3");
+            exit;
+        } catch (PDOException $e) {
+            // Código 23000 = violação de FK (fornecedor tem equipamentos associados)
+            if ($e->getCode() == 23000) {
+                $erro_sistema = "Não é possível remover este fornecedor porque tem equipamentos associados.";
+            } else {
+                $erro_sistema = "Erro ao remover: " . $e->getMessage();
+            }
+        }
+    }
+}
+
+// =======================================================
 // FICHA 11: LISTAR FORNECEDORES (SELECT + COUNT)
 // =======================================================
 try {
@@ -125,11 +244,20 @@ try {
     $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Agora o JOIN usa o "id_equipamento" e o nome exato "equipamento_fornecedor"
-    $sql = "SELECT f.*, COUNT(ef.id_equipamento) AS total_equipamentos 
-            FROM fornecedores f 
-            LEFT JOIN equipamento_fornecedor ef ON f.id_fornecedor = ef.id_fornecedor 
-            GROUP BY f.id_fornecedor 
-            ORDER BY f.nome_empresa ASC";
+    $sql = "SELECT f.*,
+            (
+                SELECT COUNT(*) 
+                FROM equipamento_fornecedor ef 
+                WHERE ef.id_fornecedor = f.id_fornecedor
+            )
+            +
+            (
+                SELECT COUNT(*) 
+                FROM equipamentos e 
+                WHERE e.id_fabricante = f.id_fornecedor
+            ) AS total_equipamentos
+        FROM fornecedores f
+        ORDER BY f.nome_empresa ASC";
 
     $stmt = $ligacao->query($sql);
     $lista_fornecedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -247,32 +375,32 @@ try {
     </div>
 </main>
 
-<!-- MODAL Ver Detalhes FORNECEDOR -->
+<!-- MODAL Ver Detalhes FORNECEDOR-->
 <div class="modal fade" id="modalDetalheFornecedor" tabindex="-1" aria-labelledby="modalDetalheFornecedorLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg bg-backend">
 
-            <!-- HEADER DO MODAL (Estilo Equipamentos) -->
+            <!-- HEADER DO MODAL -->
             <div class="modal-header border-bottom px-4 py-3 bg-white">
                 <div>
                     <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                        <!-- Ficha 13: preenchido pelo JS com os dados da BD -->
                         <h5 class="modal-title fw-bold text-dark mb-0" id="modalDetalheFornecedorLabel">
-                            Dräger Portugal
+                            <span id="detalhe-nomeEmpresa">—</span>
                         </h5>
-                        <!-- O badge do fornecedor -->
-                        <span class="badge-tipo badge-fabricante border"><span class="dot"></span>Fabricante</span>
+                        <span id="detalhe-badgeTipo" class="badge-tipo badge-fabricante border">
+                            <span class="dot"></span><span id="detalhe-tipoTexto">—</span>
+                        </span>
                     </div>
                     <p class="text-muted small mb-0">Ficha de Fornecedor</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <!-- Botões de ação com as mesmas classes customizadas -->
-                    <button class="btn-action-custom py-2 px-3" data-bs-toggle="modal"
-                        data-bs-target="#modalEditarFornecedor" data-bs-dismiss="modal">
+                    <!-- Botões de ação: passam o data-id pelo JS antes de abrir o modal -->
+                    <button id="detalhe-btnEditar" class="btn-action-custom py-2 px-3" data-id="">
                         <i class="fa-solid fa-pencil me-2"></i> Editar
                     </button>
-                    <button class="btn-action-custom btn-action-danger" data-bs-toggle="modal"
-                        data-bs-target="#modalRemoverFornecedor" data-bs-dismiss="modal">
+                    <button id="detalhe-btnRemover" class="btn-action-custom btn-action-danger" data-id="" data-equipamentos="0">
                         <i class="fa-solid fa-trash-can me-2"></i> Remover
                     </button>
                     <button type="button" class="btn-close ms-2" data-bs-dismiss="modal"
@@ -282,158 +410,132 @@ try {
 
             <!-- BODY DO MODAL -->
             <div class="modal-body p-4">
-                <!-- Wrapper centralizador -->
                 <div class="w-100" style="max-width: 1024px; margin: 0 auto;">
 
-                    <!-- CORPO DO DETALHE (LAYOUT DIVIDIDO 1/3 - 2/3) -->
                     <div class="row g-4 mb-4">
 
                         <!-- COLUNA ESQUERDA (Info Fixa) -->
                         <div class="col-lg-4 d-flex flex-column gap-3">
-                            <!-- Info Geral -->
-                            <div class="card dash-card border-0 shadow-sm p-3">
-                                <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-building me-2 text-brand"></i> Informação Geral</h6>
 
+                            <!-- Informação Geral -->
+                            <div class="card dash-card border-0 shadow-sm p-3">
+                                <h6 class="fw-bold text-dark mb-3">
+                                    <i class="fa-solid fa-building me-2 text-brand"></i> Informação Geral
+                                </h6>
                                 <div class="row g-2">
-                                    <!-- NIF e Telefone lado a lado para poupar espaço vertical -->
                                     <div class="col-6 d-flex gap-2">
                                         <i class="fa-regular fa-id-card text-muted mt-1" style="font-size: 0.85rem;"></i>
                                         <div>
                                             <div class="small text-muted fw-semibold text-uppercase lh-1" style="font-size: 0.65rem;">NIF</div>
-                                            <div class="text-dark fw-medium" style="font-size: 0.80rem;">500 123 456</div>
+                                            <div class="text-dark fw-medium" style="font-size: 0.80rem;" id="detalhe-nif">—</div>
                                         </div>
                                     </div>
                                     <div class="col-6 d-flex gap-2">
                                         <i class="fa-solid fa-phone text-muted mt-1" style="font-size: 0.85rem;"></i>
                                         <div>
                                             <div class="small text-muted fw-semibold text-uppercase lh-1" style="font-size: 0.65rem;">Telefone Geral</div>
-                                            <div class="text-dark fw-medium" style="font-size: 0.80rem;">210 000 111</div>
+                                            <div class="text-dark fw-medium" style="font-size: 0.80rem;" id="detalhe-telefoneGeral">—</div>
                                         </div>
                                     </div>
-
-                                    <!-- Restantes dados mais compactados -->
                                     <div class="col-12 d-flex gap-2 mt-2">
                                         <i class="fa-solid fa-envelope text-muted mt-1" style="font-size: 0.85rem;"></i>
                                         <div class="text-truncate">
                                             <div class="small text-muted fw-semibold text-uppercase lh-1" style="font-size: 0.65rem;">Email Geral</div>
-                                            <div class="text-dark fw-medium" style="font-size: 0.80rem;">geral@drager.pt</div>
+                                            <div class="text-dark fw-medium" style="font-size: 0.80rem;" id="detalhe-emailGeral">—</div>
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex gap-2 mt-2">
                                         <i class="fa-solid fa-location-dot text-muted mt-1" style="font-size: 0.85rem;"></i>
                                         <div>
                                             <div class="small text-muted fw-semibold text-uppercase lh-1" style="font-size: 0.65rem;">Morada</div>
-                                            <div class="text-dark fw-medium" style="font-size: 0.80rem;">Av. da Liberdade, 110, Lisboa</div>
+                                            <div class="text-dark fw-medium" style="font-size: 0.80rem;" id="detalhe-morada">—</div>
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex gap-2 mt-2">
                                         <i class="fa-solid fa-globe text-muted mt-1" style="font-size: 0.85rem;"></i>
                                         <div class="text-truncate">
                                             <div class="small text-muted fw-semibold text-uppercase lh-1" style="font-size: 0.65rem;">Website</div>
-                                            <a href="#" class="text-brand fw-medium text-decoration-none" style="font-size: 0.80rem;">www.drager.com</a>
+                                            <!-- É um <a> para ser clicável, o JS define o href -->
+                                            <a id="detalhe-websiteLink" href="#" target="_blank"
+                                                class="text-brand fw-medium text-decoration-none" style="font-size: 0.80rem;">—</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Pessoa Contacto -->
-                            <div class="card dash-card border-0 shadow-sm p-3">
-                                <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-user-tie me-2 text-brand"></i> Gestor de Conta</h6>
-
-                                <!-- Avatar e Cargo Compactos -->
+                            <!-- Pessoa de Contacto (card ocultado pelo JS se não houver responsável) -->
+                            <div id="detalhe-secaoResponsavel" class="card dash-card border-0 shadow-sm p-3 d-none">
+                                <h6 class="fw-bold text-dark mb-3">
+                                    <i class="fa-solid fa-user-tie me-2 text-brand"></i> Gestor de Conta
+                                </h6>
                                 <div class="d-flex align-items-center gap-3 bg-light rounded-3 p-2 mb-2 border">
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-brand text-white fw-bold flex-shrink-0" style="width: 38px; height: 38px; font-size: 0.9rem;">A</div>
+                                    <!-- Inicial do nome, gerada pelo JS -->
+                                    <div id="detalhe-avatarInicial"
+                                        class="rounded-circle d-flex align-items-center justify-content-center bg-brand text-white fw-bold flex-shrink-0"
+                                        style="width: 38px; height: 38px; font-size: 0.9rem;">?</div>
                                     <div>
-                                        <div class="fw-bold text-dark lh-1" style="font-size: 0.85rem;">Ana Ferreira</div>
+                                        <div class="fw-bold text-dark lh-1" style="font-size: 0.85rem;" id="detalhe-nomeResponsavel">—</div>
                                         <div class="text-muted mt-1" style="font-size: 0.75rem;">Responsável</div>
                                     </div>
                                 </div>
-
                                 <div class="d-flex flex-column gap-2 px-1">
                                     <div class="d-flex gap-2 align-items-center">
                                         <i class="fa-solid fa-phone text-muted" style="font-size: 0.85rem;"></i>
-                                        <div class="text-dark fw-medium" style="font-size: 0.80rem;">910 000 000</div>
+                                        <div class="text-dark fw-medium" style="font-size: 0.80rem;" id="detalhe-telefoneResponsavel">—</div>
                                     </div>
                                     <div class="d-flex gap-2 align-items-center">
                                         <i class="fa-solid fa-envelope text-muted" style="font-size: 0.85rem;"></i>
-                                        <div class="text-dark fw-medium text-truncate" style="font-size: 0.80rem;">ana.ferreira@drager.pt</div>
+                                        <div class="text-dark fw-medium text-truncate" style="font-size: 0.80rem;" id="detalhe-emailResponsavel">—</div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
 
                         <!-- COLUNA DIREITA (Notas e Tabela de Equipamentos) -->
                         <div class="col-lg-8 d-flex flex-column gap-4">
+
                             <!-- Notas -->
                             <div class="card dash-card border-0 shadow-sm p-4">
-                                <h6 class="fw-bold text-dark mb-3"><i
-                                        class="fa-solid fa-file-lines me-2 text-brand"></i> Notas e Observações</h6>
-                                <p class="text-muted small mb-0 lh-lg">Fabricante oficial de ventiladores e
-                                    monitores de sinais vitais. Contrato de suporte premium ativo até ao final de
-                                    2026. Prioridade máxima em pedidos de assistência para equipamentos de suporte
-                                    de vida localizados na UCI.</p>
+                                <h6 class="fw-bold text-dark mb-3">
+                                    <i class="fa-solid fa-file-lines me-2 text-brand"></i> Notas e Observações
+                                </h6>
+                                <p class="text-muted small mb-0 lh-lg" id="detalhe-observacoes">—</p>
                             </div>
 
                             <!-- Tabela de Equipamentos -->
                             <div class="d-flex flex-column flex-grow-1">
-                                <h6 class="fw-bold text-dark mb-3"><i
-                                        class="fa-solid fa-box-open me-2 text-brand"></i> Equipamentos Associados
-                                    <span class="badge bg-brand-subtle text-brand ms-2">12</span>
+                                <h6 class="fw-bold text-dark mb-3">
+                                    <i class="fa-solid fa-box-open me-2 text-brand"></i> Equipamentos Associados
+                                    <!-- Ficha 13: badge com o total, preenchido pelo JS -->
+                                    <span id="detalhe-totalEquipamentos" class="badge bg-brand-subtle text-brand ms-2">0</span>
                                 </h6>
                                 <div class="card dash-card border-0 shadow-sm overflow-hidden flex-grow-1">
-                                    <!-- Scroll Interno -->
-                                    <div class="table-responsive bg-white"
-                                        style="max-height: 350px; overflow-y: auto;">
-                                        <table class="table table-hover mb-0 align-middle"
-                                            style="position: relative;">
+                                    <div class="table-responsive bg-white" style="max-height: 350px; overflow-y: auto;">
+                                        <table class="table table-hover mb-0 align-middle" style="position: relative;">
                                             <thead class="bg-light sticky-top" style="z-index: 1;">
                                                 <tr>
-                                                    <th class="px-4 py-3 text-muted text-uppercase"
-                                                        style="font-size: 0.7rem; letter-spacing: 0.5px;">Código
-                                                    </th>
-                                                    <th class="px-3 py-3 text-muted text-uppercase"
-                                                        style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                                                        Equipamento</th>
-                                                    <th class="px-3 py-3 text-muted text-uppercase"
-                                                        style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                                                        Localização</th>
-                                                    <th class="px-3 py-3 text-muted text-uppercase"
-                                                        style="font-size: 0.7rem; letter-spacing: 0.5px;">Estado
-                                                    </th>
-                                                    <th class="px-4 py-3 text-muted text-uppercase text-end"
-                                                        style="font-size: 0.7rem; letter-spacing: 0.5px;"></th>
+                                                    <th class="px-4 py-3 text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">Código</th>
+                                                    <th class="px-3 py-3 text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">Equipamento</th>
+                                                    <th class="px-3 py-3 text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">Localização</th>
+                                                    <th class="px-3 py-3 text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">Relação</th>
+                                                    <th class="px-3 py-3 text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">Estado</th>
+                                                    <th class="px-3 py-3 text-muted text-uppercase text-end" style="font-size: 0.7rem; letter-spacing: 0.5px;"></th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <!-- Ficha 13: tbody preenchido dinamicamente pelo JS -->
+                                            <tbody id="detalhe-tbodyEquipamentos">
                                                 <tr>
-                                                    <td class="px-4 py-3 text-brand fw-bold small">EQ-0042</td>
-                                                    <td class="px-3 py-3 fw-medium text-dark small">Ventilador
-                                                        Pulmonar Evita V500</td>
-                                                    <td class="px-3 py-3 text-muted small">UCI - Piso 1</td>
-                                                    <td class="px-3 py-3"><span
-                                                            class="badge badge-soft-success">Ativo</span></td>
-                                                    <td class="px-4 py-3 text-end"><a
-                                                            href="../equipamentos/lista_equi.html"
-                                                            class="text-brand text-decoration-none small fw-semibold">Ver
-                                                            ficha &rarr;</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="px-4 py-3 text-brand fw-bold small">EQ-0043</td>
-                                                    <td class="px-3 py-3 fw-medium text-dark small">Ventilador
-                                                        Pulmonar Evita V300</td>
-                                                    <td class="px-3 py-3 text-muted small">Bloco Operatório</td>
-                                                    <td class="px-3 py-3"><span
-                                                            class="badge badge-soft-success">Ativo</span></td>
-                                                    <td class="px-4 py-3 text-end"><a
-                                                            href="../equipamentos/lista_equi.html"
-                                                            class="text-brand text-decoration-none small fw-semibold">Ver
-                                                            ficha &rarr;</a></td>
+                                                    <td colspan="5" class="text-center py-4 text-muted small">
+                                                        <i class="fa-solid fa-spinner fa-spin me-2"></i> A carregar...
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -634,7 +736,9 @@ try {
             </div>
 
             <div class="modal-body p-4">
-                <form id="formEditarFornecedor" novalidate>
+                <form id="formEditarFornecedor" action="lista_fornecedores.php" method="POST" novalidate>
+                    <input type="hidden" name="acao" value="editar_fornecedor">
+                    <input type="hidden" name="id_fornecedor" id="edit-idFornecedor" value="">
 
                     <ul class="nav nav-tabs mb-4 border-bottom-0" id="editarFornecedorTabs" role="tablist" style="pointer-events: none;">
                         <li class="nav-item" role="presentation">
@@ -662,20 +766,20 @@ try {
                                     <div class="row g-3">
                                         <div class="col-md-8">
                                             <label class="form-label fw-medium small mb-1">Nome da Empresa *</label>
-                                            <input type="text" class="form-control shadow-sm bg-white" value="Dräger Portugal" required>
+                                            <input type="text" id="edit-nomeEmpresa" name="edit_nome_empresa" class="form-control shadow-sm bg-white" value="" required>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo obrigatório.</div>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label fw-medium small mb-1">NIF</label>
-                                            <input type="text" id="edit-nifFornecedor" class="form-control shadow-sm bg-white" value="500123456">
+                                            <input type="text" id="edit-nifFornecedor" name="edit_nif" class="form-control shadow-sm bg-white" value="">
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Introduza 9 dígitos numéricos.</div>
                                         </div>
                                         <div class="col-md-12">
                                             <label class="form-label fw-medium small mb-1">Tipo de Fornecedor *</label>
                                             <div class="dropdown">
-                                                <input type="hidden" id="edit-inputTipoFornecedor" value="Fabricante" required>
+                                                <input type="hidden" id="edit-inputTipoFornecedor" name="edit_tipo_fornecedor" value="" required>
                                                 <button class="form-select shadow-sm text-start d-flex justify-content-between align-items-center bg-white" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-                                                    <span id="edit-textTipoFornecedor" class="text-dark">Fabricante</span>
+                                                    <span id="edit-textTipoFornecedor" class="text-muted">Selecionar tipo...</span>
                                                 </button>
                                                 <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
                                                     <li><a class="dropdown-item py-2" href="#" onclick="selecionarDropdownEditFornecedor('TipoFornecedor', 'Fabricante')">Fabricante</a></li>
@@ -688,11 +792,11 @@ try {
                                         </div>
                                         <div class="col-md-12 mt-4">
                                             <label class="form-label fw-medium small mb-1">Morada Fiscal / Sede</label>
-                                            <input type="text" class="form-control shadow-sm bg-white" value="Av. da Liberdade, 110, Lisboa">
+                                            <input type="text" id="edit-morada" name="edit_morada" class="form-control shadow-sm bg-white" value="">
                                         </div>
                                         <div class="col-md-12">
                                             <label class="form-label fw-medium small mb-1">Website</label>
-                                            <input type="text" class="form-control shadow-sm bg-white" value="www.drager.com">
+                                            <input type="text" id="edit-website" name="edit_website" class="form-control shadow-sm bg-white" value="">
                                         </div>
                                     </div>
                                 </div>
@@ -711,12 +815,12 @@ try {
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <label class="form-label fw-bold small mb-1 text-dark">Telefone Geral *</label>
-                                                <input type="tel" class="form-control shadow-sm bg-white" value="210000111" required>
+                                                <input type="tel" id="edit-telefoneGeral" name="edit_telefone_geral" class="form-control shadow-sm bg-white" value="" required>
                                                 <div class="invalid-feedback" style="font-size: 0.70rem;">Introduza 9 dígitos numéricos válidos.</div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-bold small mb-1 text-dark">Email Geral *</label>
-                                                <input type="email" class="form-control shadow-sm bg-white" value="geral@drager.pt" required>
+                                                <input type="email" id="edit-emailGeral" name="edit_email_geral" class="form-control shadow-sm bg-white" value="" required>
                                                 <div class="invalid-feedback" style="font-size: 0.70rem;">Introduza um email válido.</div>
                                             </div>
                                         </div>
@@ -727,16 +831,16 @@ try {
                                         <div class="row g-3">
                                             <div class="col-md-12">
                                                 <label class="form-label fw-medium small mb-1 text-muted">Nome do Responsável</label>
-                                                <input type="text" class="form-control shadow-sm bg-white" value="Ana Ferreira">
+                                                <input type="text" id="edit-nomeResponsavel" name="edit_nome_responsavel" class="form-control shadow-sm bg-white" value="">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-medium small mb-1 text-muted">Telefone Direto / Telemóvel</label>
-                                                <input type="tel" class="form-control shadow-sm bg-white" value="910000000">
+                                                <input type="tel" id="edit-telefoneResponsavel" name="edit_telefone_responsavel" class="form-control shadow-sm bg-white" value="">
                                                 <div class="invalid-feedback" style="font-size: 0.70rem;">Introduza 9 dígitos numéricos válidos.</div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label fw-medium small mb-1 text-muted">Email Direto</label>
-                                                <input type="email" class="form-control shadow-sm bg-white" value="ana.ferreira@drager.pt">
+                                                <input type="email" id="edit-emailResponsavel" name="edit_email_responsavel" class="form-control shadow-sm bg-white" value="">
                                                 <div class="invalid-feedback" style="font-size: 0.70rem;">Introduza um email válido.</div>
                                             </div>
                                         </div>
@@ -756,7 +860,7 @@ try {
                                 <div class="card-body p-0 pb-4">
                                     <div class="mb-3">
                                         <label class="form-label fw-medium small mb-1">Notas / Observações</label>
-                                        <textarea class="form-control shadow-sm bg-white" rows="6">Fabricante oficial de ventiladores e monitores de sinais vitais. Contrato de suporte premium ativo até ao final de 2026.</textarea>
+                                        <textarea id="edit-observacoes" name="edit_observacoes" class="form-control shadow-sm bg-white" rows="6"></textarea>
                                     </div>
                                 </div>
                                 <div class="p-3 border-top d-flex justify-content-between mx-n4 mb-n4 bg-light rounded-bottom">
@@ -778,7 +882,6 @@ try {
 </div>
 
 <!-- MODAL REMOVER FORNECEDOR -->
-<!-- ========================================== -->
 <div class="modal fade" id="modalRemoverFornecedor" tabindex="-1" aria-labelledby="modalRemoverFornecedorLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -793,29 +896,37 @@ try {
             </div>
 
             <div class="modal-body px-4 pt-3 pb-4">
+                <!-- Ficha 13: nome preenchido pelo JS -->
                 <p class="text-muted mb-0" style="font-size: 1.05rem; line-height: 1.6;">
-                    Está prestes a remover o fornecedor <span class="fw-semibold text-dark">"Dräger
-                        Portugal"</span>.
+                    Está prestes a remover o fornecedor
+                    <span class="fw-semibold text-dark" id="remover-nomeEmpresa">—</span>.
                 </p>
-                <!-- Alerta de Segurança (Exemplo de impedimento) -->
-                <div class="alert alert-danger mt-3 mb-0 border-0 bg-danger bg-opacity-10 text-danger d-flex gap-2 align-items-start"
+                <!-- Alerta mostrado pelo JS se tiver equipamentos associados -->
+                <div id="remover-alertaBloqueio"
+                    class="alert alert-danger mt-3 mb-0 border-0 bg-danger bg-opacity-10 text-danger d-flex gap-2 align-items-start d-none"
                     style="font-size: 0.85rem;">
                     <i class="fa-solid fa-circle-info mt-1"></i>
                     <div>
                         <strong>Atenção:</strong> Não é possível remover este fornecedor porque existem
-                        <strong>12
-                            equipamentos</strong> associados a ele no inventário. Deve primeiro reatribuir ou
-                        abater
-                        esses equipamentos.
+                        <strong id="remover-totalEquipamentos">0</strong> equipamentos associados.
+                        Para remover este fornecedor, aceda primeiro à lista de equipamentos,
+                        reatribua-os a outro fornecedor ou proceda ao seu abate.
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer border-0 px-4 pb-4 pt-0">
+                <!-- Form oculto que submete o DELETE para o PHP -->
+                <form id="formRemoverFornecedor" action="lista_fornecedores.php" method="POST">
+                    <input type="hidden" name="acao" value="remover_fornecedor">
+                    <input type="hidden" name="id_fornecedor" id="remover-idFornecedor" value="">
+                </form>
                 <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">Cancelar</button>
-                <!-- Botão desativado para ilustrar a lógica de negócio -->
-                <button type="button" class="btn btn-danger px-4 fw-bold shadow-sm" disabled>Remover
-                    Fornecedor</button>
+                <!-- Ficha 13: ativado/desativado pelo JS conforme total de equipamentos -->
+                <button type="submit" form="formRemoverFornecedor" id="btnConfirmarRemover"
+                    class="btn btn-danger px-4 fw-bold shadow-sm" disabled>
+                    Remover Fornecedor
+                </button>
             </div>
 
         </div>
@@ -1054,23 +1165,316 @@ try {
             });
         });
 
-        // 3. Submissão (Simula DB)
+        // 3. Submissão
         const formEditarFornecedor = document.getElementById('formEditarFornecedor');
         if (formEditarFornecedor) {
-            formEditarFornecedor.addEventListener('submit', function(e) {
-                e.preventDefault();
+            formEditarFornecedor.addEventListener('submit', function() {
                 const btnSubmit = document.getElementById('btnGuardarEdicaoFornecedor');
-                const originalText = btnSubmit.innerHTML;
-
                 btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> A guardar...';
                 btnSubmit.disabled = true;
-
-                setTimeout(() => {
-                    alert("Alterações guardadas com sucesso!");
-                    window.location.reload(); // Recarrega a página para refletir as alterações simuladas
-                }, 1000);
             });
         }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+const idFornAbrir = params.get('abrir');
+
+if (idFornAbrir) {
+    const botaoVer = document.querySelector('.btn-ver-forn[data-id="' + idFornAbrir + '"]');
+    if (botaoVer) {
+        botaoVer.click();
+        // Limpar o parâmetro da URL sem recarregar a página
+        window.history.replaceState(null, null, window.location.pathname);
+    }
+}
+
+        // Mapeamento de tipo de fornecedor para classe CSS do badge
+        const badgeClasses = {
+            'Fabricante': 'badge-fabricante',
+            'Distribuidor': 'badge-distribuidor',
+            'Assistência Técnica': 'badge-assistencia',
+            'Consumíveis': 'badge-consumiveis'
+        };
+
+        // Mapeamento de estado do equipamento para classe CSS do badge
+        const estadoClasses = {
+    'Ativo':           'st-ativo',
+    'Em Manutenção':   'st-manutencao',
+    'Em Calibração':   'st-calibracao',
+    'Inativo':         'st-inativo',
+    'Em Quarentena':   'st-quarentena',
+    'Abatido':         'st-abatido'
+};
+
+        // ----------------------------------------------------------
+        // BOTÕES "VER" NA TABELA
+        // Ao clicar, faz fetch ao get_fornecedor.php e preenche
+        // o modal com os dados reais da BD (Ficha 13 - Passo 2 e 3)
+        // ----------------------------------------------------------
+        document.querySelectorAll('.btn-ver-forn').forEach(function(botao) {
+            botao.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+
+                // Feedback visual no botão enquanto carrega
+                const textoOriginal = this.innerHTML;
+                this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+                const botaoAtual = this;
+
+                // Repor o tbody com mensagem de carregamento
+                document.getElementById('detalhe-tbodyEquipamentos').innerHTML =
+                    '<tr><td colspan="5" class="text-center py-4 text-muted small">' +
+                    '<i class="fa-solid fa-spinner fa-spin me-2"></i> A carregar...</td></tr>';
+
+                // Ficha 13 - Passo 1: pedido GET à API com o ID do fornecedor
+                fetch('api/get_fornecedor.php?id=' + id)
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        botaoAtual.innerHTML = textoOriginal;
+
+                        if (data.sucesso) {
+                            const f = data.dados;
+                            const equipamentos = data.equipamentos;
+
+                            // ------------------------------------------
+                            // Ficha 13 - Passo 3: preencher o modal
+                            // ------------------------------------------
+
+                            // Header: nome e badge de tipo
+                            document.getElementById('detalhe-nomeEmpresa').textContent = f.nome_empresa;
+
+                            const badgeEl = document.getElementById('detalhe-badgeTipo');
+                            const classeBase = badgeClasses[f.tipo_fornecedor] || 'badge-fabricante';
+                            badgeEl.className = 'badge-tipo ' + classeBase + ' border';
+                            document.getElementById('detalhe-tipoTexto').textContent = f.tipo_fornecedor;
+
+                            // Guardar o ID nos botões de ação do header do modal
+                            // para os listeners de Editar e Remover saberem qual fornecedor é
+                            document.getElementById('detalhe-btnEditar').setAttribute('data-id', f.id_fornecedor);
+                            document.getElementById('detalhe-btnRemover').setAttribute('data-id', f.id_fornecedor);
+                            document.getElementById('detalhe-btnRemover').setAttribute('data-equipamentos', equipamentos.length);
+
+                            // Informação Geral
+                            document.getElementById('detalhe-nif').textContent = f.nif || 'N/D';
+                            document.getElementById('detalhe-telefoneGeral').textContent = f.telefone_geral || '—';
+                            document.getElementById('detalhe-emailGeral').textContent = f.email_geral || '—';
+                            document.getElementById('detalhe-morada').textContent = f.morada || '—';
+
+                            // Website: só mostra link clicável se existir
+                            const websiteEl = document.getElementById('detalhe-websiteLink');
+                            if (f.website && f.website.trim() !== '') {
+                                websiteEl.textContent = f.website;
+                                websiteEl.href = f.website.startsWith('http') ? f.website : 'https://' + f.website;
+                            } else {
+                                websiteEl.textContent = '—';
+                                websiteEl.href = '#';
+                            }
+
+                            // Observações
+                            document.getElementById('detalhe-observacoes').textContent =
+                                (f.observacoes && f.observacoes.trim() !== '') ? f.observacoes : 'Sem observações registadas.';
+
+                            // Responsável: mostra o card só se existir nome
+                            const secaoResp = document.getElementById('detalhe-secaoResponsavel');
+                            if (f.nome_responsavel && f.nome_responsavel.trim() !== '') {
+                                secaoResp.classList.remove('d-none');
+                                document.getElementById('detalhe-avatarInicial').textContent = f.nome_responsavel.charAt(0).toUpperCase();
+                                document.getElementById('detalhe-nomeResponsavel').textContent = f.nome_responsavel;
+                                document.getElementById('detalhe-telefoneResponsavel').textContent = f.telefone_responsavel || '—';
+                                document.getElementById('detalhe-emailResponsavel').textContent = f.email_responsavel || '—';
+                            } else {
+                                secaoResp.classList.add('d-none');
+                            }
+
+                            // ------------------------------------------
+                            // Tabela de equipamentos associados
+                            // O JS constrói as linhas <tr> dinamicamente
+                            // ------------------------------------------
+                            document.getElementById('detalhe-totalEquipamentos').textContent = equipamentos.filter(function(eq) { return eq.estado !== 'Abatido'; }).length;
+
+                            const tbody = document.getElementById('detalhe-tbodyEquipamentos');
+
+                            if (equipamentos.length === 0) {
+    tbody.innerHTML =
+        '<tr><td colspan="6" class="text-center py-4 text-muted small">' +
+        'Sem equipamentos associados.</td></tr>';
+} else {
+    // Filtrar os equipamentos Abatidos — já saíram do inventário
+    const equipamentosAtivos = equipamentos.filter(function(eq) {
+        return eq.estado !== 'Abatido';
+    });
+
+    if (equipamentosAtivos.length === 0) {
+        tbody.innerHTML =
+            '<tr><td colspan="6" class="text-center py-4 text-muted small">' +
+            'Sem equipamentos ativos associados.</td></tr>';
+    } else {
+        tbody.innerHTML = '';
+        equipamentosAtivos.forEach(function (eq) {
+            const classeEstado = estadoClasses[eq.estado] || 'st-inativo';
+            const tr = document.createElement('tr');
+            tr.innerHTML =
+                '<td class="px-4 py-3 text-brand fw-bold small">' + eq.codigo_interno + '</td>' +
+                '<td class="px-3 py-3 fw-medium text-dark small">' + eq.designacao + '</td>' +
+                '<td class="px-3 py-3 text-muted small">' + (eq.nome_servico || '—') + '</td>' +
+                '<td class="px-3 py-3 text-muted small">' + eq.relacao + '</td>' +
+                '<td class="px-3 py-3"><span class="badge-eq ' + classeEstado + '" style="font-size: 0.75rem; padding: 0.3rem 0.5rem;"><span class="dot"></span>' + eq.estado + '</span></td>' +
+                '<td class="px-3 py-3 text-end">' +
+    '<a href="../../views/equipamentos/lista_equi.php?abrir=' + eq.id_equipamento + '&origem=fornecedor&id_fornecedor=' + f.id_fornecedor + '" ' +
+    'class="btn btn-sm btn-brand-subtle text-brand fw-semibold shadow-none" ' +
+    'style="font-size: 0.75rem;">Ver ficha →</a>' +
+'</td>'
+            tbody.appendChild(tr);
+        });
+    }
+}
+
+                            // Abrir o modal
+                            new bootstrap.Modal(document.getElementById('modalDetalheFornecedor')).show();
+
+                        } else {
+                            alert('Erro ao carregar dados: ' + data.erro);
+                        }
+                    })
+                    .catch(function(err) {
+                        botaoAtual.innerHTML = textoOriginal;
+                        console.error('Erro AJAX:', err);
+                        alert('Ocorreu um erro de comunicação com o servidor.');
+                    });
+            });
+        });
+
+        // Botão Remover direto da tabela
+        document.querySelectorAll('.btn-remover-forn').forEach(function(botao) {
+            botao.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+
+                fetch('api/get_fornecedor.php?id=' + id)
+                    .then(function(r) {
+                        return r.json();
+                    })
+                    .then(function(data) {
+                        if (data.sucesso) {
+                            const f = data.dados;
+                            const total = data.equipamentos.length;
+
+                            document.getElementById('remover-idFornecedor').value = f.id_fornecedor;
+                            document.getElementById('remover-nomeEmpresa').textContent = '"' + f.nome_empresa + '"';
+                            document.getElementById('remover-totalEquipamentos').textContent = total;
+
+                            const alertaBloqueio = document.getElementById('remover-alertaBloqueio');
+                            const btnConfirmar = document.getElementById('btnConfirmarRemover');
+
+                            if (total > 0) {
+                                alertaBloqueio.classList.remove('d-none');
+                                btnConfirmar.disabled = true;
+                            } else {
+                                alertaBloqueio.classList.add('d-none');
+                                btnConfirmar.disabled = false;
+                            }
+
+                            new bootstrap.Modal(document.getElementById('modalRemoverFornecedor')).show();
+                        }
+                    });
+            });
+        });
+
+        // ----------------------------------------------------------
+        // BOTÃO "EDITAR" dentro do modal de detalhes
+        // Por agora só fecha o modal de detalhes e abre o de editar.
+        // O preenchimento do formulário de edição será implementado
+        // na fase seguinte (modal de editar).
+        // ----------------------------------------------------------
+        document.getElementById('detalhe-btnEditar').addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+
+            // Ficha 13: segundo fetch para garantir dados mais recentes (suporte multi-utilizador)
+            fetch('api/get_fornecedor.php?id=' + id)
+                .then(function(r) {
+                    return r.json();
+                })
+                .then(function(data) {
+                    if (data.sucesso) {
+                        const f = data.dados;
+
+                        // Preencher o ID oculto para o PHP saber qual fornecedor atualizar
+                        document.getElementById('edit-idFornecedor').value = f.id_fornecedor;
+
+                        // Step 1
+                        document.getElementById('edit-nomeEmpresa').value = f.nome_empresa;
+                        document.getElementById('edit-nifFornecedor').value = f.nif || '';
+                        document.getElementById('edit-morada').value = f.morada || '';
+                        document.getElementById('edit-website').value = f.website || '';
+                        selecionarDropdownEditFornecedor('TipoFornecedor', f.tipo_fornecedor);
+
+                        // Step 2
+                        document.getElementById('edit-telefoneGeral').value = f.telefone_geral || '';
+                        document.getElementById('edit-emailGeral').value = f.email_geral || '';
+                        document.getElementById('edit-nomeResponsavel').value = f.nome_responsavel || '';
+                        document.getElementById('edit-telefoneResponsavel').value = f.telefone_responsavel || '';
+                        document.getElementById('edit-emailResponsavel').value = f.email_responsavel || '';
+
+                        // Step 3
+                        document.getElementById('edit-observacoes').value = f.observacoes || '';
+
+                        // Repor o wizard no Step 1 antes de abrir
+                        new bootstrap.Tab(document.getElementById('edit-nf-step1-tab')).show();
+                        document.querySelectorAll('#editarFornecedorTabs .nav-link').forEach(function(tab) {
+                            tab.classList.add('text-muted');
+                            tab.classList.remove('active', 'text-dark');
+                            tab.querySelector('.badge').className = 'badge bg-secondary text-white me-1 rounded-pill';
+                        });
+                        const step1Tab = document.getElementById('edit-nf-step1-tab');
+                        step1Tab.classList.remove('text-muted');
+                        step1Tab.classList.add('active', 'text-dark');
+                        step1Tab.querySelector('.badge').className = 'badge bg-brand text-white me-1 rounded-pill';
+
+                        // Fechar o modal de detalhes e abrir o de editar
+                        bootstrap.Modal.getInstance(document.getElementById('modalDetalheFornecedor')).hide();
+                        new bootstrap.Modal(document.getElementById('modalEditarFornecedor')).show();
+                    } else {
+                        alert('Erro ao carregar dados para edição: ' + data.erro);
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Erro AJAX:', err);
+                    alert('Ocorreu um erro de comunicação.');
+                });
+        });
+
+        // ----------------------------------------------------------
+        // BOTÃO "REMOVER" dentro do modal de detalhes
+        // Será implementado na fase seguinte (modal de remover).
+        // ----------------------------------------------------------
+        document.getElementById('detalhe-btnRemover').addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const totalEquipamentos = parseInt(this.getAttribute('data-equipamentos') || '0');
+            const nomeEmpresa = document.getElementById('detalhe-nomeEmpresa').textContent;
+
+            // Preencher o modal de remover com os dados que já temos
+            document.getElementById('remover-idFornecedor').value = id;
+            document.getElementById('remover-nomeEmpresa').textContent = '"' + nomeEmpresa + '"';
+            document.getElementById('remover-totalEquipamentos').textContent = totalEquipamentos;
+
+            const alertaBloqueio = document.getElementById('remover-alertaBloqueio');
+            const btnConfirmar = document.getElementById('btnConfirmarRemover');
+
+            if (totalEquipamentos > 0) {
+                alertaBloqueio.classList.remove('d-none');
+                btnConfirmar.disabled = true;
+            } else {
+                alertaBloqueio.classList.add('d-none');
+                btnConfirmar.disabled = false;
+            }
+
+            bootstrap.Modal.getInstance(document.getElementById('modalDetalheFornecedor')).hide();
+            new bootstrap.Modal(document.getElementById('modalRemoverFornecedor')).show();
+        });
+
     });
 </script>
 
@@ -1086,11 +1490,28 @@ try {
     </script>
 <?php endif; ?>
 
-<?php if ($sucesso): ?>
+<?php if ($sucesso == 1): ?>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             alert("✅ Fornecedor registado com sucesso!");
-            // Limpa a palavra ?sucesso=1 do link para não repetir ao atualizar a página
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+    </script>
+<?php endif; ?>
+
+<?php if ($sucesso == 2): ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            alert("✅ Fornecedor atualizado com sucesso!");
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+    </script>
+<?php endif; ?>
+
+<?php if ($sucesso == 3): ?>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            alert("✅ Fornecedor removido com sucesso!");
             window.history.replaceState(null, null, window.location.pathname);
         });
     </script>

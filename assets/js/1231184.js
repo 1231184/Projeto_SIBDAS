@@ -300,3 +300,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// ==========================================
+// FICHA 13: Abrir modal de detalhes via URL
+// Usado quando se vem da página de fornecedores
+// com o parâmetro ?abrir=ID na URL
+// ==========================================
+document.addEventListener('DOMContentLoaded', function () {
+    const params    = new URLSearchParams(window.location.search);
+    const idAbrir   = params.get('abrir');
+
+    if (idAbrir) {
+        const botaoAlvo = document.querySelector('.btn-ver-eq[data-id="' + idAbrir + '"]');
+
+        if (botaoAlvo) {
+            botaoAlvo.click();
+        } else {
+            fetch('api/get_equipamento.php?id=' + idAbrir)
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.sucesso) {
+                        const eq = data.dados;
+                        const formEditar = document.getElementById('formEditar');
+                        if (formEditar) {
+                            let inputId = formEditar.querySelector('input[name="id_equipamento"]');
+                            if (!inputId) {
+                                inputId = document.createElement('input');
+                                inputId.type = 'hidden';
+                                inputId.name = 'id_equipamento';
+                                formEditar.appendChild(inputId);
+                            }
+                            inputId.value = eq.id_equipamento;
+                            formEditar.querySelector('input[name="internalCode"]').value = eq.codigo_interno;
+                            formEditar.querySelector('input[name="name"]').value = eq.designacao;
+                            formEditar.querySelector('input[name="brand"]').value = eq.marca;
+                            formEditar.querySelector('input[name="model"]').value = eq.modelo;
+                            formEditar.querySelector('input[name="serialNumber"]').value = eq.numero_serie;
+                            if (eq.ano_fabrico) formEditar.querySelector('input[name="manufacturingYear"]').value = eq.ano_fabrico;
+                            if (eq.data_aquisicao) formEditar.querySelector('input[name="acquisitionDate"]').value = eq.data_aquisicao;
+                            if (eq.custo_aquisicao) formEditar.querySelector('input[name="cost"]').value = eq.custo_aquisicao;
+                            formEditar.querySelector('select[name="entryType"]').value = eq.tipo_entrada;
+                            formEditar.querySelector('select[name="status"]').value = eq.estado;
+                            if (typeof selecionarDropdownEdit === 'function') {
+                                selecionarDropdownEdit('Categoria', eq.categoria);
+                                selecionarDropdownEdit('Criticidade', eq.criticidade);
+                            }
+                            const obs = formEditar.querySelector('textarea[name="observations"]');
+                            if (obs) obs.value = eq.observacoes || '';
+                        }
+                        new bootstrap.Modal(document.getElementById('modalDetalhes')).show();
+                    }
+                });
+        }
+    }
+});

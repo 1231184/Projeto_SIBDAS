@@ -2,6 +2,18 @@
 require_once __DIR__ . '/../../includes/funcoes.php';
 redirect_if_not_logged();
 
+// Ficha 13: contexto de origem para o botão "Voltar ao Fornecedor"
+$origem        = $_GET['origem'] ?? 'equipamentos';
+$id_fornecedor = isset($_GET['id_fornecedor']) ? (int)$_GET['id_fornecedor'] : null;
+
+if ($origem === 'fornecedor' && $id_fornecedor) {
+    $urlVoltar   = '../fornecedores/lista_fornecedores.php?abrir=' . $id_fornecedor;
+    $textoVoltar = 'Voltar ao Fornecedor';
+} else {
+    $urlVoltar   = null;
+    $textoVoltar = null;
+}
+
 $mensagem_sucesso = "";
 if (isset($_GET['sucesso']) && $_GET['sucesso'] == "1") {
     $mensagem_sucesso = "Equipamento registado com sucesso!";
@@ -32,6 +44,7 @@ try {
 $ligacao = null;
 // --- FIM DA LIGAÇÃO À BASE DE DADOS ---
 ?>
+
 
 
 <?php include '../../includes/header.php'; ?>
@@ -406,21 +419,27 @@ $ligacao = null;
                     <p class="text-muted custom-monospace small mb-0">EQ-2024-001</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <button class="btn-action-custom bg-white border text-dark"
-                        onclick="alert('🖨️ Comando enviado! A etiqueta com o código de barras do equipamento EQ-2024-001 foi gerada com sucesso.')">
-                        <i class="fa-solid fa-barcode me-1"></i> Etiqueta
-                    </button>
-                    <button class="btn-action-custom py-2 px-3" data-bs-toggle="modal" data-bs-target="#modalEditar"
-                        data-bs-dismiss="modal">
-                        <i class="fa-solid fa-pencil me-2"></i> Editar
-                    </button>
-                    <button class="btn-action-custom btn-action-danger" data-bs-toggle="modal"
-                        data-bs-target="#modalRemover">
-                        <i class="fa-solid fa-trash-can me-2"></i> Remover
-                    </button>
-                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal"
-                        aria-label="Fechar"></button>
-                </div>
+    <?php if ($urlVoltar): ?>
+        <a href="<?= htmlspecialchars($urlVoltar) ?>"
+           class="btn-action-custom py-2 px-3 text-decoration-none">
+            <i class="fa-solid fa-arrow-left me-2"></i><?= htmlspecialchars($textoVoltar) ?>
+        </a>
+    <?php endif; ?>
+    <button class="btn-action-custom bg-white border text-dark"
+        onclick="alert('🖨️ Comando enviado! A etiqueta com o código de barras do equipamento EQ-2024-001 foi gerada com sucesso.')">
+        <i class="fa-solid fa-barcode me-1"></i> Etiqueta
+    </button>
+    <button class="btn-action-custom py-2 px-3" data-bs-toggle="modal" data-bs-target="#modalEditar"
+        data-bs-dismiss="modal">
+        <i class="fa-solid fa-pencil me-2"></i> Editar
+    </button>
+    <button class="btn-action-custom btn-action-danger" data-bs-toggle="modal"
+        data-bs-target="#modalRemover">
+        <i class="fa-solid fa-trash-can me-2"></i> Remover
+    </button>
+    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal"
+        aria-label="Fechar"></button>
+</div>
             </div>
 
             <!-- Body do Modal -->

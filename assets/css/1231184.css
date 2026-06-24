@@ -337,6 +337,18 @@ section[id] {
     border: 1px solid rgba(14, 165, 233, 0.3);
 }
 
+.badge-soft-secondary {
+    background-color: rgba(100, 116, 139, 0.15);
+    color: #475569;
+    border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.badge-soft-dark {
+    background-color: rgba(30, 41, 59, 0.1);
+    color: #334155;
+    border: 1px solid rgba(30, 41, 59, 0.2);
+}
+
 .custom-monospace {
     font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
 }

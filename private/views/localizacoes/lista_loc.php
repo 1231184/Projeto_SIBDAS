@@ -1,6 +1,338 @@
 <?php
 require_once __DIR__ . '/../../includes/funcoes.php';
 redirect_if_not_logged();
+
+$erro_sistema = "";
+$sucesso = isset($_GET['sucesso']) ? (int)$_GET['sucesso'] : 0;
+
+// Função auxiliar para criar ligação PDO (evita repetição nos 12 blocos)
+function ligacaoBD() {
+    $pdo = new PDO(
+        "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
+        MYSQL_USERNAME, MYSQL_PASSWORD
+    );
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    return $pdo;
+}
+
+// -------------------------------------------------------
+// EDIFÍCIOS
+// -------------------------------------------------------
+
+// FICHA 13: NOVO EDIFÍCIO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'novo_edificio') {
+    $nome      = trim($_POST['nome'] ?? '');
+    $descricao = trim($_POST['descricao'] ?? '');
+
+    if (empty($nome)) {
+        $erro_sistema = "O nome do edifício é obrigatório.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("INSERT INTO edificios (nome, descricao) VALUES (:nome, :descricao)");
+            $stmt->execute([
+                ':nome'      => $nome,
+                ':descricao' => !empty($descricao) ? $descricao : null
+            ]);
+            header("Location: lista_loc.php?sucesso=1");
+            exit;
+        } catch (PDOException $e) {
+            $erro_sistema = "Erro ao criar edifício: " . $e->getMessage();
+        }
+    }
+}
+
+// FICHA 13: EDITAR EDIFÍCIO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_edificio') {
+    $id        = (int)($_POST['id_edificio'] ?? 0);
+    $nome      = trim($_POST['nome'] ?? '');
+    $descricao = trim($_POST['descricao'] ?? '');
+
+    if (empty($nome) || $id <= 0) {
+        $erro_sistema = "Dados inválidos para editar edifício.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("UPDATE edificios SET nome = :nome, descricao = :descricao WHERE id_edificio = :id");
+            $stmt->execute([
+                ':nome'      => $nome,
+                ':descricao' => !empty($descricao) ? $descricao : null,
+                ':id'        => $id
+            ]);
+            header("Location: lista_loc.php?sucesso=2");
+            exit;
+        } catch (PDOException $e) {
+            $erro_sistema = "Erro ao editar edifício: " . $e->getMessage();
+        }
+    }
+}
+
+// FICHA 13: REMOVER EDIFÍCIO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover_edificio') {
+    $id = (int)($_POST['id_edificio'] ?? 0);
+
+    if ($id <= 0) {
+        $erro_sistema = "ID de edifício inválido.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("DELETE FROM edificios WHERE id_edificio = :id");
+            $stmt->execute([':id' => $id]);
+            header("Location: lista_loc.php?sucesso=3");
+            exit;
+        } catch (PDOException $e) {
+            // Código 23000 = FK violation (tem pisos associados)
+            if ($e->getCode() == 23000) {
+                $erro_sistema = "Não é possível remover este edifício porque tem pisos associados.";
+            } else {
+                $erro_sistema = "Erro ao remover edifício: " . $e->getMessage();
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+// PISOS
+// -------------------------------------------------------
+
+// FICHA 13: NOVO PISO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'novo_piso') {
+    $id_edificio = (int)($_POST['id_edificio'] ?? 0);
+    $designacao  = trim($_POST['designacao'] ?? '');
+    $observacoes = trim($_POST['observacoes'] ?? '');
+
+    if (empty($designacao) || $id_edificio <= 0) {
+        $erro_sistema = "A designação do piso é obrigatória.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("INSERT INTO pisos (id_edificio, designacao, observacoes) VALUES (:id_edificio, :designacao, :observacoes)");
+            $stmt->execute([
+                ':id_edificio' => $id_edificio,
+                ':designacao'  => $designacao,
+                ':observacoes' => !empty($observacoes) ? $observacoes : null
+            ]);
+            header("Location: lista_loc.php?sucesso=4");
+            exit;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $erro_sistema = "Já existe um piso com essa designação neste edifício.";
+            } else {
+                $erro_sistema = "Erro ao criar piso: " . $e->getMessage();
+            }
+        }
+    }
+}
+
+// FICHA 13: EDITAR PISO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_piso') {
+    $id          = (int)($_POST['id_piso'] ?? 0);
+    $designacao  = trim($_POST['designacao'] ?? '');
+    $observacoes = trim($_POST['observacoes'] ?? '');
+
+    if (empty($designacao) || $id <= 0) {
+        $erro_sistema = "Dados inválidos para editar piso.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("UPDATE pisos SET designacao = :designacao, observacoes = :observacoes WHERE id_piso = :id");
+            $stmt->execute([
+                ':designacao'  => $designacao,
+                ':observacoes' => !empty($observacoes) ? $observacoes : null,
+                ':id'          => $id
+            ]);
+            header("Location: lista_loc.php?sucesso=5");
+            exit;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $erro_sistema = "Já existe um piso com essa designação neste edifício.";
+            } else {
+                $erro_sistema = "Erro ao editar piso: " . $e->getMessage();
+            }
+        }
+    }
+}
+
+// FICHA 13: REMOVER PISO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover_piso') {
+    $id = (int)($_POST['id_piso'] ?? 0);
+
+    if ($id <= 0) {
+        $erro_sistema = "ID de piso inválido.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("DELETE FROM pisos WHERE id_piso = :id");
+            $stmt->execute([':id' => $id]);
+            header("Location: lista_loc.php?sucesso=6");
+            exit;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $erro_sistema = "Não é possível remover este piso porque tem serviços associados.";
+            } else {
+                $erro_sistema = "Erro ao remover piso: " . $e->getMessage();
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+// SERVIÇOS
+// -------------------------------------------------------
+
+// FICHA 13: NOVO SERVIÇO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'novo_servico') {
+    $id_piso            = (int)($_POST['id_piso'] ?? 0);
+    $nome               = trim($_POST['nome'] ?? '');
+    $diretor_responsavel = trim($_POST['diretor_responsavel'] ?? '');
+    $centro_custo       = trim($_POST['centro_custo'] ?? '');
+
+    if (empty($nome) || $id_piso <= 0) {
+        $erro_sistema = "O nome do serviço é obrigatório.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("INSERT INTO servicos (id_piso, nome, diretor_responsavel, centro_custo) VALUES (:id_piso, :nome, :diretor, :custo)");
+            $stmt->execute([
+                ':id_piso' => $id_piso,
+                ':nome'    => $nome,
+                ':diretor' => !empty($diretor_responsavel) ? $diretor_responsavel : null,
+                ':custo'   => !empty($centro_custo) ? $centro_custo : null
+            ]);
+            header("Location: lista_loc.php?sucesso=7");
+            exit;
+        } catch (PDOException $e) {
+            $erro_sistema = "Erro ao criar serviço: " . $e->getMessage();
+        }
+    }
+}
+
+// FICHA 13: EDITAR SERVIÇO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_servico') {
+    $id                  = (int)($_POST['id_servico'] ?? 0);
+    $nome                = trim($_POST['nome'] ?? '');
+    $diretor_responsavel = trim($_POST['diretor_responsavel'] ?? '');
+    $centro_custo        = trim($_POST['centro_custo'] ?? '');
+
+    if (empty($nome) || $id <= 0) {
+        $erro_sistema = "Dados inválidos para editar serviço.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("UPDATE servicos SET nome = :nome, diretor_responsavel = :diretor, centro_custo = :custo WHERE id_servico = :id");
+            $stmt->execute([
+                ':nome'    => $nome,
+                ':diretor' => !empty($diretor_responsavel) ? $diretor_responsavel : null,
+                ':custo'   => !empty($centro_custo) ? $centro_custo : null,
+                ':id'      => $id
+            ]);
+            header("Location: lista_loc.php?sucesso=8");
+            exit;
+        } catch (PDOException $e) {
+            $erro_sistema = "Erro ao editar serviço: " . $e->getMessage();
+        }
+    }
+}
+
+// FICHA 13: REMOVER SERVIÇO
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover_servico') {
+    $id = (int)($_POST['id_servico'] ?? 0);
+
+    if ($id <= 0) {
+        $erro_sistema = "ID de serviço inválido.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("DELETE FROM servicos WHERE id_servico = :id");
+            $stmt->execute([':id' => $id]);
+            header("Location: lista_loc.php?sucesso=9");
+            exit;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $erro_sistema = "Não é possível remover este serviço porque tem salas ou equipamentos associados.";
+            } else {
+                $erro_sistema = "Erro ao remover serviço: " . $e->getMessage();
+            }
+        }
+    }
+}
+
+// -------------------------------------------------------
+// SALAS
+// -------------------------------------------------------
+
+// FICHA 13: NOVA SALA
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'nova_sala') {
+    $id_servico    = (int)($_POST['id_servico'] ?? 0);
+    $identificacao = trim($_POST['identificacao'] ?? '');
+    $observacoes   = trim($_POST['observacoes'] ?? '');
+
+    if (empty($identificacao) || $id_servico <= 0) {
+        $erro_sistema = "A identificação da sala é obrigatória.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("INSERT INTO salas (id_servico, identificacao, observacoes) VALUES (:id_servico, :identificacao, :observacoes)");
+            $stmt->execute([
+                ':id_servico'    => $id_servico,
+                ':identificacao' => $identificacao,
+                ':observacoes'   => !empty($observacoes) ? $observacoes : null
+            ]);
+            header("Location: lista_loc.php?sucesso=10");
+            exit;
+        } catch (PDOException $e) {
+            $erro_sistema = "Erro ao criar sala: " . $e->getMessage();
+        }
+    }
+}
+
+// FICHA 13: EDITAR SALA
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_sala') {
+    $id            = (int)($_POST['id_sala'] ?? 0);
+    $identificacao = trim($_POST['identificacao'] ?? '');
+    $observacoes   = trim($_POST['observacoes'] ?? '');
+
+    if (empty($identificacao) || $id <= 0) {
+        $erro_sistema = "Dados inválidos para editar sala.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("UPDATE salas SET identificacao = :identificacao, observacoes = :observacoes WHERE id_sala = :id");
+            $stmt->execute([
+                ':identificacao' => $identificacao,
+                ':observacoes'   => !empty($observacoes) ? $observacoes : null,
+                ':id'            => $id
+            ]);
+            header("Location: lista_loc.php?sucesso=11");
+            exit;
+        } catch (PDOException $e) {
+            $erro_sistema = "Erro ao editar sala: " . $e->getMessage();
+        }
+    }
+}
+
+// FICHA 13: REMOVER SALA
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover_sala') {
+    $id = (int)($_POST['id_sala'] ?? 0);
+
+    if ($id <= 0) {
+        $erro_sistema = "ID de sala inválido.";
+    } else {
+        try {
+            $pdo = ligacaoBD();
+            $stmt = $pdo->prepare("DELETE FROM salas WHERE id_sala = :id");
+            $stmt->execute([':id' => $id]);
+            header("Location: lista_loc.php?sucesso=12");
+            exit;
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $erro_sistema = "Não é possível remover esta sala porque tem equipamentos associados.";
+            } else {
+                $erro_sistema = "Erro ao remover sala: " . $e->getMessage();
+            }
+        }
+    }
+}
 ?>
 
 <?php include '../../includes/header.php'; ?>
