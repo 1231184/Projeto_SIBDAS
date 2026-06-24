@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 $(document).ready(function() {
     if ($('#tabelaDados').length > 0) {
         
-        // Configuração da Tabela e Paginação (Ficha 11)
+        // 1. Configuração Base da Tabela
         window.tabelaEquipamentos = $('#tabelaDados').DataTable({
             pageLength: 5,
             pagingType: "full_numbers",
@@ -116,7 +116,7 @@ $(document).ready(function() {
                 infoFiltered: "(filtrado de _MAX_ totais)",
                 loadingRecords: "Carregando...",
                 processing: "Processando...",
-                zeroRecords: "Nenhum equipamento encontrado com estes filtros.",
+                zeroRecords: "Nenhum registo encontrado com estes filtros.",
                 paginate: {
                     first: "Primeira",
                     last: "Última",
@@ -130,36 +130,84 @@ $(document).ready(function() {
             }
         });
 
-        // Ligar barra de pesquisa TUA ao DataTables
-        $('#inputPesquisa').on('keyup', function() {
-            window.tabelaEquipamentos.search(this.value).draw();
-        });
+        // ----------------------------------------------------
+        // LÓGICA ESPECÍFICA: PÁGINA DE EQUIPAMENTOS
+        // ----------------------------------------------------
+        if (document.getElementById('inputPesquisa')) { // Se a barra de equipamentos existir
+            
+            // Ligar a barra de pesquisa de Equipamentos
+            $('#inputPesquisa').on('keyup', function() {
+                window.tabelaEquipamentos.search(this.value).draw();
+            });
 
-        // Filtro avançado das tuas Checkboxes (Motor DataTables)
+            // Atualiza a tabela quando clicas nas checkboxes
+            $('.filter-check input[type="checkbox"]').on('change', function() {
+                window.tabelaEquipamentos.draw();
+            });
+        }
+
+        // ----------------------------------------------------
+        // LÓGICA ESPECÍFICA: PÁGINA DE FORNECEDORES
+        // ----------------------------------------------------
+        if (document.getElementById('pesquisaFornecedores')) { // Se a barra de fornecedores existir
+            
+            // Ligar a barra de pesquisa de Fornecedores
+            $('#pesquisaFornecedores').on('keyup', function() {
+                window.tabelaEquipamentos.search(this.value).draw();
+            });
+
+            // Ligar os botões de Filtro Rápido (Fabricante, Distribuidor, etc.)
+            $('.btn-filter').on('click', function() {
+                $('.btn-filter').removeClass('active');
+                $(this).addClass('active');
+                window.tabelaEquipamentos.draw();
+            });
+        }
+
+        // ----------------------------------------------------
+        // MOTOR DE FILTRAGEM GLOBAL (Protegido contra erros)
+        // ----------------------------------------------------
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             if (settings.nTable.id !== 'tabelaDados') return true;
 
             var tr = settings.aoData[dataIndex].nTr;
             if (!tr) return true;
 
-            var estado = tr.getAttribute('data-estado') || '';
-            var criticidade = tr.getAttribute('data-criticidade') || '';
-            var categoria = tr.getAttribute('data-categoria') || '';
+            // --- Regras para Equipamentos ---
+            if (document.getElementById('inputPesquisa')) {
+                var estado = tr.getAttribute('data-estado') || '';
+                var criticidade = tr.getAttribute('data-criticidade') || '';
+                var categoria = tr.getAttribute('data-categoria') || '';
 
-            var estAtivos = Array.from(document.querySelectorAll('input[data-group="estado"]:checked')).map(cb => cb.value);
-            var critAtivas = Array.from(document.querySelectorAll('input[data-group="criticidade"]:checked')).map(cb => cb.value);
-            var catAtivas = Array.from(document.querySelectorAll('input[data-group="categoria"]:checked')).map(cb => cb.value);
+                var estAtivos = Array.from(document.querySelectorAll('input[data-group="estado"]:checked')).map(cb => cb.value);
+                var critAtivas = Array.from(document.querySelectorAll('input[data-group="criticidade"]:checked')).map(cb => cb.value);
+                var catAtivas = Array.from(document.querySelectorAll('input[data-group="categoria"]:checked')).map(cb => cb.value);
 
-            var matchEstado = estAtivos.length === 0 || estAtivos.includes(estado);
-            var matchCrit = critAtivas.length === 0 || critAtivas.includes(criticidade);
-            var matchCat = catAtivas.length === 0 || catAtivas.includes(categoria);
+                var matchEstado = estAtivos.length === 0 || estAtivos.includes(estado);
+                var matchCrit = critAtivas.length === 0 || critAtivas.includes(criticidade);
+                var matchCat = catAtivas.length === 0 || catAtivas.includes(categoria);
 
-            return matchEstado && matchCrit && matchCat;
-        });
+                return matchEstado && matchCrit && matchCat;
+            }
 
-        // Atualiza a tabela quando clicas nas checkboxes
-        $('.filter-check input[type="checkbox"]').on('change', function() {
-            window.tabelaEquipamentos.draw();
+            // --- Regras para Fornecedores ---
+if (document.getElementById('pesquisaFornecedores')) {
+    var filtroAtivo = $('.btn-filter.active').text().trim();
+    
+    if (filtroAtivo === 'Todos' || filtroAtivo === '') {
+        return true;
+    }
+    
+    // Lê o texto da célula da coluna Tipo (índice 1) sem HTML
+    var celulaHtml = data[1] || "";
+    var div = document.createElement('div');
+    div.innerHTML = celulaHtml;
+    var tipoFornecedor = div.textContent || div.innerText || "";
+    
+    return tipoFornecedor.trim() === filtroAtivo;
+}
+
+            return true;
         });
     }
 });
