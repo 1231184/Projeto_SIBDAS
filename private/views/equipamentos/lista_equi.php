@@ -2,6 +2,9 @@
 require_once __DIR__ . '/../../includes/funcoes.php';
 redirect_if_not_logged();
 
+$filtro_servico = isset($_GET['id_servico']) ? (int)$_GET['id_servico'] : null;
+$filtro_sala    = isset($_GET['id_sala'])    ? (int)$_GET['id_sala']    : null;
+
 // Ficha 13: contexto de origem para o botão "Voltar ao Fornecedor"
 $origem        = $_GET['origem'] ?? 'equipamentos';
 $id_fornecedor = isset($_GET['id_fornecedor']) ? (int)$_GET['id_fornecedor'] : null;
@@ -32,7 +35,11 @@ try {
     $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Faz a consulta (Query) para ir buscar todos os equipamentos!
-    $resultados = $ligacao->query("SELECT * FROM equipamentos")->fetchAll(PDO::FETCH_OBJ);
+    $sql_equip = "SELECT * FROM equipamentos WHERE 1=1";
+if ($filtro_sala)    $sql_equip .= " AND id_sala = " . $filtro_sala;
+elseif ($filtro_servico) $sql_equip .= " AND id_servico = " . $filtro_servico;
+$sql_equip .= " ORDER BY codigo_interno ASC";
+$resultados = $ligacao->query($sql_equip)->fetchAll(PDO::FETCH_OBJ);
     $erro = '';
 } catch (PDOException $err) {
     // Se a password estiver errada ou a BD em baixo, ele captura o erro aqui!
