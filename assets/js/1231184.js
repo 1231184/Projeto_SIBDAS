@@ -165,6 +165,24 @@ $(document).ready(function() {
         }
 
         // ----------------------------------------------------
+        // LÓGICA ESPECÍFICA: PÁGINA DE DOCUMENTAÇÃO
+        // ----------------------------------------------------
+        if (document.getElementById('pesquisaDocs')) {
+
+            // Ligar a barra de pesquisa
+            $('#pesquisaDocs').on('keyup', function() {
+                window.tabelaEquipamentos.search(this.value).draw();
+            });
+
+            // Ligar os botões de filtro por tipo
+            $('.btn-filter').on('click', function() {
+                $('.btn-filter').removeClass('active');
+                $(this).addClass('active');
+                window.tabelaEquipamentos.draw();
+            });
+        }
+
+        // ----------------------------------------------------
         // MOTOR DE FILTRAGEM GLOBAL (Protegido contra erros)
         // ----------------------------------------------------
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
@@ -175,37 +193,44 @@ $(document).ready(function() {
 
             // --- Regras para Equipamentos ---
             if (document.getElementById('inputPesquisa')) {
-                var estado = tr.getAttribute('data-estado') || '';
+                var estado      = tr.getAttribute('data-estado')      || '';
                 var criticidade = tr.getAttribute('data-criticidade') || '';
-                var categoria = tr.getAttribute('data-categoria') || '';
+                var categoria   = tr.getAttribute('data-categoria')   || '';
 
-                var estAtivos = Array.from(document.querySelectorAll('input[data-group="estado"]:checked')).map(cb => cb.value);
+                var estAtivos  = Array.from(document.querySelectorAll('input[data-group="estado"]:checked')).map(cb => cb.value);
                 var critAtivas = Array.from(document.querySelectorAll('input[data-group="criticidade"]:checked')).map(cb => cb.value);
-                var catAtivas = Array.from(document.querySelectorAll('input[data-group="categoria"]:checked')).map(cb => cb.value);
+                var catAtivas  = Array.from(document.querySelectorAll('input[data-group="categoria"]:checked')).map(cb => cb.value);
 
-                var matchEstado = estAtivos.length === 0 || estAtivos.includes(estado);
-                var matchCrit = critAtivas.length === 0 || critAtivas.includes(criticidade);
-                var matchCat = catAtivas.length === 0 || catAtivas.includes(categoria);
+                var matchEstado = estAtivos.length  === 0 || estAtivos.includes(estado);
+                var matchCrit   = critAtivas.length === 0 || critAtivas.includes(criticidade);
+                var matchCat    = catAtivas.length  === 0 || catAtivas.includes(categoria);
 
                 return matchEstado && matchCrit && matchCat;
             }
 
             // --- Regras para Fornecedores ---
-if (document.getElementById('pesquisaFornecedores')) {
-    var filtroAtivo = $('.btn-filter.active').text().trim();
-    
-    if (filtroAtivo === 'Todos' || filtroAtivo === '') {
-        return true;
-    }
-    
-    // Lê o texto da célula da coluna Tipo (índice 1) sem HTML
-    var celulaHtml = data[1] || "";
-    var div = document.createElement('div');
-    div.innerHTML = celulaHtml;
-    var tipoFornecedor = div.textContent || div.innerText || "";
-    
-    return tipoFornecedor.trim() === filtroAtivo;
-}
+            if (document.getElementById('pesquisaFornecedores')) {
+                var filtroAtivo = $('.btn-filter.active').text().trim();
+
+                if (filtroAtivo === 'Todos' || filtroAtivo === '') return true;
+
+                var celulaHtml = data[1] || '';
+                var div = document.createElement('div');
+                div.innerHTML = celulaHtml;
+                var tipoFornecedor = (div.textContent || div.innerText || '').trim();
+
+                return tipoFornecedor === filtroAtivo;
+            }
+
+            // --- Regras para Documentação ---
+            if (document.getElementById('pesquisaDocs')) {
+                var filtroAtivo = $('.btn-filter.active').attr('data-tipo') || 'Todos';
+
+                if (filtroAtivo === 'Todos' || filtroAtivo === '') return true;
+
+                var tipoCelula = tr.getAttribute('data-tipo') || '';
+                return tipoCelula === filtroAtivo;
+            }
 
             return true;
         });
