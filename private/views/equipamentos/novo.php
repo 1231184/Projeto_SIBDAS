@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Custo: obrigatório e positivo
-    if (empty($custo)) {
+    if ($custo === '' || $custo === null) {
         $erros["cost"] = "Campo obrigatório.";
     } elseif (!is_numeric($custo) || (float)$custo < 0) {
         $erros["cost"] = "O custo deve ser um valor positivo.";
@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // 3. SE NÃO HÁ ERROS — NORMALIZAR E GUARDAR NA BASE DE DADOS
     if (empty($erros)) {
-
+ 
         $designacao  = ucwords(strtolower($designacao));
         $marca       = ucwords(strtolower($marca));
         $modelo      = strtoupper($modelo);
@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $custo       = !empty($custo) ? (float)$custo : null;
         $ano_fabrico = !empty($ano_fabrico) ? (int)$ano_fabrico : null;
         $data_aquisicao = !empty($data_aquisicao) ? $data_aquisicao : null;
-
+ 
         try {
             $ligacao = new PDO(
                 "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
@@ -110,21 +110,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 MYSQL_PASSWORD
             );
             $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            $ligacao->beginTransaction();
+ 
+            // -------------------------------------------------------
+            // A) Resolver id_servico, id_sala e id_fabricante
+            // -------------------------------------------------------
+            $nome_servico = trim($_POST['servico'] ?? '');
+            $nome_sala    = trim($_POST['sala']    ?? '');
+ 
+            $id_servico = null;
+            $id_sala    = null;
+ 
+            if (!empty($nome_servico)) {
+                $stmtServ = $ligacao->prepare("SELECT id_servico FROM servicos WHERE nome = :nome LIMIT 1");
+                $stmtServ->execute([':nome' => $nome_servico]);
+                $row = $stmtServ->fetch(PDO::FETCH_OBJ);
+                if ($row) $id_servico = $row->id_servico;
+            }
+ 
+            if (!empty($nome_sala) && $id_servico) {
+                $stmtSala = $ligacao->prepare("SELECT id_sala FROM salas WHERE identificacao = :ident AND id_servico = :id_serv LIMIT 1");
+                $stmtSala->execute([':ident' => $nome_sala, ':id_serv' => $id_servico]);
+                $row = $stmtSala->fetch(PDO::FETCH_OBJ);
+                if ($row) $id_sala = $row->id_sala;
+            }
+ 
+            $id_fabricante = null;
+            if (!empty($fabricante)) {
+                $stmtFab = $ligacao->prepare("SELECT id_fornecedor FROM fornecedores WHERE nome_empresa = :nome LIMIT 1");
+                $stmtFab->execute([':nome' => $fabricante]);
+                $row = $stmtFab->fetch(PDO::FETCH_OBJ);
+                if ($row) $id_fabricante = $row->id_fornecedor;
+            }
+ 
+            // -------------------------------------------------------
+            // B) INSERT principal na tabela equipamentos
+            // -------------------------------------------------------
             $sql = "INSERT INTO equipamentos (
                         codigo_interno, designacao, marca, modelo, numero_serie,
                         ano_fabrico, categoria, criticidade,
                         data_aquisicao, custo_aquisicao, tipo_entrada, estado,
                         falta_declaracao_ce, falta_manual_utilizador, falta_fatura_guia,
-                        observacoes
+                        observacoes, id_servico, id_sala, id_fabricante
                     ) VALUES (
                         :codigo_interno, :designacao, :marca, :modelo, :numero_serie,
                         :ano_fabrico, :categoria, :criticidade,
                         :data_aquisicao, :custo_aquisicao, :tipo_entrada, :estado,
                         :falta_declaracao_ce, :falta_manual_utilizador, :falta_fatura_guia,
-                        :observacoes
+                        :observacoes, :id_servico, :id_sala, :id_fabricante
                     )";
-
+ 
             $stmt = $ligacao->prepare($sql);
             $stmt->execute([
                 ':codigo_interno'          => $codigo_interno,
@@ -143,23 +178,210 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ':falta_manual_utilizador' => $falta_manual_utilizador,
                 ':falta_fatura_guia'       => $falta_fatura_guia,
                 ':observacoes'             => $observacoes,
+                ':id_servico'              => $id_servico,
+                ':id_sala'                 => $id_sala,
+                ':id_fabricante'           => $id_fabricante,
             ]);
-
+ 
+            $id_equipamento = (int)$ligacao->lastInsertId();
+ 
+            // -------------------------------------------------------
+            // C) INSERT na equipamento_fornecedor
+            // -------------------------------------------------------
+            $nome_fornecedor  = trim($_POST['fornecedor']  ?? '');
+            $nome_assistencia = trim($_POST['assistencia'] ?? '');
+            $nome_consumiveis = trim($_POST['consumiveis'] ?? '');
+ 
+            $papeisParaInserir = [];
+            if (!empty($nome_fornecedor))  $papeisParaInserir[] = ['nome' => $nome_fornecedor,  'papel' => 'Comercial'];
+            if (!empty($nome_assistencia)) $papeisParaInserir[] = ['nome' => $nome_assistencia, 'papel' => 'Assistência'];
+            if (!empty($nome_consumiveis)) $papeisParaInserir[] = ['nome' => $nome_consumiveis, 'papel' => 'Consumíveis'];
+ 
+            foreach ($papeisParaInserir as $entry) {
+                $stmtF = $ligacao->prepare("SELECT id_fornecedor FROM fornecedores WHERE nome_empresa = :nome LIMIT 1");
+                $stmtF->execute([':nome' => $entry['nome']]);
+                $rowF = $stmtF->fetch(PDO::FETCH_OBJ);
+                if ($rowF) {
+                    $stmtEF = $ligacao->prepare("INSERT IGNORE INTO equipamento_fornecedor (id_equipamento, id_fornecedor, papel) VALUES (:id_eq, :id_f, :papel)");
+                    $stmtEF->execute([':id_eq' => $id_equipamento, ':id_f' => $rowF->id_fornecedor, ':papel' => $entry['papel']]);
+                }
+            }
+ 
+            // -------------------------------------------------------
+            // D) INSERT em garantias_contratos
+            // -------------------------------------------------------
+            $tem_garantia = isset($_POST['temGarantia']);
+            $tem_contrato = isset($_POST['temContrato']);
+ 
+            if ($tem_garantia) {
+                $g_inicio = trim($_POST['garantiaInicio'] ?? '');
+                $g_fim    = trim($_POST['garantiaFim']    ?? '');
+                if (!empty($g_inicio) && !empty($g_fim)) {
+                    $stmtGar = $ligacao->prepare("
+                        INSERT INTO garantias_contratos (id_equipamento, tipo_cobertura, data_inicio, data_fim)
+                        VALUES (:id_eq, 'Garantia', :inicio, :fim)
+                    ");
+                    $stmtGar->execute([':id_eq' => $id_equipamento, ':inicio' => $g_inicio, ':fim' => $g_fim]);
+                }
+            }
+ 
+            if ($tem_contrato) {
+                $c_ref    = trim($_POST['referenciaContrato']    ?? '');
+                $c_entidade = trim($_POST['entidadeContrato']    ?? '');
+                $c_tipo   = trim($_POST['tipoContrato']          ?? '');
+                $c_period = trim($_POST['periodicidadeContrato'] ?? '');
+                $c_inicio = trim($_POST['contratoInicio']        ?? '');
+                $c_fim    = trim($_POST['contratoFim']           ?? '');
+ 
+                $id_entidade = null;
+                if (!empty($c_entidade)) {
+                    $stmtEnt = $ligacao->prepare("SELECT id_fornecedor FROM fornecedores WHERE nome_empresa = :nome LIMIT 1");
+                    $stmtEnt->execute([':nome' => $c_entidade]);
+                    $rowEnt = $stmtEnt->fetch(PDO::FETCH_OBJ);
+                    if ($rowEnt) $id_entidade = $rowEnt->id_fornecedor;
+                }
+ 
+                if (!empty($c_inicio) && !empty($c_fim)) {
+                    $stmtCont = $ligacao->prepare("
+                        INSERT INTO garantias_contratos
+                            (id_equipamento, tipo_cobertura, referencia, id_entidade_responsavel, tipo_contrato, periodicidade, data_inicio, data_fim)
+                        VALUES
+                            (:id_eq, 'Contrato Manutenção', :ref, :id_ent, :tipo, :period, :inicio, :fim)
+                    ");
+                    $stmtCont->execute([
+                        ':id_eq'  => $id_equipamento,
+                        ':ref'    => $c_ref    ?: null,
+                        ':id_ent' => $id_entidade,
+                        ':tipo'   => $c_tipo   ?: null,
+                        ':period' => $c_period ?: null,
+                        ':inicio' => $c_inicio,
+                        ':fim'    => $c_fim,
+                    ]);
+                }
+            }
+ 
+            // -------------------------------------------------------
+            // E) INSERT em acessorios
+            // -------------------------------------------------------
+            $acessorios_post = $_POST['acessorios'] ?? [];
+            foreach ($acessorios_post as $ace) {
+                $ace_codigo     = trim($ace['codigo']     ?? '');
+                $ace_designacao = trim($ace['designacao'] ?? '');
+                $ace_serie      = trim($ace['serie']      ?? '');
+                if (empty($ace_designacao)) continue;
+ 
+                $stmtAce = $ligacao->prepare("
+                    INSERT INTO acessorios (id_equipamento, codigo_componente, designacao, numero_serie)
+                    VALUES (:id_eq, :cod, :des, :ser)
+                ");
+                $stmtAce->execute([
+                    ':id_eq' => $id_equipamento,
+                    ':cod'   => $ace_codigo     ?: null,
+                    ':des'   => $ace_designacao,
+                    ':ser'   => $ace_serie      ?: null,
+                ]);
+            }
+ 
+            // -------------------------------------------------------
+            // F) UPLOAD e INSERT em documentos
+            // -------------------------------------------------------
+            $docs_post = $_POST['docs'] ?? [];
+            $pastas = [
+                'Manual de utilizador'        => 'manuais',
+                'Manual de serviço'           => 'manuais',
+                'Certificado de calibração'   => 'certificados',
+                'Contrato de manutenção'      => 'contratos',
+                'Fatura ou guia de aquisição' => 'faturas',
+                'Declaração de conformidade'  => 'declaracoes',
+                'Certificado de Garantia'     => 'certificados',
+                'Relatório técnico'           => 'certificados',
+            ];
+ 
+            $doc_index = 0;
+            foreach ($docs_post as $idDoc => $doc) {
+                $doc_tipo     = trim($doc['tipo']      ?? '');
+                $doc_titulo   = trim($doc['titulo']    ?? '');
+                $doc_emissao  = trim($doc['emissao']   ?? '');
+                $doc_validade = trim($doc['validade']  ?? '');
+                $doc_fornec   = trim($doc['fornecedor'] ?? '');
+ 
+                if (empty($doc_tipo)) continue;
+ 
+                // Resolver id_fornecedor do documento
+                $id_forn_doc = null;
+                if (!empty($doc_fornec) && $doc_fornec !== 'Nenhuma') {
+                    $stmtFD = $ligacao->prepare("SELECT id_fornecedor FROM fornecedores WHERE nome_empresa = :nome LIMIT 1");
+                    $stmtFD->execute([':nome' => $doc_fornec]);
+                    $rowFD = $stmtFD->fetch(PDO::FETCH_OBJ);
+                    if ($rowFD) $id_forn_doc = $rowFD->id_fornecedor;
+                }
+ 
+                // Upload do ficheiro
+                $caminho_ficheiro = 'assets/docs/sem_ficheiro.pdf'; // fallback
+                if (isset($_FILES['docFicheiros']['tmp_name'][$doc_index]) && $_FILES['docFicheiros']['error'][$doc_index] === UPLOAD_ERR_OK) {
+                    $pasta_tipo = $pastas[$doc_tipo] ?? 'outros';
+                    $pasta_dest = __DIR__ . '/../../../../assets/docs/' . $pasta_tipo . '/';
+ 
+                    if (!is_dir($pasta_dest)) mkdir($pasta_dest, 0755, true);
+ 
+                    $nome_original = basename($_FILES['docFicheiros']['name'][$doc_index]);
+                    $extensao      = strtolower(pathinfo($nome_original, PATHINFO_EXTENSION));
+                    $nome_seguro   = $codigo_interno . '_' . $pasta_tipo . '_' . ($doc_index + 1) . '.' . $extensao;
+                    $caminho_full  = $pasta_dest . $nome_seguro;
+ 
+                    if (move_uploaded_file($_FILES['docFicheiros']['tmp_name'][$doc_index], $caminho_full)) {
+                        $caminho_ficheiro = 'assets/docs/' . $pasta_tipo . '/' . $nome_seguro;
+                    }
+                }
+ 
+                $stmtDoc = $ligacao->prepare("
+                    INSERT INTO documentos (id_equipamento, id_fornecedor, tipo_documento, titulo, data_emissao, data_validade, caminho_ficheiro)
+                    VALUES (:id_eq, :id_forn, :tipo, :titulo, :emissao, :validade, :caminho)
+                ");
+                $stmtDoc->execute([
+                    ':id_eq'    => $id_equipamento,
+                    ':id_forn'  => $id_forn_doc,
+                    ':tipo'     => $doc_tipo,
+                    ':titulo'   => $doc_titulo   ?: null,
+                    ':emissao'  => $doc_emissao  ?: null,
+                    ':validade' => $doc_validade ?: null,
+                    ':caminho'  => $caminho_ficheiro,
+                ]);
+ 
+                $doc_index++;
+            }
+ 
+            // -------------------------------------------------------
+            // G) INSERT em historico_movimentacoes (entrada em inventário)
+            // -------------------------------------------------------
+            if ($id_servico) {
+                $id_utilizador = $_SESSION['id_utilizador'] ?? null;
+                $stmtHist = $ligacao->prepare("
+                    INSERT INTO historico_movimentacoes (id_equipamento, id_servico_origem, id_servico_destino, motivo, id_utilizador)
+                    VALUES (:id_eq, NULL, :id_serv, 'Entrada em inventário', :id_util)
+                ");
+                $stmtHist->execute([
+                    ':id_eq'   => $id_equipamento,
+                    ':id_serv' => $id_servico,
+                    ':id_util' => $id_utilizador,
+                ]);
+            }
+ 
+            $ligacao->commit();
             $ligacao = null;
-
+ 
             header("Location: lista_equi.php?sucesso=1");
             exit;
+ 
         } catch (PDOException $err) {
-            // Detetar especificamente o erro de número de série duplicado (MySQL erro 1062)
-            // e transformá-lo num erro de campo no Passo 1 em vez de erro genérico no Passo 6
+            if (isset($ligacao)) $ligacao->rollBack();
             if ($err->getCode() == 23000 && strpos($err->getMessage(), 'numero_serie') !== false) {
                 $erros["serialNumber"] = "Este número de série já existe.";
             } else {
                 $erro_sistema = "Erro ao guardar o equipamento: " . $err->getMessage();
             }
+            $ligacao = null;
         }
-
-        $ligacao = null;
     }
 }
 ?>
@@ -221,7 +443,7 @@ try {
         </div>
     </div>
 
-    <form action="#" method="POST" style="max-width: 1024px;" novalidate>
+    <form action="#" method="POST" enctype="multipart/form-data" style="max-width: 1024px;" novalidate>
 
         <!-- SEPARADORES (WIZARD STEPS) -->
         <ul class="nav nav-tabs mb-4 border-bottom-0" id="equipamentoTabs" role="tablist"
@@ -331,15 +553,7 @@ try {
                                                 onclick="event.stopPropagation()">
                                         </li>
                                         <div id="listaManufacturer">
-                                            <li><a class="dropdown-item py-1 small" href="#"
-                                                    onclick="selecionarDropdown('manufacturer', 'Philips Healthcare PT')">Philips
-                                                    Healthcare PT</a></li>
-                                            <li><a class="dropdown-item py-1 small" href="#"
-                                                    onclick="selecionarDropdown('manufacturer', 'Dräger Portugal')">Dräger
-                                                    Portugal</a></li>
-                                            <li><a class="dropdown-item py-1 small" href="#"
-                                                    onclick="selecionarDropdown('manufacturer', 'Mindray')">Mindray</a>
-                                            </li>
+                                            <!-- preenchido pelo JS via API -->
                                         </div>
                                     </ul>
                                     <div class="invalid-feedback" style="font-size: 0.70rem;">Campo obrigatório.
@@ -351,7 +565,7 @@ try {
                                         class="text-decoration-none text-secondary hover-brand">
                                         <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Criar novo
                                     </a>
-                                    <a href="#" onclick="atualizarFornecedores(event)"
+                                    <a href="#" onclick="carregarDadosFormulario(); event.preventDefault();"
                                         class="text-decoration-none text-brand">
                                         <i class="fa-solid fa-rotate me-1"></i>Atualizar lista
                                     </a>
@@ -577,12 +791,7 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaEdificio">
-                                                    <li><a class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('edificio', 'Edifício Principal', 'piso')">Edifício
-                                                            Principal</a></li>
-                                                    <li><a class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('edificio', 'Edifício Sul', 'piso')">Edifício
-                                                            Sul</a></li>
+                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -610,18 +819,7 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaPiso">
-                                                    <li data-parent="Edifício Principal"><a
-                                                            class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('piso', 'Piso 0', 'servico')">Piso
-                                                            0</a></li>
-                                                    <li data-parent="Edifício Principal"><a
-                                                            class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('piso', 'Piso 1', 'servico')">Piso
-                                                            1</a></li>
-                                                    <li data-parent="Edifício Sul"><a class="dropdown-item py-2"
-                                                            href="#"
-                                                            onclick="selecionarLocalizacao('piso', 'Piso 0', 'servico')">Piso
-                                                            0</a></li>
+                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -649,18 +847,7 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaServico">
-                                                    <li data-parent="Piso 0"><a class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('servico', 'Urgência Geral', 'sala')">Urgência
-                                                            Geral</a></li>
-                                                    <li data-parent="Piso 0"><a class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('servico', 'Imagiologia', 'sala')">Imagiologia</a>
-                                                    </li>
-                                                    <li data-parent="Piso 1"><a class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('servico', 'Unidade de Cuidados Intensivos (UCI)', 'sala')">Unidade
-                                                            de Cuidados Intensivos (UCI)</a></li>
-                                                    <li data-parent="Piso 1"><a class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('servico', 'Bloco Operatório', 'sala')">Bloco
-                                                            Operatório</a></li>
+                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -688,22 +875,7 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaSala">
-                                                    <li data-parent="Urgência Geral"><a class="dropdown-item py-2"
-                                                            href="#"
-                                                            onclick="selecionarLocalizacao('sala', 'Triagem', null)">Triagem</a>
-                                                    </li>
-                                                    <li data-parent="Urgência Geral"><a class="dropdown-item py-2"
-                                                            href="#"
-                                                            onclick="selecionarLocalizacao('sala', 'Sala de Reanimação', null)">Sala
-                                                            de Reanimação</a></li>
-                                                    <li data-parent="Unidade de Cuidados Intensivos (UCI)"><a
-                                                            class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('sala', 'Box 1', null)">Box
-                                                            1</a></li>
-                                                    <li data-parent="Unidade de Cuidados Intensivos (UCI)"><a
-                                                            class="dropdown-item py-2" href="#"
-                                                            onclick="selecionarLocalizacao('sala', 'Box 2', null)">Box
-                                                            2</a></li>
+                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                         </div>
@@ -769,15 +941,7 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaFornecedor">
-                                                    <li><a class="dropdown-item py-1 small" href="#"
-                                                            onclick="selecionarDropdown('fornecedor', 'Philips Healthcare PT')">Philips
-                                                            Healthcare PT</a></li>
-                                                    <li><a class="dropdown-item py-1 small" href="#"
-                                                            onclick="selecionarDropdown('fornecedor', 'Dräger Portugal')">Dräger
-                                                            Portugal</a></li>
-                                                    <li><a class="dropdown-item py-1 small" href="#"
-                                                            onclick="selecionarDropdown('fornecedor', 'TechMed Solutions')">TechMed
-                                                            Solutions</a></li>
+                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -807,15 +971,7 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaAssistencia">
-                                                    <li><a class="dropdown-item py-1 small" href="#"
-                                                            onclick="selecionarDropdown('assistencia', 'MedServ Técnica')">MedServ
-                                                            Técnica</a></li>
-                                                    <li><a class="dropdown-item py-1 small" href="#"
-                                                            onclick="selecionarDropdown('assistencia', 'IberiaMed Serviços')">IberiaMed
-                                                            Serviços</a></li>
-                                                    <li><a class="dropdown-item py-1 small" href="#"
-                                                            onclick="selecionarDropdown('assistencia', 'Philips Healthcare PT')">Philips
-                                                            Healthcare PT</a></li>
+                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -845,15 +1001,7 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaConsumiveis">
-                                                    <li><a class="dropdown-item py-1 small" href="#"
-                                                            onclick="selecionarDropdown('consumiveis', 'Nenhum / Não Aplicável')">Nenhum
-                                                            / Não Aplicável</a></li>
-                                                    <li><a class="dropdown-item py-1 small" href="#"
-                                                            onclick="selecionarDropdown('consumiveis', 'FarmaMed Consumíveis')">FarmaMed
-                                                            Consumíveis</a></li>
-                                                    <li><a class="dropdown-item py-1 small" href="#"
-                                                            onclick="selecionarDropdown('consumiveis', 'Hospitália PT')">Hospitália
-                                                            PT</a></li>
+                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                         </div>
@@ -944,12 +1092,7 @@ try {
                                                                 onclick="event.stopPropagation()">
                                                         </li>
                                                         <div id="listaEntidadeContrato">
-                                                            <li><a class="dropdown-item py-1 small" href="#"
-                                                                    onclick="selecionarDropdown('entidadeContrato', 'MedServ Técnica')">MedServ
-                                                                    Técnica</a></li>
-                                                            <li><a class="dropdown-item py-1 small" href="#"
-                                                                    onclick="selecionarDropdown('entidadeContrato', 'IberiaMed Serviços')">IberiaMed
-                                                                    Serviços</a></li>
+                                                            <!-- preenchido pelo JS via API -->
                                                         </div>
                                                     </ul>
                                                     <div class="invalid-feedback" style="font-size: 0.70rem;">
@@ -1130,15 +1273,7 @@ try {
                                                     onclick="event.stopPropagation()">
                                             </li>
                                             <div id="listaDocFornecedor">
-                                                <li><a class="dropdown-item py-1 small" href="#"
-                                                        onclick="selecionarDropdown('docFornecedor', 'Nenhuma')">Nenhuma</a>
-                                                </li>
-                                                <li><a class="dropdown-item py-1 small" href="#"
-                                                        onclick="selecionarDropdown('docFornecedor', 'Philips Healthcare PT')">Philips
-                                                        Healthcare PT</a></li>
-                                                <li><a class="dropdown-item py-1 small" href="#"
-                                                        onclick="selecionarDropdown('docFornecedor', 'MedServ Técnica')">MedServ
-                                                        Técnica</a></li>
+                                                <!-- preenchido pelo JS via API -->
                                             </div>
                                         </ul>
                                     </div>
@@ -1160,8 +1295,9 @@ try {
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label small text-dark mb-1">Ficheiro (PDF, JPG) *</label>
-                                    <input type="file" id="docFicheiro"
-                                        class="form-control form-control-sm shadow-sm bg-white">
+                                    <input type="file" id="docFicheiro" name="docFicheiros[]"
+    class="form-control form-control-sm shadow-sm bg-white"
+    accept=".pdf,.jpg,.jpeg,.png">
                                 </div>
                                 <div class="col-md-2 d-flex align-items-end">
                                     <button type="button" id="btnAnexarDoc"
@@ -1380,8 +1516,49 @@ try {
                     `;
                 tbody.appendChild(tr);
 
-                // Adicionar evento ao botão do lixo para remover a linha
+                // Criar inputs hidden para o PHP receber os dados deste documento
+                const idDoc = Date.now();
+                const form = document.querySelector('form');
+
+                const hTipo = document.createElement('input');
+                hTipo.type = 'hidden';
+                hTipo.name = `docs[${idDoc}][tipo]`;
+                hTipo.value = tipo;
+                form.appendChild(hTipo);
+
+                const hTitulo = document.createElement('input');
+                hTitulo.type = 'hidden';
+                hTitulo.name = `docs[${idDoc}][titulo]`;
+                hTitulo.value = titulo;
+                form.appendChild(hTitulo);
+
+                const hEmissao = document.createElement('input');
+                hEmissao.type = 'hidden';
+                hEmissao.name = `docs[${idDoc}][emissao]`;
+                hEmissao.value = emissao;
+                form.appendChild(hEmissao);
+
+                const hValidade = document.createElement('input');
+                hValidade.type = 'hidden';
+                hValidade.name = `docs[${idDoc}][validade]`;
+                hValidade.value = validade;
+                form.appendChild(hValidade);
+
+                const hFornDoc = document.createElement('input');
+                hFornDoc.type = 'hidden';
+                hFornDoc.name = `docs[${idDoc}][fornecedor]`;
+                hFornDoc.value = document.getElementById('inputDocFornecedor').value || '';
+                form.appendChild(hFornDoc);
+
+                // Guardar referência do idDoc na linha para remoção posterior
+                tr.dataset.docId = idDoc;
+
+                // Adicionar evento ao botão do lixo para remover a linha e os inputs hidden
                 tr.querySelector('.btn-remover-doc').addEventListener('click', function() {
+                    const docId = tr.dataset.docId;
+                    if (docId) {
+                        document.querySelectorAll(`input[name^="docs[${docId}]"]`).forEach(i => i.remove());
+                    }
                     tr.remove();
                     if (tbody.children.length === 0) {
                         tbody.innerHTML = `<tr id="emptyDocRow"><td colspan="4" class="text-center text-muted small py-4"><i class="fa-regular fa-folder-open fs-4 d-block mb-2 text-secondary"></i>Nenhum documento anexado ainda.</td></tr>`;
@@ -1393,7 +1570,7 @@ try {
                 document.getElementById('docEmissao').value = '';
                 document.getElementById('dataValidadeDoc').value = '';
                 ficheiroInput.value = '';
-                desativarNivelLocalizacao('tipoDocumento', 'Selecionar tipo...', false); // Reinicia o dropdown
+                desativarNivelLocalizacao('tipoDocumento', 'Selecionar tipo...', false);
                 document.getElementById('dataValidadeDoc').disabled = true;
                 document.getElementById('dataValidadeDoc').classList.remove('bg-white', 'border-warning');
                 document.getElementById('dataValidadeDoc').classList.add('bg-light');
@@ -1477,18 +1654,45 @@ try {
                     `;
                 tbody.appendChild(tr);
 
+                // Criar inputs hidden para o PHP receber os dados deste acessório
+                const idAce = Date.now();
+                const form = document.querySelector('form');
+
+                const hCod = document.createElement('input');
+                hCod.type = 'hidden';
+                hCod.name = `acessorios[${idAce}][codigo]`;
+                hCod.value = codigo;
+                form.appendChild(hCod);
+
+                const hDes = document.createElement('input');
+                hDes.type = 'hidden';
+                hDes.name = `acessorios[${idAce}][designacao]`;
+                hDes.value = designacao;
+                form.appendChild(hDes);
+
+                const hSer = document.createElement('input');
+                hSer.type = 'hidden';
+                hSer.name = `acessorios[${idAce}][serie]`;
+                hSer.value = serie;
+                form.appendChild(hSer);
+
+                tr.dataset.aceId = idAce;
+
                 tr.querySelector('.btn-remover-acessorio').addEventListener('click', function() {
+                    const aceId = tr.dataset.aceId;
+                    if (aceId) {
+                        document.querySelectorAll(`input[name^="acessorios[${aceId}]"]`).forEach(i => i.remove());
+                    }
                     tr.remove();
                     if (tbody.children.length === 0) {
                         tbody.innerHTML = `<tr id="emptyAcessorioRow"><td colspan="4" class="text-center text-muted small py-4"><i class="fa-solid fa-puzzle-piece fs-4 d-block mb-2 text-secondary"></i>Nenhum componente associado.</td></tr>`;
                     }
-                    atualizarCodigoNovoAcessorio(); // Atualiza se removermos um
+                    atualizarCodigoNovoAcessorio();
                 });
 
                 designacaoInput.value = '';
                 serieInput.value = '';
 
-                // Gera imediatamente o próximo código!
                 atualizarCodigoNovoAcessorio();
             });
         }
@@ -1823,7 +2027,7 @@ try {
                 items[i].style.display = "none";
             }
         }
-    } // A CHAVETA QUE FALTAVA FECHAR ESTAVA AQUI!
+    }
 
     // Função Específica para a Cascata de Localizações (Passo 2)
     function selecionarLocalizacao(nivelAtual, valorSelecionado, proximoNivel) {
@@ -1834,28 +2038,74 @@ try {
         spanTexto.classList.add('text-dark');
         document.getElementById('input' + nivelAtual.charAt(0).toUpperCase() + nivelAtual.slice(1)).value = valorSelecionado;
 
-        // 2. Regras de Cascata para limpar os níveis à frente
+        // 2. Regras de cascata — limpar níveis seguintes
         if (nivelAtual === 'edificio') {
-            desativarNivelLocalizacao('servico', 'Aguardando piso...');
-            desativarNivelLocalizacao('sala', 'Aguardando serviço...');
+            desativarNivelLocalizacao('piso', 'Aguardar edifício...');
+            desativarNivelLocalizacao('servico', 'Aguardar piso...');
+            desativarNivelLocalizacao('sala', 'Aguardar serviço...');
         } else if (nivelAtual === 'piso') {
-            desativarNivelLocalizacao('sala', 'Aguardando serviço...');
+            desativarNivelLocalizacao('servico', 'Aguardar piso...');
+            desativarNivelLocalizacao('sala', 'Aguardar serviço...');
+        } else if (nivelAtual === 'servico') {
+            desativarNivelLocalizacao('sala', 'Aguardar serviço...');
         }
 
-        // 3. Ativar o Próximo Nível e filtrar as opções
+        // 3. Preencher o próximo nível com dados da API
         if (proximoNivel) {
-            document.getElementById('btn' + proximoNivel.charAt(0).toUpperCase() + proximoNivel.slice(1)).classList.remove('disabled');
-            desativarNivelLocalizacao(proximoNivel, 'Selecionar ' + proximoNivel + '...', false);
+            const btnProximo = document.getElementById('btn' + proximoNivel.charAt(0).toUpperCase() + proximoNivel.slice(1));
+            const listaProximo = document.getElementById('lista' + proximoNivel.charAt(0).toUpperCase() + proximoNivel.slice(1));
 
-            const listaDiv = document.getElementById('lista' + proximoNivel.charAt(0).toUpperCase() + proximoNivel.slice(1));
-            const items = listaDiv.getElementsByTagName('li');
+            btnProximo.classList.remove('disabled');
 
-            for (let i = 0; i < items.length; i++) {
-                if (items[i].getAttribute('data-parent') === valorSelecionado) {
-                    items[i].style.display = "";
-                } else {
-                    items[i].style.display = "none";
+            let itens = [];
+
+            if (proximoNivel === 'piso') {
+                // Encontrar o id do edifício pelo nome
+                const ed = (window._dadosEdificios || []).find(e => e.nome === valorSelecionado);
+                if (ed) {
+                    itens = (window._dadosPisos || [])
+                        .filter(p => p.id_edificio == ed.id_edificio)
+                        .map(p => `<li data-id="${p.id_piso}" data-parent="${valorSelecionado}">
+                        <a class="dropdown-item py-2" href="#"
+                            onclick="selecionarLocalizacao('piso', '${p.designacao.replace(/'/g, "\\'")}', 'servico')">
+                            ${p.designacao}</a></li>`);
                 }
+            } else if (proximoNivel === 'servico') {
+                // Encontrar o id do piso pelo nome e edifício atual
+                const edNome = document.getElementById('textEdificio').innerText;
+                const ed = (window._dadosEdificios || []).find(e => e.nome === edNome);
+                const piso = (window._dadosPisos || []).find(p => p.designacao === valorSelecionado && p.id_edificio == ed?.id_edificio);
+                if (piso) {
+                    itens = (window._dadosServicos || [])
+                        .filter(s => s.id_piso == piso.id_piso)
+                        .map(s => `<li data-id="${s.id_servico}" data-parent="${valorSelecionado}">
+                        <a class="dropdown-item py-2" href="#"
+                            onclick="selecionarLocalizacao('servico', '${s.nome.replace(/'/g, "\\'")}', 'sala')">
+                            ${s.nome}</a></li>`);
+                }
+            } else if (proximoNivel === 'sala') {
+                // Encontrar o id do serviço pelo nome
+                const pisoNome = document.getElementById('textPiso').innerText;
+                const edNome = document.getElementById('textEdificio').innerText;
+                const ed = (window._dadosEdificios || []).find(e => e.nome === edNome);
+                const piso = (window._dadosPisos || []).find(p => p.designacao === pisoNome && p.id_edificio == ed?.id_edificio);
+                const serv = (window._dadosServicos || []).find(s => s.nome === valorSelecionado && s.id_piso == piso?.id_piso);
+                if (serv) {
+                    const salasDeste = (window._dadosSalas || []).filter(sl => sl.id_servico == serv.id_servico);
+                    if (salasDeste.length === 0) {
+                        // Serviço sem salas — manter opcional
+                        listaProximo.innerHTML = '<li class="px-3 py-2 text-muted small">Sem salas registadas</li>';
+                    } else {
+                        itens = salasDeste.map(sl => `<li data-id="${sl.id_sala}" data-parent="${valorSelecionado}">
+                        <a class="dropdown-item py-2" href="#"
+                            onclick="selecionarLocalizacao('sala', '${sl.identificacao.replace(/'/g, "\\'")}', null)">
+                            ${sl.identificacao}</a></li>`);
+                    }
+                }
+            }
+
+            if (itens.length > 0) {
+                listaProximo.innerHTML = itens.join('');
             }
         }
     }
@@ -1885,84 +2135,108 @@ try {
         }
     }
 
-    // Função AJAX para ir buscar os fornecedores à Base de Dados sem recarregar a página
-    async function atualizarFornecedores(event) {
-        event.preventDefault(); // Evita que a página dê um "salto" para cima
-
-        // Encontra o ícone de atualizar e põe-no a rodar (feedback visual para o utilizador)
-        const btn = event.currentTarget;
-        const icon = btn.querySelector('i');
-        icon.classList.add('fa-spin');
-
+    // =========================================================================
+    // CARREGAR DROPDOWNS DA BD VIA API (Passo B)
+    // =========================================================================
+    async function carregarDadosFormulario() {
         try {
-            // ================================================================
-            // CÓDIGO REAL PARA O FUTURO (Quando tiveres PHP e Base de Dados)
-            // ================================================================
-            // const resposta = await fetch('api/obter_fornecedores.php');
-            // const novosFornecedores = await resposta.json();
+            const resposta = await fetch('api/get_dados_formulario.php');
+            const dados = await resposta.json();
 
-            // ================================================================
-            // SIMULAÇÃO (Para testares agora o funcionamento visual)
-            // ================================================================
-            await new Promise(resolve => setTimeout(resolve, 800)); // Simula 0.8s de internet a carregar
-            const novosFornecedores = [
-                "Philips Healthcare PT",
-                "Dräger Portugal",
-                "Mindray",
-                "TechMed Solutions",
-                "Nova Empresa Que Acabei de Criar Lda" // Repara nesta nova!
-            ];
+            if (!dados.sucesso) {
+                console.error('Erro ao carregar dados do formulário:', dados.erro);
+                return;
+            }
 
-            // 3. Atualizar o HTML das 4 listas de fornecedores (Fabricante, Comercial, Assistência, Consumíveis)
-            const listasParaAtualizar = [{
-                    idLista: 'listaManufacturer',
-                    campoInput: 'manufacturer'
-                },
-                {
-                    idLista: 'listaFornecedor',
-                    campoInput: 'fornecedor'
-                },
-                {
-                    idLista: 'listaAssistencia',
-                    campoInput: 'assistencia'
-                },
-                {
-                    idLista: 'listaConsumiveis',
-                    campoInput: 'consumiveis'
-                }
-            ];
+            // ---- FABRICANTE (Passo 1) ----
+            const listaManuf = document.getElementById('listaManufacturer');
+            if (listaManuf) {
+                listaManuf.innerHTML = dados.fornecedores.map(f =>
+                    `<li><a class="dropdown-item py-1 small" href="#"
+                    onclick="selecionarDropdown('manufacturer', '${f.nome_empresa.replace(/'/g, "\\'")}')">
+                    ${f.nome_empresa}</a></li>`
+                ).join('');
+            }
 
-            listasParaAtualizar.forEach(lista => {
-                const container = document.getElementById(lista.idLista);
-                if (container) {
-                    container.innerHTML = ''; // Limpa a lista velha
+            // ---- FORNECEDOR COMERCIAL (Passo 3) ----
+            const listaForn = document.getElementById('listaFornecedor');
+            if (listaForn) {
+                listaForn.innerHTML = dados.fornecedores.map(f =>
+                    `<li><a class="dropdown-item py-1 small" href="#"
+                    onclick="selecionarDropdown('fornecedor', '${f.nome_empresa.replace(/'/g, "\\'")}')">
+                    ${f.nome_empresa}</a></li>`
+                ).join('');
+            }
 
-                    // Preenche com a lista nova que veio da Base de Dados
-                    novosFornecedores.forEach(empresa => {
-                        container.innerHTML += `<li><a class="dropdown-item py-1 small" href="#" onclick="selecionarDropdown('${lista.campoInput}', '${empresa}')">${empresa}</a></li>`;
-                    });
-                }
-            });
+            // ---- ASSISTÊNCIA TÉCNICA (Passo 3) ----
+            const listaAss = document.getElementById('listaAssistencia');
+            if (listaAss) {
+                listaAss.innerHTML = dados.fornecedores.map(f =>
+                    `<li><a class="dropdown-item py-1 small" href="#"
+                    onclick="selecionarDropdown('assistencia', '${f.nome_empresa.replace(/'/g, "\\'")}')">
+                    ${f.nome_empresa}</a></li>`
+                ).join('');
+            }
 
-            // 4. Parar a animação e dar feedback
-            icon.classList.remove('fa-spin');
+            // ---- CONSUMÍVEIS (Passo 3) ----
+            const listaCons = document.getElementById('listaConsumiveis');
+            if (listaCons) {
+                listaCons.innerHTML = dados.fornecedores.map(f =>
+                    `<li><a class="dropdown-item py-1 small" href="#"
+                    onclick="selecionarDropdown('consumiveis', '${f.nome_empresa.replace(/'/g, "\\'")}')">
+                    ${f.nome_empresa}</a></li>`
+                ).join('');
+            }
 
-            // Opcional: mostrar um aviso de sucesso que desaparece rápido
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-            // Se não tiveres o SweetAlert, podes usar um alert normal:
-            // alert("Listas de fornecedores atualizadas com sucesso!");
+            // ---- ENTIDADE CONTRATO (Passo 3) ----
+            const listaEnt = document.getElementById('listaEntidadeContrato');
+            if (listaEnt) {
+                listaEnt.innerHTML = dados.fornecedores.map(f =>
+                    `<li><a class="dropdown-item py-1 small" href="#"
+                    onclick="selecionarDropdown('entidadeContrato', '${f.nome_empresa.replace(/'/g, "\\'")}')">
+                    ${f.nome_empresa}</a></li>`
+                ).join('');
+            }
 
-        } catch (error) {
-            console.error("Erro ao carregar fornecedores:", error);
-            icon.classList.remove('fa-spin');
-            alert("Erro de ligação. Não foi possível atualizar a lista.");
+            // ---- FORNECEDOR DO DOCUMENTO (Passo 4) ----
+            const listaDocForn = document.getElementById('listaDocFornecedor');
+            if (listaDocForn) {
+                listaDocForn.innerHTML =
+                    `<li><a class="dropdown-item py-1 small" href="#"
+            onclick="selecionarDropdown('docFornecedor', 'Nenhuma')">Nenhuma</a></li>` +
+                    dados.fornecedores.map(f =>
+                        `<li><a class="dropdown-item py-1 small" href="#"
+                onclick="selecionarDropdown('docFornecedor', '${f.nome_empresa.replace(/'/g, "\\'")}')">
+                ${f.nome_empresa}</a></li>`
+                    ).join('');
+            }
+
+            // ---- EDIFÍCIOS (Passo 2) ----
+            const listaEd = document.getElementById('listaEdificio');
+            if (listaEd) {
+                listaEd.innerHTML = dados.edificios.map(e =>
+                    `<li><a class="dropdown-item py-2" href="#"
+                    onclick="selecionarLocalizacao('edificio', '${e.nome.replace(/'/g, "\\'")}', 'piso')"
+                    data-id="${e.id_edificio}">
+                    ${e.nome}</a></li>`
+                ).join('');
+            }
+
+            // ---- PISOS (Passo 2) — guardados globalmente para filtrar por edifício ----
+            window._dadosPisos = dados.pisos;
+            window._dadosServicos = dados.servicos;
+            window._dadosSalas = dados.salas;
+
+            // Guarda também os edifícios para lookup por nome
+            window._dadosEdificios = dados.edificios;
+
+        } catch (erro) {
+            console.error('Erro de comunicação ao carregar dados do formulário:', erro);
         }
     }
+
+    // Chama a API ao carregar a página
+    carregarDadosFormulario();
 
     // Função para ativar/desativar a Data de Validade na Documentação
     function verificarValidadeDoc(tipoSelecionado) {
@@ -2032,6 +2306,57 @@ try {
 
         <?php if (!empty($_POST['sala'])): ?>
             selecionarLocalizacao('sala', <?= json_encode($_POST['sala']) ?>, null);
+        <?php endif; ?>
+
+        // Passo 3: Fornecedores e entidades
+        <?php if (!empty($_POST['fornecedor'])): ?>
+            selecionarDropdown('fornecedor', <?= json_encode($_POST['fornecedor']) ?>);
+        <?php endif; ?>
+
+        <?php if (!empty($_POST['assistencia'])): ?>
+            selecionarDropdown('assistencia', <?= json_encode($_POST['assistencia']) ?>);
+        <?php endif; ?>
+
+        <?php if (!empty($_POST['consumiveis'])): ?>
+            selecionarDropdown('consumiveis', <?= json_encode($_POST['consumiveis']) ?>);
+        <?php endif; ?>
+
+        <?php if (!empty($_POST['entidadeContrato'])): ?>
+            selecionarDropdown('entidadeContrato', <?= json_encode($_POST['entidadeContrato']) ?>);
+        <?php endif; ?>
+
+        // Passo 3: Datas de garantia e contrato
+        <?php if (!empty($_POST['garantiaInicio'])): ?>
+            document.querySelector('input[name="garantiaInicio"]').value = <?= json_encode($_POST['garantiaInicio']) ?>;
+        <?php endif; ?>
+
+        <?php if (!empty($_POST['garantiaFim'])): ?>
+            document.querySelector('input[name="garantiaFim"]').value = <?= json_encode($_POST['garantiaFim']) ?>;
+        <?php endif; ?>
+
+        <?php if (!empty($_POST['referenciaContrato'])): ?>
+            document.querySelector('input[name="referenciaContrato"]').value = <?= json_encode($_POST['referenciaContrato']) ?>;
+        <?php endif; ?>
+
+        <?php if (!empty($_POST['tipoContrato'])): ?>
+            document.querySelector('select[name="tipoContrato"]').value = <?= json_encode($_POST['tipoContrato']) ?>;
+        <?php endif; ?>
+
+        <?php if (!empty($_POST['periodicidadeContrato'])): ?>
+            document.querySelector('select[name="periodicidadeContrato"]').value = <?= json_encode($_POST['periodicidadeContrato']) ?>;
+        <?php endif; ?>
+
+        <?php if (!empty($_POST['contratoInicio'])): ?>
+            document.querySelector('input[name="contratoInicio"]').value = <?= json_encode($_POST['contratoInicio']) ?>;
+        <?php endif; ?>
+
+        <?php if (!empty($_POST['contratoFim'])): ?>
+            document.querySelector('input[name="contratoFim"]').value = <?= json_encode($_POST['contratoFim']) ?>;
+        <?php endif; ?>
+
+        // Passo 6: Observações
+        <?php if (!empty($_POST['observations'])): ?>
+            document.querySelector('textarea[name="observations"]').value = <?= json_encode($_POST['observations']) ?>;
         <?php endif; ?>
     });
 </script>

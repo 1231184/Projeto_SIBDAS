@@ -35,11 +35,20 @@ try {
     $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Faz a consulta (Query) para ir buscar todos os equipamentos!
-    $sql_equip = "SELECT * FROM equipamentos WHERE 1=1";
-if ($filtro_sala)    $sql_equip .= " AND id_sala = " . $filtro_sala;
-elseif ($filtro_servico) $sql_equip .= " AND id_servico = " . $filtro_servico;
-$sql_equip .= " ORDER BY codigo_interno ASC";
-$resultados = $ligacao->query($sql_equip)->fetchAll(PDO::FETCH_OBJ);
+    $sql_equip = "
+    SELECT
+        e.*,
+        s.nome AS nome_servico,
+        sa.identificacao AS nome_sala
+    FROM equipamentos e
+    LEFT JOIN servicos s  ON s.id_servico = e.id_servico
+    LEFT JOIN salas sa    ON sa.id_sala   = e.id_sala
+    WHERE 1=1
+";
+    if ($filtro_sala)        $sql_equip .= " AND e.id_sala = "    . $filtro_sala;
+    elseif ($filtro_servico) $sql_equip .= " AND e.id_servico = " . $filtro_servico;
+    $sql_equip .= " ORDER BY e.codigo_interno ASC";
+    $resultados = $ligacao->query($sql_equip)->fetchAll(PDO::FETCH_OBJ);
     $erro = '';
 } catch (PDOException $err) {
     // Se a password estiver errada ou a BD em baixo, ele captura o erro aqui!
@@ -50,9 +59,28 @@ $resultados = $ligacao->query($sql_equip)->fetchAll(PDO::FETCH_OBJ);
 // Fecha a Ligação
 $ligacao = null;
 // --- FIM DA LIGAÇÃO À BASE DE DADOS ---
+
+// --- DADOS PARA OS FILTROS DA SIDEBAR ---
+try {
+    $ligacao2 = new PDO(
+        "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
+        MYSQL_USERNAME,
+        MYSQL_PASSWORD
+    );
+    $ligacao2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $categorias = $ligacao2->query("SELECT DISTINCT categoria FROM equipamentos ORDER BY categoria ASC")->fetchAll(PDO::FETCH_COLUMN);
+    $marcas     = $ligacao2->query("SELECT DISTINCT marca FROM equipamentos ORDER BY marca ASC")->fetchAll(PDO::FETCH_COLUMN);
+    $servicos   = $ligacao2->query("SELECT DISTINCT s.nome FROM equipamentos e INNER JOIN servicos s ON s.id_servico = e.id_servico ORDER BY s.nome ASC")->fetchAll(PDO::FETCH_COLUMN);
+
+    $ligacao2 = null;
+} catch (PDOException $err) {
+    $categorias = [];
+    $marcas     = [];
+    $servicos   = [];
+}
+// --- FIM DADOS FILTROS ---
 ?>
-
-
 
 <?php include '../../includes/header.php'; ?>
 
@@ -192,18 +220,13 @@ $ligacao = null;
                     <div id="collapseCategoria" class="accordion-collapse collapse"
                         data-bs-parent="#accordionFiltros">
                         <div class="accordion-body">
-                            <label class="filter-check"><input type="checkbox" value="Monitorização"
-                                    data-group="categoria">
-                                <div class="custom-box"></div><span class="label-text">Monitorização</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox" value="Terapia"
-                                    data-group="categoria">
-                                <div class="custom-box"></div><span class="label-text">Terapia</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox" value="Diagnóstico"
-                                    data-group="categoria">
-                                <div class="custom-box"></div><span class="label-text">Diagnóstico</span>
-                            </label>
+                            <?php foreach ($categorias as $cat): ?>
+                                <label class="filter-check">
+                                    <input type="checkbox" value="<?= htmlspecialchars($cat) ?>" data-group="categoria">
+                                    <div class="custom-box"></div>
+                                    <span class="label-text"><?= htmlspecialchars($cat) ?></span>
+                                </label>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -211,33 +234,20 @@ $ligacao = null;
                 <div class="accordion-item border-0">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed fw-bold text-uppercase shadow-none" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#collapseFornecedor">
-                            Fornecedor
+                            data-bs-toggle="collapse" data-bs-target="#collapseFabricante">
+                            Fabricante
                         </button>
                     </h2>
-                    <div id="collapseFornecedor" class="accordion-collapse collapse"
+                    <div id="collapseFabricante" class="accordion-collapse collapse"
                         data-bs-parent="#accordionFiltros">
                         <div class="accordion-body">
-                            <label class="filter-check"><input type="checkbox" value="Dräger Portugal"
-                                    data-group="fornecedor">
-                                <div class="custom-box"></div><span class="label-text">Dräger Portugal</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox" value="Philips Healthcare PT"
-                                    data-group="fornecedor">
-                                <div class="custom-box"></div><span class="label-text">Philips Healthcare PT</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox" value="MedServ Técnica"
-                                    data-group="fornecedor">
-                                <div class="custom-box"></div><span class="label-text">MedServ Técnica</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox" value="TechMed Solutions"
-                                    data-group="fornecedor">
-                                <div class="custom-box"></div><span class="label-text">TechMed Solutions</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox" value="IberiaMed Serviços"
-                                    data-group="fornecedor">
-                                <div class="custom-box"></div><span class="label-text">IberiaMed Serviços</span>
-                            </label>
+                            <?php foreach ($marcas as $marca): ?>
+                                <label class="filter-check">
+                                    <input type="checkbox" value="<?= htmlspecialchars($marca) ?>" data-group="fabricante">
+                                    <div class="custom-box"></div>
+                                    <span class="label-text"><?= htmlspecialchars($marca) ?></span>
+                                </label>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -252,26 +262,13 @@ $ligacao = null;
                     <div id="collapseServico" class="accordion-collapse collapse"
                         data-bs-parent="#accordionFiltros">
                         <div class="accordion-body">
-                            <label class="filter-check"><input type="checkbox" value="Urgência Geral"
-                                    data-group="servico">
-                                <div class="custom-box"></div><span class="label-text">Urgência Geral</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox" value="Imagiologia"
-                                    data-group="servico">
-                                <div class="custom-box"></div><span class="label-text">Imagiologia</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox"
-                                    value="Unidade de Cuidados Intensivos (UCI)" data-group="servico">
-                                <div class="custom-box"></div><span class="label-text">UCI</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox" value="Bloco Operatório"
-                                    data-group="servico">
-                                <div class="custom-box"></div><span class="label-text">Bloco Operatório</span>
-                            </label>
-                            <label class="filter-check"><input type="checkbox" value="Medicina Interna"
-                                    data-group="servico">
-                                <div class="custom-box"></div><span class="label-text">Medicina Interna</span>
-                            </label>
+                            <?php foreach ($servicos as $srv): ?>
+                                <label class="filter-check">
+                                    <input type="checkbox" value="<?= htmlspecialchars($srv) ?>" data-group="servico">
+                                    <div class="custom-box"></div>
+                                    <span class="label-text"><?= htmlspecialchars($srv) ?></span>
+                                </label>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
@@ -335,7 +332,7 @@ $ligacao = null;
                                 </tr>
                             <?php else: ?>
                                 <?php foreach ($resultados as $equip): ?>
-                                    <tr data-estado="<?= htmlspecialchars($equip->estado) ?>" data-criticidade="<?= htmlspecialchars($equip->criticidade) ?>" data-categoria="<?= htmlspecialchars($equip->categoria) ?>">
+                                    <tr data-estado="<?= htmlspecialchars($equip->estado) ?>" data-criticidade="<?= htmlspecialchars($equip->criticidade) ?>" data-categoria="<?= htmlspecialchars($equip->categoria) ?>" data-servico="<?= htmlspecialchars($equip->nome_servico ?? '') ?>" data-fabricante="<?= htmlspecialchars($equip->marca) ?>">
                                         <td class="px-3 py-3 text-brand fw-bold" style="font-size: 1.0rem;">
                                             <?= htmlspecialchars($equip->codigo_interno) ?>
                                         </td>
@@ -347,8 +344,11 @@ $ligacao = null;
                                                 <?= htmlspecialchars($equip->marca . ' · ' . $equip->modelo) ?>
                                             </div>
                                         </td>
-                                        <td class="px-3 py-3 text-dark fw-medium" style="font-size: 1.0rem;">
-                                            Sala <?= htmlspecialchars($equip->id_sala ?? 'N/A') ?>
+                                        <td class="px-3 py-3" style="font-size: 1.0rem;">
+                                            <div class="fw-medium text-dark"><?= htmlspecialchars($equip->nome_servico ?? '—') ?></div>
+                                            <?php if (!empty($equip->nome_sala)): ?>
+                                                <div class="text-muted" style="font-size: 0.8rem;"><?= htmlspecialchars($equip->nome_sala) ?></div>
+                                            <?php endif; ?>
                                         </td>
                                         <?php
                                         // Lógica para as cores da Criticidade
@@ -418,35 +418,35 @@ $ligacao = null;
                 <div>
                     <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
                         <h5 class="modal-title fw-bold text-dark mb-0" id="modalDetalhesLabel">
-                            Monitor Multiparamétrico de Sinais Vitais
+                            <span id="det-designacao">—</span>
                         </h5>
-                        <span class="badge badge-soft-success">Ativo</span>
-                        <span class="badge badge-soft-warning">Alta</span>
+                        <span id="det-badge-estado" class="badge">—</span>
+                        <span id="det-badge-criticidade" class="badge">—</span>
                     </div>
-                    <p class="text-muted custom-monospace small mb-0">EQ-2024-001</p>
+                    <p class="text-muted custom-monospace small mb-0" id="det-codigo">—</p>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-    <?php if ($urlVoltar): ?>
-        <a href="<?= htmlspecialchars($urlVoltar) ?>"
-           class="btn-action-custom py-2 px-3 text-decoration-none">
-            <i class="fa-solid fa-arrow-left me-2"></i><?= htmlspecialchars($textoVoltar) ?>
-        </a>
-    <?php endif; ?>
-    <button class="btn-action-custom bg-white border text-dark"
-        onclick="alert('🖨️ Comando enviado! A etiqueta com o código de barras do equipamento EQ-2024-001 foi gerada com sucesso.')">
-        <i class="fa-solid fa-barcode me-1"></i> Etiqueta
-    </button>
-    <button class="btn-action-custom py-2 px-3" data-bs-toggle="modal" data-bs-target="#modalEditar"
-        data-bs-dismiss="modal">
-        <i class="fa-solid fa-pencil me-2"></i> Editar
-    </button>
-    <button class="btn-action-custom btn-action-danger" data-bs-toggle="modal"
-        data-bs-target="#modalRemover">
-        <i class="fa-solid fa-trash-can me-2"></i> Remover
-    </button>
-    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal"
-        aria-label="Fechar"></button>
-</div>
+                    <?php if ($urlVoltar): ?>
+                        <a href="<?= htmlspecialchars($urlVoltar) ?>"
+                            class="btn-action-custom py-2 px-3 text-decoration-none">
+                            <i class="fa-solid fa-arrow-left me-2"></i><?= htmlspecialchars($textoVoltar) ?>
+                        </a>
+                    <?php endif; ?>
+                    <button class="btn-action-custom bg-white border text-dark"
+                        onclick="alert('🖨️ Comando enviado! A etiqueta com o código de barras do equipamento EQ-2024-001 foi gerada com sucesso.')">
+                        <i class="fa-solid fa-barcode me-1"></i> Etiqueta
+                    </button>
+                    <button class="btn-action-custom py-2 px-3" data-bs-toggle="modal" data-bs-target="#modalEditar"
+                        data-bs-dismiss="modal">
+                        <i class="fa-solid fa-pencil me-2"></i> Editar
+                    </button>
+                    <button class="btn-action-custom btn-action-danger" data-bs-toggle="modal"
+                        data-bs-target="#modalRemover">
+                        <i class="fa-solid fa-trash-can me-2"></i> Remover
+                    </button>
+                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+                </div>
             </div>
 
             <!-- Body do Modal -->
@@ -506,69 +506,58 @@ $ligacao = null;
 
                                 <!-- TAB 1: GERAL -->
                                 <div class="tab-pane fade show active" id="geral-pane" role="tabpanel" tabindex="0">
-
-                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Identificação e
-                                        Fabrico</h5>
+                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Identificação e Fabrico</h5>
                                     <div class="row row-cols-2 row-cols-md-3 g-4 mb-4">
                                         <div class="col">
                                             <p class="detail-label">Categoria</p>
-                                            <p class="detail-value">Monitorização</p>
+                                            <p class="detail-value" id="det-categoria">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Criticidade Clínica</p>
-                                            <p class="detail-value"><span
-                                                    class="badge badge-soft-warning">Alta</span></p>
+                                            <p class="detail-value" id="det-criticidade">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Estado Atual</p>
-                                            <p class="detail-value"><span class="badge badge-soft-success">Ativo /
-                                                    Operacional</span></p>
+                                            <p class="detail-value" id="det-estado">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Marca</p>
-                                            <p class="detail-value">Philips</p>
+                                            <p class="detail-value" id="det-marca">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Modelo</p>
-                                            <p class="detail-value">IntelliVue MX700</p>
+                                            <p class="detail-value" id="det-modelo">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Número de Série</p>
-                                            <p class="detail-value custom-monospace" style="font-size: 0.8rem;">
-                                                SN-PH-2024-001</p>
+                                            <p class="detail-value custom-monospace" style="font-size:0.8rem;" id="det-serie">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Fabricante</p>
-                                            <p class="detail-value">Philips Healthcare</p>
+                                            <p class="detail-value" id="det-fabricante">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Ano de Fabrico</p>
-                                            <p class="detail-value">2023</p>
+                                            <p class="detail-value" id="det-ano-fabrico">—</p>
                                         </div>
                                     </div>
-
-                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2 mt-4">Receção e
-                                        Aquisição</h5>
+                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2 mt-4">Receção e Aquisição</h5>
                                     <div class="row row-cols-2 row-cols-md-3 g-4 mb-4">
                                         <div class="col">
                                             <p class="detail-label">Tipo de Entrada</p>
-                                            <p class="detail-value">Compra</p>
+                                            <p class="detail-value" id="det-tipo-entrada">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Data de Aquisição</p>
-                                            <p class="detail-value">15/01/2024</p>
+                                            <p class="detail-value" id="det-data-aquisicao">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Custo de Aquisição</p>
-                                            <p class="detail-value">18 500,00 €</p>
+                                            <p class="detail-value" id="det-custo">—</p>
                                         </div>
                                     </div>
-
-                                    <h5 class="fw-semibold fs-6 mb-2 text-dark border-bottom pb-2 mt-4">Observações
-                                    </h5>
-                                    <p class="detail-value text-muted" style="font-size: 0.875rem;">Monitor de UCI
-                                        com 12 derivações ECG. Equipamento encontra-se em excelente estado de
-                                        conservação.</p>
+                                    <h5 class="fw-semibold fs-6 mb-2 text-dark border-bottom pb-2 mt-4">Observações</h5>
+                                    <p class="detail-value text-muted" style="font-size:0.875rem;" id="det-observacoes">—</p>
                                 </div>
 
                                 <!-- TAB 2: LOCALIZAÇÃO -->
@@ -577,54 +566,29 @@ $ligacao = null;
                                     <div class="row row-cols-2 row-cols-md-4 g-4 mb-4">
                                         <div class="col">
                                             <p class="detail-label">Edifício</p>
-                                            <p class="detail-value d-flex align-items-center gap-1">
-                                                <i class="fa-regular fa-building text-muted"></i> Edifício Principal
-                                            </p>
+                                            <p class="detail-value d-flex align-items-center gap-1"><i class="fa-regular fa-building text-muted"></i> <span id="det-edificio">—</span></p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Piso</p>
-                                            <p class="detail-value">Piso 1</p>
+                                            <p class="detail-value" id="det-piso">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Serviço</p>
-                                            <p class="detail-value">Unidade de Cuidados Intensivos (UCI)</p>
+                                            <p class="detail-value" id="det-servico">—</p>
                                         </div>
                                         <div class="col">
                                             <p class="detail-label">Sala / Compartimento</p>
-                                            <p class="detail-value">Box 1</p>
+                                            <p class="detail-value" id="det-sala">—</p>
                                         </div>
                                     </div>
-
                                     <div class="card dash-card shadow-sm border-0 bg-light">
                                         <div class="card-header border-0 bg-transparent pt-3 px-4 pb-2 d-flex align-items-center gap-2">
                                             <i class="fa-solid fa-clock-rotate-left text-muted" style="font-size: 1rem;"></i>
                                             <h6 class="card-title-custom mb-0">Histórico de Movimentações</h6>
                                         </div>
                                         <div class="card-body px-4 pb-4 pt-0">
-                                            <div class="d-flex flex-column gap-2">
-
-                                                <div class="list-box bg-white border d-flex justify-content-between align-items-center py-2">
-                                                    <div>
-                                                        <span class="fw-bold text-dark small">Transferência de Serviço</span>
-                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">Movido de: Serviço de Urgência &rarr; UCI (Unidade A)</p>
-                                                    </div>
-                                                    <div class="text-end">
-                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">15/01/2024</p>
-                                                        <p class="text-muted small mb-0" style="font-size: 0.65rem;">Por: admin</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="list-box bg-white border d-flex justify-content-between align-items-center py-2">
-                                                    <div>
-                                                        <span class="fw-bold text-dark small">Entrada em Inventário</span>
-                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">Registo inicial e instalação física no Serviço de Urgência</p>
-                                                    </div>
-                                                    <div class="text-end">
-                                                        <p class="text-muted small mb-0" style="font-size: 0.75rem;">10/01/2024</p>
-                                                        <p class="text-muted small mb-0" style="font-size: 0.65rem;">Por: admin</p>
-                                                    </div>
-                                                </div>
-
+                                            <div class="d-flex flex-column gap-2" id="det-historico">
+                                                <!-- preenchido pelo JS -->
                                             </div>
                                         </div>
                                     </div>
@@ -632,215 +596,33 @@ $ligacao = null;
 
                                 <!-- TAB 3: FORNECEDORES -->
                                 <div class="tab-pane fade" id="fornecedores-pane" role="tabpanel" tabindex="0">
-                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Entidades
-                                        Associadas</h5>
-                                    <div class="d-flex flex-column gap-2 mt-3">
-                                        <a href="#" class="text-decoration-none text-dark">
-                                            <div class="list-box d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <p class="detail-value fw-medium">Philips Healthcare</p>
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        Fornecedor Comercial</p>
-                                                </div>
-                                                <div class="text-end d-none d-sm-block">
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        +351 210 000 002</p>
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        contacto@philips-saude.pt</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="text-decoration-none text-dark">
-                                            <div class="list-box d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <p class="detail-value fw-medium">MedServ Técnica</p>
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        Assistência Técnica Oficial</p>
-                                                </div>
-                                                <div class="text-end d-none d-sm-block">
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        +351 210 000 004</p>
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        suporte@medserv.pt</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="text-decoration-none text-dark">
-                                            <div class="list-box d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <p class="detail-value fw-medium">FarmaMed Consumíveis</p>
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        Fornecedor de Consumíveis</p>
-                                                </div>
-                                                <div class="text-end d-none d-sm-block">
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        +351 210 000 008</p>
-                                                    <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                        geral@farmamed.pt</p>
-                                                </div>
-                                            </div>
-                                        </a>
+                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Entidades Associadas</h5>
+                                    <div class="d-flex flex-column gap-2 mt-3" id="det-fornecedores">
+                                        <!-- preenchido pelo JS -->
                                     </div>
                                 </div>
 
                                 <!-- TAB 4: GARANTIAS E CONTRATOS -->
                                 <div class="tab-pane fade" id="garantias-pane" role="tabpanel" tabindex="0">
-
-                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">
-                                        <i class="fa-solid fa-shield-halved text-success me-2"></i> Garantia Legal
-                                    </h5>
-                                    <div class="list-box list-box-light border-0 mb-4">
-                                        <div class="row row-cols-2 row-cols-md-3 g-3">
-                                            <div class="col">
-                                                <p class="detail-label">Início da Garantia</p>
-                                                <p class="detail-value">15/01/2024</p>
-                                            </div>
-                                            <div class="col">
-                                                <p class="detail-label">Fim da Garantia</p>
-                                                <p class="detail-value">15/01/2027</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">
-                                        <i class="fa-solid fa-file-contract text-muted me-2"></i> Contrato de
-                                        Manutenção
-                                    </h5>
-                                    <div class="list-box list-box-light border-0">
-                                        <div class="row row-cols-2 row-cols-md-3 g-3">
-                                            <div class="col">
-                                                <p class="detail-label">Nº Referência</p>
-                                                <p class="detail-value custom-monospace" style="font-size: 0.8rem;">
-                                                    CNT-2024-001</p>
-                                            </div>
-                                            <div class="col">
-                                                <p class="detail-label">Entidade Responsável</p>
-                                                <p class="detail-value">MedServ Técnica</p>
-                                            </div>
-                                            <div class="col">
-                                                <p class="detail-label">Tipo de Contrato</p>
-                                                <p class="detail-value">Full-Service</p>
-                                            </div>
-                                            <div class="col">
-                                                <p class="detail-label">Periodicidade</p>
-                                                <p class="detail-value">Anual</p>
-                                            </div>
-                                            <div class="col">
-                                                <p class="detail-label">Início do Contrato</p>
-                                                <p class="detail-value">15/01/2024</p>
-                                            </div>
-                                            <div class="col">
-                                                <p class="detail-label">Fim do Contrato</p>
-                                                <p class="detail-value">15/01/2027</p>
-                                            </div>
-                                        </div>
+                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Garantias e Contratos</h5>
+                                    <div class="d-flex flex-column gap-3 mt-3" id="det-garantias">
+                                        <!-- preenchido pelo JS -->
                                     </div>
                                 </div>
 
                                 <!-- TAB 5: DOCUMENTOS -->
                                 <div class="tab-pane fade" id="documentos-pane" role="tabpanel" tabindex="0">
-                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Ficheiros
-                                        Anexados</h5>
-                                    <div class="d-flex flex-column gap-2 mt-3">
-
-                                        <div
-                                            class="list-box list-box-light d-flex justify-content-between align-items-center gap-3">
-                                            <div class="flex-grow-1">
-                                                <p class="detail-value fw-medium mb-0">IntelliVue MX700 - Manual do
-                                                    Utilizador</p>
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">Manual
-                                                    de Utilizador — 01/01/2023</p>
-                                                <p class="text-muted custom-monospace small mb-0"
-                                                    style="font-size: 0.75rem;">
-                                                    <i
-                                                        class="fa-solid fa-file-pdf text-danger me-1"></i>intellivue_mx700_manual.pdf
-                                                </p>
-                                            </div>
-                                            <a href="../../assets/docs/intellivue_mx700_manual.pdf" download
-                                                class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 flex-shrink-0"
-                                                title="Descarregar ficheiro">
-                                                <i class="fa-solid fa-download"></i>
-                                                <span class="d-none d-sm-inline">Download</span>
-                                            </a>
-                                        </div>
-
-                                        <div class="list-box d-flex justify-content-between align-items-center gap-3"
-                                            style="background-color: rgba(254, 242, 242, 0.5); border-color: rgba(254, 202, 202, 0.5);">
-                                            <div class="flex-grow-1">
-                                                <p class="detail-value fw-medium mb-0">Certificado de Calibração -
-                                                    Monitor MX700</p>
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                    Certificado de Calibração — 01/06/2024</p>
-                                                <p class="text-muted custom-monospace small mb-0"
-                                                    style="font-size: 0.75rem;">
-                                                    <i
-                                                        class="fa-solid fa-file-pdf text-danger me-1"></i>calib_monitor_2024.pdf
-                                                </p>
-                                                <p class="text-danger fw-medium small mb-0"
-                                                    style="font-size: 0.75rem;">
-                                                    <i class="fa-solid fa-circle-exclamation me-1"></i>Validade:
-                                                    01/06/2025 (Expirado)
-                                                </p>
-                                            </div>
-                                            <a href="../../assets/docs/calib_monitor_2024.pdf" download
-                                                class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 flex-shrink-0"
-                                                title="Descarregar ficheiro">
-                                                <i class="fa-solid fa-download"></i>
-                                                <span class="d-none d-sm-inline">Download</span>
-                                            </a>
-                                        </div>
-
-                                        <div
-                                            class="list-box list-box-light d-flex justify-content-between align-items-center gap-3">
-                                            <div class="flex-grow-1">
-                                                <p class="detail-value fw-medium mb-0">Contrato Full Service Philips
-                                                    2024-2027</p>
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                    Contrato de Manutenção — 15/01/2024</p>
-                                                <p class="text-muted custom-monospace small mb-0"
-                                                    style="font-size: 0.75rem;">
-                                                    <i
-                                                        class="fa-solid fa-file-pdf text-danger me-1"></i>contrato_philips.pdf
-                                                </p>
-                                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">
-                                                    Validade: 15/01/2027</p>
-                                            </div>
-                                            <a href="../../assets/docs/contrato_philips.pdf" download
-                                                class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 flex-shrink-0"
-                                                title="Descarregar ficheiro">
-                                                <i class="fa-solid fa-download"></i>
-                                                <span class="d-none d-sm-inline">Download</span>
-                                            </a>
-                                        </div>
-
+                                    <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Ficheiros Anexados</h5>
+                                    <div class="d-flex flex-column gap-2 mt-3" id="det-documentos">
+                                        <!-- preenchido pelo JS -->
                                     </div>
                                 </div>
 
                                 <!-- TAB 6: ACESSÓRIOS -->
                                 <div class="tab-pane fade" id="acessorios-pane" role="tabpanel" tabindex="0">
                                     <h5 class="fw-semibold fs-6 mb-3 text-dark border-bottom pb-2">Componentes e Acessórios Associados</h5>
-                                    <div class="d-flex flex-column gap-2 mt-3">
-
-                                        <div class="list-box list-box-light d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <p class="detail-value fw-medium">Cabo ECG 5 Vias</p>
-                                                <p class="text-brand small fw-bold mb-0" style="font-size: 0.75rem;">EQ-0001.01</p>
-                                            </div>
-                                            <div class="text-end">
-                                                <p class="text-muted custom-monospace small mb-0" style="font-size: 0.75rem;">SN-889900</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="list-box list-box-light d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <p class="detail-value fw-medium">Braçadeira de Pressão Adulto</p>
-                                                <p class="text-brand small fw-bold mb-0" style="font-size: 0.75rem;">EQ-0001.02</p>
-                                            </div>
-                                            <div class="text-end">
-                                                <p class="text-muted custom-monospace small mb-0 fst-italic" style="font-size: 0.75rem;">Não definido</p>
-                                            </div>
-                                        </div>
-
+                                    <div class="d-flex flex-column gap-2 mt-3" id="det-acessorios">
+                                        <!-- preenchido pelo JS -->
                                     </div>
                                 </div>
 
@@ -850,8 +632,7 @@ $ligacao = null;
 
                     <!-- Rodapé de Metadados -->
                     <div class="d-flex gap-4 text-muted px-2" style="font-size: 0.75rem;">
-                        <span>Criado a: 16/04/2026</span>
-                        <span>Última atualização: 16/04/2026</span>
+                        <span>Criado a: <span id="det-data-registo">—</span></span>
                     </div>
 
                 </div>
