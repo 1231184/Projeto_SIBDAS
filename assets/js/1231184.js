@@ -183,6 +183,22 @@ $(document).ready(function() {
         }
 
         // ----------------------------------------------------
+        // LÓGICA ESPECÍFICA: PÁGINA DE GARANTIAS
+        // ----------------------------------------------------
+        if (document.getElementById('pesquisaGarantias')) {
+
+            $('#pesquisaGarantias').on('keyup', function() {
+                window.tabelaEquipamentos.search(this.value).draw();
+            });
+
+            $('.btn-filter').on('click', function() {
+                $('.btn-filter').removeClass('active');
+                $(this).addClass('active');
+                window.tabelaEquipamentos.draw();
+            });
+        }
+
+        // ----------------------------------------------------
         // MOTOR DE FILTRAGEM GLOBAL (Protegido contra erros)
         // ----------------------------------------------------
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
@@ -224,6 +240,16 @@ $(document).ready(function() {
 
             // --- Regras para Documentação ---
             if (document.getElementById('pesquisaDocs')) {
+                var filtroAtivo = $('.btn-filter.active').attr('data-tipo') || 'Todos';
+
+                if (filtroAtivo === 'Todos' || filtroAtivo === '') return true;
+
+                var tipoCelula = tr.getAttribute('data-tipo') || '';
+                return tipoCelula === filtroAtivo;
+            }
+
+            // --- Regras para Garantias ---
+            if (document.getElementById('pesquisaGarantias')) {
                 var filtroAtivo = $('.btn-filter.active').attr('data-tipo') || 'Todos';
 
                 if (filtroAtivo === 'Todos' || filtroAtivo === '') return true;
