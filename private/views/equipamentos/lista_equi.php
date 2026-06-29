@@ -127,8 +127,9 @@ try {
                     }, 4000);
                 </script>
             <?php endif; ?>
+            <?php $resultadosActivos = array_filter($resultados, fn($e) => $e->estado !== 'Abatido'); ?>
             <div class="text-muted small" id="totalRegistos">
-                <?= count($resultados) ?> <?= count($resultados) == 1 ? 'equipamento registado' : 'equipamentos registados' ?>
+                <?= count($resultadosActivos) ?> <?= count($resultadosActivos) == 1 ? 'equipamento registado' : 'equipamentos registados' ?>
             </div>
         </div>
         <a href="novo.php" class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm fw-bold">
@@ -175,6 +176,9 @@ try {
                             </label>
                             <label class="filter-check"><input type="checkbox" value="Inativo" data-group="estado">
                                 <div class="custom-box"></div><span class="label-text">Inativo</span>
+                            </label>
+                            <label class="filter-check"><input type="checkbox" value="Abatido" data-group="estado">
+                                <div class="custom-box"></div><span class="label-text">Abatido</span>
                             </label>
                         </div>
                     </div>
@@ -345,9 +349,13 @@ try {
                                             </div>
                                         </td>
                                         <td class="px-3 py-3" style="font-size: 1.0rem;">
-                                            <div class="fw-medium text-dark"><?= htmlspecialchars($equip->nome_servico ?? '—') ?></div>
-                                            <?php if (!empty($equip->nome_sala)): ?>
-                                                <div class="text-muted" style="font-size: 0.8rem;"><?= htmlspecialchars($equip->nome_sala) ?></div>
+                                            <?php if ($equip->estado === 'Abatido'): ?>
+                                                <span class="text-muted fst-italic" style="font-size: 0.85rem;">—</span>
+                                            <?php else: ?>
+                                                <div class="fw-medium text-dark"><?= htmlspecialchars($equip->nome_servico ?? '—') ?></div>
+                                                <?php if (!empty($equip->nome_sala)): ?>
+                                                    <div class="text-muted" style="font-size: 0.8rem;"><?= htmlspecialchars($equip->nome_sala) ?></div>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         </td>
                                         <?php
@@ -390,10 +398,12 @@ try {
                                                     Ver
                                                 </button>
 
+                                                <?php if ($equip->estado !== 'Abatido'): ?>
                                                 <button class="btn btn-sm btn-light border text-danger shadow-none btn-remover-eq"
                                                     data-id="<?= $equip->id_equipamento ?>" title="Remover">
                                                     <i class="fa-solid fa-trash-can"></i>
                                                 </button>
+                                                <?php endif; ?>
                                             </div>
                                         </td>
                                     </tr>
@@ -562,6 +572,7 @@ try {
 
                                 <!-- TAB 2: LOCALIZAÇÃO -->
                                 <div class="tab-pane fade" id="localizacao-pane" role="tabpanel" tabindex="0">
+                                    <div id="det-localizacao-atual">
                                     <h5 class="fw-semibold fs-6 mb-4 text-dark border-bottom pb-2">Localização Atual</h5>
                                     <div class="row row-cols-2 row-cols-md-4 g-4 mb-4">
                                         <div class="col">
@@ -580,6 +591,7 @@ try {
                                             <p class="detail-label">Sala / Compartimento</p>
                                             <p class="detail-value" id="det-sala">—</p>
                                         </div>
+                                    </div>
                                     </div>
                                     <div class="card dash-card shadow-sm border-0 bg-light">
                                         <div class="card-header border-0 bg-transparent pt-3 px-4 pb-2 d-flex align-items-center gap-2">
@@ -933,7 +945,7 @@ try {
                                                             <span id="edit-textEdificio" class="text-dark">Edifício
                                                                 Principal</span>
                                                         </button>
-                                                        <ul
+                                                         <ul
                                                             class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
                                                             <li class="px-2 pb-2 mb-2 border-bottom">
                                                                 <input type="text"
@@ -944,9 +956,7 @@ try {
                                                                     onclick="event.stopPropagation()">
                                                             </li>
                                                             <div id="edit-listaEdificio">
-                                                                <li><a class="dropdown-item py-2" href="#"
-                                                                        onclick="selecionarLocalizacaoEdit('Edificio', 'Edifício Principal', 'Piso')">Edifício
-                                                                        Principal</a></li>
+                                                                <!-- preenchido pelo JS via API -->
                                                             </div>
                                                         </ul>
                                                         <div class="invalid-feedback" style="font-size: 0.70rem;">
@@ -968,9 +978,7 @@ try {
                                                         <ul
                                                             class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
                                                             <div id="edit-listaPiso">
-                                                                <li><a class="dropdown-item py-2" href="#"
-                                                                        onclick="selecionarLocalizacaoEdit('Piso', 'Piso 1', 'Servico')">Piso
-                                                                        1</a></li>
+                                                                <!-- preenchido pelo JS via API -->
                                                             </div>
                                                         </ul>
                                                     </div>
@@ -991,9 +999,7 @@ try {
                                                         <ul
                                                             class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
                                                             <div id="edit-listaServico">
-                                                                <li><a class="dropdown-item py-2" href="#"
-                                                                        onclick="selecionarLocalizacaoEdit('Servico', 'Unidade de Cuidados Intensivos (UCI)', 'Sala')">Unidade
-                                                                        de Cuidados Intensivos (UCI)</a></li>
+                                                                <!-- preenchido pelo JS via API -->
                                                             </div>
                                                         </ul>
                                                     </div>
@@ -1014,9 +1020,7 @@ try {
                                                         <ul
                                                             class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
                                                             <div id="edit-listaSala">
-                                                                <li><a class="dropdown-item py-2" href="#"
-                                                                        onclick="selecionarLocalizacaoEdit('Sala', 'Box 1', null)">Box
-                                                                        1</a></li>
+                                                                <!-- preenchido pelo JS via API -->
                                                             </div>
                                                         </ul>
                                                     </div>
@@ -1058,14 +1062,20 @@ try {
                                                             required>
                                                         <button
                                                             class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                            type="button" data-bs-toggle="dropdown">
+                                                            type="button" data-bs-toggle="dropdown" data-bs-display="static">
                                                             <span id="edit-textFornecedor" class="text-dark">Philips
                                                                 Healthcare PT</span>
                                                         </button>
-                                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                            <li><a class="dropdown-item py-1 small" href="#"
-                                                                    onclick="selecionarDropdownEdit('Fornecedor', 'Philips Healthcare PT')">Philips
-                                                                    Healthcare PT</a></li>
+                                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                            <li class="px-2 pb-2 mb-2 border-bottom">
+                                                                <input type="text" class="form-control form-control-sm shadow-none bg-light"
+                                                                    id="edit-searchFornecedor" placeholder="Pesquisar..."
+                                                                    onkeyup="filtrarDropdown('edit-searchFornecedor', 'edit-listaFornecedor')"
+                                                                    onclick="event.stopPropagation()">
+                                                            </li>
+                                                            <div id="edit-listaFornecedor">
+                                                                <!-- preenchido pelo JS via API -->
+                                                            </div>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -1078,14 +1088,20 @@ try {
                                                             required>
                                                         <button
                                                             class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                            type="button" data-bs-toggle="dropdown">
+                                                            type="button" data-bs-toggle="dropdown" data-bs-display="static">
                                                             <span id="edit-textAssistencia"
                                                                 class="text-dark">MedServ Técnica</span>
                                                         </button>
-                                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                            <li><a class="dropdown-item py-1 small" href="#"
-                                                                    onclick="selecionarDropdownEdit('Assistencia', 'MedServ Técnica')">MedServ
-                                                                    Técnica</a></li>
+                                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                            <li class="px-2 pb-2 mb-2 border-bottom">
+                                                                <input type="text" class="form-control form-control-sm shadow-none bg-light"
+                                                                    id="edit-searchAssistencia" placeholder="Pesquisar..."
+                                                                    onkeyup="filtrarDropdown('edit-searchAssistencia', 'edit-listaAssistencia')"
+                                                                    onclick="event.stopPropagation()">
+                                                            </li>
+                                                            <div id="edit-listaAssistencia">
+                                                                <!-- preenchido pelo JS via API -->
+                                                            </div>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -1097,14 +1113,20 @@ try {
                                                             id="edit-inputConsumiveis">
                                                         <button
                                                             class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm"
-                                                            type="button" data-bs-toggle="dropdown">
+                                                            type="button" data-bs-toggle="dropdown" data-bs-display="static">
                                                             <span id="edit-textConsumiveis"
                                                                 class="text-muted">Selecionar fornecedor...</span>
                                                         </button>
-                                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1">
-                                                            <li><a class="dropdown-item py-1 small" href="#"
-                                                                    onclick="selecionarDropdownEdit('Consumiveis', 'FarmaMed Consumíveis')">FarmaMed
-                                                                    Consumíveis</a></li>
+                                                        <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                            <li class="px-2 pb-2 mb-2 border-bottom">
+                                                                <input type="text" class="form-control form-control-sm shadow-none bg-light"
+                                                                    id="edit-searchConsumiveis" placeholder="Pesquisar..."
+                                                                    onkeyup="filtrarDropdown('edit-searchConsumiveis', 'edit-listaConsumiveis')"
+                                                                    onclick="event.stopPropagation()">
+                                                            </li>
+                                                            <div id="edit-listaConsumiveis">
+                                                                <!-- preenchido pelo JS via API -->
+                                                            </div>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -1168,12 +1190,29 @@ try {
                                                         <div class="col-7">
                                                             <label class="form-label small text-dark mb-1">Entidade
                                                                 Responsável *</label>
-                                                            <select name="entidadeContrato"
-                                                                class="form-select form-select-sm shadow-sm bg-white"
-                                                                required>
-                                                                <option value="Philips Healthcare PT" selected>
-                                                                    Philips Healthcare PT</option>
-                                                            </select>
+                                                        <div class="dropdown">
+                                                            <input type="hidden" name="entidadeContrato"
+                                                                id="edit-inputEntidadeContrato" required>
+                                                            <button
+                                                                class="form-select form-select-sm text-start d-flex justify-content-between align-items-center shadow-sm bg-white"
+                                                                type="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false" data-bs-display="static">
+                                                                <span id="edit-textEntidadeContrato"
+                                                                    class="text-muted">Selecionar entidade...</span>
+                                                            </button>
+                                                            <ul class="dropdown-menu w-100 shadow-sm border-0 mt-1 dropdown-menu-scrollable">
+                                                                <li class="px-2 pb-2 mb-2 border-bottom">
+                                                                    <input type="text" class="form-control form-control-sm shadow-none bg-light"
+                                                                        id="edit-searchEntidadeContrato" placeholder="Pesquisar..."
+                                                                        onkeyup="filtrarDropdown('edit-searchEntidadeContrato', 'edit-listaEntidadeContrato')"
+                                                                        onclick="event.stopPropagation()">
+                                                                </li>
+                                                                <div id="edit-listaEntidadeContrato">
+                                                                    <!-- preenchido pelo JS via API -->
+                                                                </div>
+                                                            </ul>
+                                                            <div class="invalid-feedback" style="font-size: 0.70rem;">Obrigatório.</div>
+                                                        </div>
                                                         </div>
                                                         <div class="col-6 mt-1">
                                                             <label class="form-label small text-dark mb-1">Tipo de
@@ -1181,8 +1220,10 @@ try {
                                                             <select name="tipoContrato"
                                                                 class="form-select form-select-sm shadow-sm text-dark bg-white"
                                                                 required>
-                                                                <option value="Full-Service" selected>Full-Service
-                                                                </option>
+                                                                <option value="" disabled>Selecione...</option>
+                                                                <option value="Full-Service">Full-Service</option>
+                                                                <option value="Apenas Preventiva">Apenas Preventiva</option>
+                                                                <option value="Peças e Mão de Obra">Peças e Mão de Obra</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-6 mt-1">
@@ -1192,7 +1233,10 @@ try {
                                                             <select name="periodicidadeContrato"
                                                                 class="form-select form-select-sm shadow-sm text-dark bg-white"
                                                                 required>
-                                                                <option value="Anual" selected>Anual</option>
+                                                                <option value="" disabled>Selecione...</option>
+                                                                <option value="Anual">Anual</option>
+                                                                <option value="Semestral">Semestral</option>
+                                                                <option value="Trimestral">Trimestral</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-6 mt-1">
@@ -1244,19 +1288,19 @@ try {
                                         <div class="d-flex flex-wrap gap-4">
                                             <div class="form-check">
                                                 <input class="form-check-input border-warning" type="checkbox"
-                                                    id="edit-faltaCE" value="Declaração CE">
+                                                    id="edit-faltaCE" name="faltaCE" value="Declaração CE">
                                                 <label class="form-check-label small fw-medium text-dark"
                                                     for="edit-faltaCE">Declaração CE</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input border-warning" type="checkbox"
-                                                    id="edit-faltaManual" value="Manual Utilizador">
+                                                    id="edit-faltaManual" name="faltaManual" value="Manual Utilizador">
                                                 <label class="form-check-label small fw-medium text-dark"
                                                     for="edit-faltaManual">Manual de Utilizador</label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input border-warning" type="checkbox"
-                                                    id="edit-faltaFatura" value="Fatura">
+                                                    id="edit-faltaFatura" name="faltaFatura" value="Fatura">
                                                 <label class="form-check-label small fw-medium text-dark"
                                                     for="edit-faltaFatura">Fatura / Guia</label>
                                             </div>
@@ -1308,8 +1352,9 @@ try {
                                             <div class="col-md-7">
                                                 <label class="form-label small text-dark mb-1">Ficheiro (PDF, JPG)
                                                     *</label>
-                                                <input type="file" id="edit-docFicheiro"
-                                                    class="form-control form-control-sm shadow-sm bg-white">
+                                                <input type="file" id="edit-docFicheiro" name="docFicheiros[]"
+                                                    class="form-control form-control-sm shadow-sm bg-white"
+                                                    accept=".pdf,.jpg,.jpeg,.png">
                                             </div>
                                             <div class="col-md-2 d-flex align-items-end">
                                                 <button type="button" id="edit-btnAnexarDoc"
@@ -1485,17 +1530,14 @@ try {
             </div>
 
             <!-- Body -->
+            <!-- Body -->
             <div class="modal-body px-4 pt-3 pb-4">
 
                 <p class="text-muted mb-0" style="font-size: 1.05rem; line-height: 1.6;">
-
-                    Esta ação irá remover permanentemente
-                    <span class="fw-semibold text-dark">
-                        "Monitor Multiparamétrico de Sinais Vitais"
-                    </span>
-                    (<span class="custom-monospace">EQ-2024-001</span>)
-                    do inventário, incluindo todos os documentos e
-                    garantias associados.
+                    Esta ação irá marcar como <strong>Abatido</strong> o equipamento
+                    <span class="fw-semibold text-dark" id="remover-designacao">"—"</span>
+                    (<span class="custom-monospace" id="remover-codigo">—</span>).
+                    O equipamento deixará de aparecer na listagem activa mas o registo será preservado.
                 </p>
             </div>
             <!-- Footer -->
@@ -1503,8 +1545,8 @@ try {
                 <button type="button" class="btn btn-light border px-4" data-bs-dismiss="modal">
                     Cancelar
                 </button>
-                <button type="button" class="btn btn-danger px-4">
-                    Remover
+                <button type="button" class="btn btn-danger px-4" id="btnConfirmarRemover">
+                    <i class="fa-solid fa-ban me-1"></i> Confirmar Abate
                 </button>
             </div>
         </div>
@@ -1539,7 +1581,7 @@ try {
         if (input) input.value = valor;
     }
 
-    function selecionarLocalizacaoEdit(nivelAtual, valor, proximoNivel) {
+    function selecionarLocalizacaoEdit(nivelAtual, valor, proximoNivel, idPai) {
         selecionarDropdownEdit(nivelAtual, valor);
         if (nivelAtual === 'Edificio') {
             desativarNivelLocalizacaoEdit('Servico', 'Aguardando piso...');
@@ -1551,11 +1593,9 @@ try {
             document.getElementById('edit-btn' + proximoNivel).classList.remove('disabled');
             desativarNivelLocalizacaoEdit(proximoNivel, 'Selecionar...', false);
             const lista = document.getElementById('edit-lista' + proximoNivel);
-            const items = lista.getElementsByTagName('li');
-            for (let i = 0; i < items.length; i++) {
-                if (items[i].getAttribute('data-parent') === valor) items[i].style.display = "";
-                else items[i].style.display = "none";
-            }
+            lista.querySelectorAll('li').forEach(li => {
+                li.style.display = (li.getAttribute('data-parent-id') == idPai) ? '' : 'none';
+            });
         }
     }
 
@@ -1576,6 +1616,60 @@ try {
         else container.classList.add('d-none');
     }
 
+    function mudarSeparadorEdit(target) {
+        new bootstrap.Tab(document.querySelector(target)).show();
+        const tabCerta = target.replace('-pane', '-tab').replace('#', '');
+        document.querySelectorAll('#editarTabs .nav-link').forEach(nav => {
+            const badge = nav.querySelector('.badge');
+            if (nav.id === tabCerta) {
+                nav.classList.replace('text-muted', 'text-dark');
+                nav.classList.add('active');
+                badge.classList.replace('bg-secondary', 'bg-brand');
+            } else {
+                nav.classList.replace('text-dark', 'text-muted');
+                nav.classList.remove('active');
+                badge.classList.replace('bg-brand', 'bg-secondary');
+            }
+        });
+    }
+
+    function atualizarCodigoEdicaoAcessorio() {
+            const tbody = document.getElementById('edit-tabelaAcessoriosBody');
+            let numeros = [];
+
+            // 1. Guarda todos os números
+            for (let tr of tbody.children) {
+                const tdCode = tr.querySelector('td:first-child');
+                if (tdCode && tdCode.innerText.includes('.')) {
+                    const partes = tdCode.innerText.split('.');
+                    if (partes.length === 2) {
+                        numeros.push(parseInt(partes[1], 10));
+                    }
+                }
+            }
+
+            // 2. Ordena
+            numeros.sort((a, b) => a - b);
+
+            // 3. Procura a primeira lacuna livre
+            let proximoNum = 1;
+            for (let i = 0; i < numeros.length; i++) {
+                if (numeros[i] === proximoNum) {
+                    proximoNum++;
+                } else if (numeros[i] > proximoNum) {
+                    break;
+                }
+            }
+
+            // 4. Aplica
+            const proximoNumStr = proximoNum.toString().padStart(2, '0');
+
+            // Vai buscar o código do equipamento que está a ser editado (Passo 1 do modal)
+            const codigoPrincipal = document.querySelector('input[name="internalCode"]').value || 'EQ-0001';
+
+            document.getElementById('edit-acessorioCodigo').value = `${codigoPrincipal}.${proximoNumStr}`;
+        }
+
     function verificarValidadeDocEdit(valor) {
         const campo = document.getElementById('edit-dataValidadeDoc');
         if (valor === 'Certificado de calibração') {
@@ -1590,7 +1684,31 @@ try {
 
     document.addEventListener('DOMContentLoaded', function() {
 
-        // Reativar a remoção manual de linhas pré-existentes na tabela (ex: documentos e acessórios já guardados)
+        // ---- Botões "Remover" na tabela ----
+        document.querySelectorAll('.btn-remover-eq').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                // Encontrar a linha da tabela para obter designação e código
+                const tr = this.closest('tr');
+                const designacao = tr.querySelector('td:nth-child(2) .fw-bold')?.textContent || '—';
+                const codigo     = tr.querySelector('td:nth-child(1)')?.textContent?.trim() || '—';
+
+                // Preencher o modal
+                const el = document.getElementById('remover-designacao');
+                const ec = document.getElementById('remover-codigo');
+                if (el) el.textContent = '"' + designacao + '"';
+                if (ec) ec.textContent = codigo;
+
+                // Guardar ID no botão de confirmar
+                const btnConf = document.getElementById('btnConfirmarRemover');
+                if (btnConf) btnConf.setAttribute('data-id', id);
+
+                // Abrir modal
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('modalRemover')).show();
+            });
+        });
+
+        // Reativar a remoção manual de linhas pré-existentes na tabela
         document.querySelectorAll('#modalEditar .btn-remover-doc').forEach(btn => {
             btn.addEventListener('click', function() {
                 this.closest('tr').remove();
@@ -1652,47 +1770,8 @@ try {
         // LÓGICA ANEXAR ACESSÓRIO (Edição) - COM AUTO-INCREMENTO
         // =========================================================================
 
-        function atualizarCodigoEdicaoAcessorio() {
-            const tbody = document.getElementById('edit-tabelaAcessoriosBody');
-            let numeros = [];
-
-            // 1. Guarda todos os números
-            for (let tr of tbody.children) {
-                const tdCode = tr.querySelector('td:first-child');
-                if (tdCode && tdCode.innerText.includes('.')) {
-                    const partes = tdCode.innerText.split('.');
-                    if (partes.length === 2) {
-                        numeros.push(parseInt(partes[1], 10));
-                    }
-                }
-            }
-
-            // 2. Ordena
-            numeros.sort((a, b) => a - b);
-
-            // 3. Procura a primeira lacuna livre
-            let proximoNum = 1;
-            for (let i = 0; i < numeros.length; i++) {
-                if (numeros[i] === proximoNum) {
-                    proximoNum++;
-                } else if (numeros[i] > proximoNum) {
-                    break;
-                }
-            }
-
-            // 4. Aplica
-            const proximoNumStr = proximoNum.toString().padStart(2, '0');
-
-            // Vai buscar o código do equipamento que está a ser editado (Passo 1 do modal)
-            const codigoPrincipal = document.querySelector('input[name="internalCode"]').value || 'EQ-0001';
-
-            document.getElementById('edit-acessorioCodigo').value = `${codigoPrincipal}.${proximoNumStr}`;
-        }
-
         const btnAdcAcc = document.getElementById('edit-btnAdicionarAcessorio');
         if (btnAdcAcc) {
-            // Calcula logo o próximo número ao abrir (ex: EQ-0001.03)
-            atualizarCodigoEdicaoAcessorio();
 
             // Permitir que os botões de lixo que já vêm no HTML também recalculem o código
             document.querySelectorAll('#edit-tabelaAcessoriosBody .btn-remover-acessorio').forEach(btn => {
@@ -1841,36 +1920,40 @@ try {
             });
         });
 
-        function mudarSeparadorEdit(target) {
-            new bootstrap.Tab(document.querySelector(target)).show();
-            const tabCerta = target.replace('-pane', '-tab').replace('#', '');
-            document.querySelectorAll('#editarTabs .nav-link').forEach(nav => {
-                const badge = nav.querySelector('.badge');
-                if (nav.id === tabCerta) {
-                    nav.classList.replace('text-muted', 'text-dark');
-                    nav.classList.add('active');
-                    badge.classList.replace('bg-secondary', 'bg-brand');
-                } else {
-                    nav.classList.replace('text-dark', 'text-muted');
-                    nav.classList.remove('active');
-                    badge.classList.replace('bg-brand', 'bg-secondary');
-                }
-            });
-        }
-
         // SUBMETER EDIÇÃO (Passo 6)
         const formEdicao = document.getElementById('formEditar');
         if (formEdicao) {
             formEdicao.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const btn = document.getElementById('btnGuardarEdicao');
+                const textoOriginal = btn.innerHTML;
                 btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> A guardar...';
                 btn.disabled = true;
 
-                setTimeout(() => {
-                    alert("✅ Alterações guardadas com sucesso!");
-                    window.location.reload();
-                }, 1000);
+                const formData = new FormData(formEdicao);
+
+                fetch('api/atualizar_equipamento.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.sucesso) {
+                        const modalEl = document.getElementById('modalEditar');
+                        bootstrap.Modal.getInstance(modalEl)?.hide();
+                        window.location.reload();
+                    } else {
+                        alert('Erro ao guardar: ' + (data.erro || 'Erro desconhecido.'));
+                        btn.innerHTML = textoOriginal;
+                        btn.disabled = false;
+                    }
+                })
+                .catch(err => {
+                    console.error('Erro no fetch:', err);
+                    alert('Erro de comunicação com o servidor.');
+                    btn.innerHTML = textoOriginal;
+                    btn.disabled = false;
+                });
             });
         }
     });

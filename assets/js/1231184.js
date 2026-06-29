@@ -219,7 +219,13 @@ $(document).ready(function() {
                 var servAtivos = Array.from(document.querySelectorAll('input[data-group="servico"]:checked')).map(cb => cb.value);
                 var fabAtivos  = Array.from(document.querySelectorAll('input[data-group="fabricante"]:checked')).map(cb => cb.value);
 
-                var matchEstado = estAtivos.length  === 0 || estAtivos.includes(estado);
+                // Se nenhum filtro de estado activo, esconder abatidos por defeito
+                var matchEstado;
+                if (estAtivos.length === 0) {
+                    matchEstado = estado !== 'Abatido';
+                } else {
+                    matchEstado = estAtivos.includes(estado);
+                }
                 var matchCrit   = critAtivas.length === 0 || critAtivas.includes(criticidade);
                 var matchCat    = catAtivas.length  === 0 || catAtivas.includes(categoria);
                 var matchServ  = servAtivos.length === 0 || servAtivos.includes(tr.getAttribute('data-servico') || '');
@@ -264,6 +270,11 @@ $(document).ready(function() {
 
             return true;
         });
+
+        // Forçar aplicação do filtro (ex: esconder abatidos) logo no carregamento
+        if (window.tabelaEquipamentos && document.getElementById('inputPesquisa')) {
+            window.tabelaEquipamentos.draw();
+        }
     }
 });
 
@@ -271,6 +282,12 @@ $(document).ready(function() {
 // 4. LÓGICA AJAX PARA MODAIS (Ver / Editar)
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
+
+    // --- PRÉ-CARREGAR listas de localização e fornecedores (uma única vez) ---
+    let dadosFormulario = null;
+    fetch('api/get_dados_formulario.php')
+        .then(r => r.json())
+        .then(fd => { if (fd.sucesso) dadosFormulario = fd; });
  
     // ---- Função: preencher o modal "Ver Detalhes" com dados reais ----
     function preencherModalDetalhes(data) {
@@ -315,8 +332,32 @@ document.addEventListener('DOMContentLoaded', function() {
  
         document.getElementById('det-data-registo').textContent = eq.data_registo
             ? new Date(eq.data_registo).toLocaleDateString('pt-PT') : '—';
+
+        // Resetar para a aba Geral sempre que o modal abre
+        const tabGeral = document.getElementById('geral-tab');
+        if (tabGeral) new bootstrap.Tab(tabGeral).show();
+
+        // Esconder/mostrar botões consoante estado
+        const isAbatido = eq.estado === 'Abatido';
+        const btnEditarDet   = document.querySelector('#modalDetalhes .btn-action-custom[data-bs-target="#modalEditar"]');
+        const btnRemoverDet  = document.querySelector('#modalDetalhes .btn-action-custom.btn-action-danger');
+        const btnEtiquetaDet = document.querySelector('#modalDetalhes .btn-action-custom[data-bs-toggle="modal"][data-bs-target="#modalEditar"]')
+            || document.querySelector('#modalDetalhes button.btn-action-custom:not(.btn-action-danger):not([data-bs-dismiss])');
+        if (btnEditarDet)   btnEditarDet.style.display   = isAbatido ? 'none' : '';
+        if (btnRemoverDet)  btnRemoverDet.style.display  = isAbatido ? 'none' : '';
+
+        // Esconder todos os btn-action-custom excepto o fechar quando abatido
+        document.querySelectorAll('#modalDetalhes .modal-header .btn-action-custom').forEach(btn => {
+            if (!btn.classList.contains('btn-close')) {
+                btn.style.display = isAbatido ? 'none' : '';
+            }
+        });
  
         // ---- SEPARADOR LOCALIZAÇÃO ----
+        const divLocalizacaoAtual = document.getElementById('det-localizacao-atual');
+        if (divLocalizacaoAtual) {
+            divLocalizacaoAtual.style.display = isAbatido ? 'none' : '';
+        }
         document.getElementById('det-edificio').textContent = eq.nome_edificio || '—';
         document.getElementById('det-piso').textContent     = eq.nome_piso     || '—';
         document.getElementById('det-servico').textContent  = eq.nome_servico  || '—';
@@ -444,11 +485,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
  
     // ---- Função: preencher o modal "Editar" com dados reais ----
-    function preencherModalEditar(eq) {
+    function preencherModalEditar(eq, data) {
         const formEditar = document.getElementById('formEditar');
         if (!formEditar) return;
- 
-        // Adicionar campo oculto com o ID do equipamento para o UPDATE futuro
+
+        // --- CAMPO OCULTO COM ID ---
         let inputId = formEditar.querySelector('input[name="id_equipamento"]');
         if (!inputId) {
             inputId = document.createElement('input');
@@ -457,31 +498,251 @@ document.addEventListener('DOMContentLoaded', function() {
             formEditar.appendChild(inputId);
         }
         inputId.value = eq.id_equipamento;
- 
-        // Preencher os inputs de texto diretos
-        formEditar.querySelector('input[name="internalCode"]').value  = eq.codigo_interno;
-        formEditar.querySelector('input[name="name"]').value          = eq.designacao;
-        formEditar.querySelector('input[name="brand"]').value         = eq.marca;
-        formEditar.querySelector('input[name="model"]').value         = eq.modelo;
-        formEditar.querySelector('input[name="serialNumber"]').value  = eq.numero_serie;
- 
-        if (eq.ano_fabrico)     formEditar.querySelector('input[name="manufacturingYear"]').value = eq.ano_fabrico;
-        if (eq.data_aquisicao)  formEditar.querySelector('input[name="acquisitionDate"]').value   = eq.data_aquisicao;
-        if (eq.custo_aquisicao) formEditar.querySelector('input[name="cost"]').value              = eq.custo_aquisicao;
- 
-        // Dropdowns nativos (selects)
-        formEditar.querySelector('select[name="entryType"]').value = eq.tipo_entrada;
-        formEditar.querySelector('select[name="status"]').value    = eq.estado;
- 
-        // Dropdowns customizados
-        if (typeof selecionarDropdownEdit === 'function') {
-            selecionarDropdownEdit('Categoria',   eq.categoria);
-            selecionarDropdownEdit('Criticidade', eq.criticidade);
+
+        // --- GUARDAR DADOS PARA O MODAL REMOVER ---
+        const removerDesignacao = document.getElementById('remover-designacao');
+        const removerCodigo     = document.getElementById('remover-codigo');
+        if (removerDesignacao) removerDesignacao.textContent = '"' + (eq.designacao || '—') + '"';
+        if (removerCodigo)     removerCodigo.textContent     = eq.codigo_interno || '—';
+
+        // Guardar o ID no botão de confirmar abate
+        const btnConfirmar = document.getElementById('btnConfirmarRemover');
+        if (btnConfirmar) btnConfirmar.setAttribute('data-id', eq.id_equipamento);
+
+        // --- PASSO 1: IDENTIFICAÇÃO ---
+        formEditar.querySelector('input[name="internalCode"]').value  = eq.codigo_interno  || '';
+        formEditar.querySelector('input[name="name"]').value          = eq.designacao       || '';
+        formEditar.querySelector('input[name="brand"]').value         = eq.marca            || '';
+        formEditar.querySelector('input[name="model"]').value         = eq.modelo           || '';
+        formEditar.querySelector('input[name="serialNumber"]').value  = eq.numero_serie     || '';
+        formEditar.querySelector('input[name="manufacturingYear"]').value = eq.ano_fabrico  || '';
+
+        selecionarDropdownEdit('Categoria',    eq.categoria    || '');
+        selecionarDropdownEdit('Criticidade',  eq.criticidade  || '');
+        selecionarDropdownEdit('Manufacturer', eq.nome_fabricante || '');
+
+        // --- PASSO 2: RECEÇÃO E LOCALIZAÇÃO ---
+        formEditar.querySelector('input[name="acquisitionDate"]').value = eq.data_aquisicao  || '';
+        formEditar.querySelector('input[name="cost"]').value            = (eq.custo_aquisicao !== null && eq.custo_aquisicao !== undefined) ? eq.custo_aquisicao : '';
+        formEditar.querySelector('select[name="entryType"]').value      = eq.tipo_entrada    || '';
+        formEditar.querySelector('select[name="status"]').value         = eq.estado          || '';
+
+        // Localização hierárquica — preenche os 4 níveis directamente sem activar a lógica de cascata
+        const edificio = eq.nome_edificio || '';
+        const piso     = eq.nome_piso     || '';
+        const servico  = eq.nome_servico  || '';
+        const sala     = eq.nome_sala     || '';
+
+        const setLocalizacao = (nivel, valor) => {
+            const span  = document.getElementById('edit-text'  + nivel);
+            const input = document.getElementById('edit-input' + nivel);
+            if (span)  { span.textContent = valor || 'Selecionar...'; span.className = valor ? 'text-dark' : 'text-muted'; }
+            if (input) input.value = valor || '';
+        };
+        setLocalizacao('Edificio', edificio);
+        setLocalizacao('Piso',     piso);
+        setLocalizacao('Servico',  servico);
+        setLocalizacao('Sala',     sala);
+
+        // --- PASSO 3: ENTIDADES E CONTRATOS ---
+        // Fornecedores por papel
+        const fornComercial  = (data.fornecedores || []).find(f => f.papel === 'Comercial');
+        const fornAssistencia = (data.fornecedores || []).find(f => f.papel === 'Assistência');
+        const fornConsumiveis = (data.fornecedores || []).find(f => f.papel === 'Consumíveis');
+
+        selecionarDropdownEdit('Fornecedor',  fornComercial  ? fornComercial.nome_empresa  : '');
+        selecionarDropdownEdit('Assistencia', fornAssistencia ? fornAssistencia.nome_empresa : '');
+        selecionarDropdownEdit('Consumiveis', fornConsumiveis ? fornConsumiveis.nome_empresa : '');
+
+        // Garantia
+        const garantia = (data.garantias || []).find(g => g.tipo_cobertura === 'Garantia');
+        const switchGarantia = document.getElementById('edit-temGarantia');
+        if (switchGarantia) {
+            switchGarantia.checked = !!garantia;
+            toggleCamposEdit('edit-temGarantia', 'edit-camposGarantia');
         }
- 
-        // Observações
+        formEditar.querySelector('input[name="garantiaInicio"]').value = garantia ? garantia.data_inicio : '';
+        formEditar.querySelector('input[name="garantiaFim"]').value    = garantia ? garantia.data_fim    : '';
+
+        // Contrato de manutenção
+        const contrato = (data.garantias || []).find(g => g.tipo_cobertura === 'Contrato Manutenção');
+        const switchContrato = document.getElementById('edit-temContrato');
+        if (switchContrato) {
+            switchContrato.checked = !!contrato;
+            toggleCamposEdit('edit-temContrato', 'edit-camposContrato');
+        }
+        formEditar.querySelector('input[name="referenciaContrato"]').value = contrato ? (contrato.referencia || '') : '';
+        selecionarDropdownEdit('EntidadeContrato', contrato ? (contrato.entidade_responsavel || '') : '');
+        formEditar.querySelector('select[name="tipoContrato"]').value         = contrato ? (contrato.tipo_contrato  || '') : '';
+        formEditar.querySelector('select[name="periodicidadeContrato"]').value = contrato ? (contrato.periodicidade  || '') : '';
+        formEditar.querySelector('input[name="contratoInicio"]').value         = contrato ? (contrato.data_inicio    || '') : '';
+        formEditar.querySelector('input[name="contratoFim"]').value            = contrato ? (contrato.data_fim       || '') : '';
+
+        // --- PASSO 4: DOCUMENTOS ---
+        // Limpa os documentos hardcoded e repõe com os reais da BD
+        const tabelaDocsBody = document.getElementById('edit-tabelaDocsBody');
+        tabelaDocsBody.innerHTML = '';
+        (data.documentos || []).forEach(d => {
+            const tr = document.createElement('tr');
+            const validade = d.data_validade || '';
+            const ficheiro = d.caminho_ficheiro ? d.caminho_ficheiro.split('/').pop() : '—';
+            tr.innerHTML = `
+                <input type="hidden" name="ids_docs_existentes[]" value="${d.id_documento}">
+                <td class="px-3 py-2 small fw-medium text-dark">
+                    <span class="badge bg-secondary mb-1 d-inline-block edit-tipo-doc-anexado">${d.tipo_documento}</span><br>
+                    ${d.titulo || '—'}
+                </td>
+                <td class="py-2 small ${validade ? 'text-warning fw-bold' : 'text-muted'}">${validade || 'N/A'}</td>
+                <td class="py-2 small text-muted"><i class="fa-solid fa-file-pdf text-danger me-1"></i>${ficheiro}</td>
+                <td class="text-end px-3 py-2">
+                    <button type="button" class="btn btn-sm text-danger btn-remover-doc" data-id-doc="${d.id_documento}">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </td>`;
+            tabelaDocsBody.appendChild(tr);
+            tr.querySelector('.btn-remover-doc').addEventListener('click', function() {
+                // Adiciona o ID ao campo de remoção e remove a linha
+                const idDoc = this.getAttribute('data-id-doc');
+                if (idDoc) {
+                    const hiddenRemover = document.createElement('input');
+                    hiddenRemover.type  = 'hidden';
+                    hiddenRemover.name  = 'ids_docs_remover[]';
+                    hiddenRemover.value = idDoc;
+                    formEditar.appendChild(hiddenRemover);
+                }
+                tr.remove();
+            });
+        });
+
+        // Checkboxes de documentação em falta
+        const faltaCE     = document.getElementById('edit-faltaCE');
+        const faltaManual = document.getElementById('edit-faltaManual');
+        const faltaFatura = document.getElementById('edit-faltaFatura');
+        if (faltaCE)     faltaCE.checked     = eq.falta_declaracao_ce      == 1;
+        if (faltaManual) faltaManual.checked = eq.falta_manual_utilizador  == 1;
+        if (faltaFatura) faltaFatura.checked = eq.falta_fatura_guia        == 1;
+
+        // --- PASSO 5: ACESSÓRIOS ---
+        const tabelaAcesBody = document.getElementById('edit-tabelaAcessoriosBody');
+        tabelaAcesBody.innerHTML = '';
+        (data.acessorios || []).forEach(a => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="px-3 py-2 small fw-bold text-brand">${a.codigo_componente || '—'}</td>
+                <td class="py-2 small fw-medium text-dark">${a.designacao}</td>
+                <td class="py-2 small text-muted">${a.numero_serie || 'Não definido'}</td>
+                <td class="text-end px-3 py-2">
+                    <button type="button" class="btn btn-sm text-danger btn-remover-acessorio">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </td>`;
+            tabelaAcesBody.appendChild(tr);
+            tr.querySelector('.btn-remover-acessorio').addEventListener('click', () => {
+                tr.remove();
+                if (typeof atualizarCodigoEdicaoAcessorio === 'function') atualizarCodigoEdicaoAcessorio();
+            });
+        });
+
+        // Atualiza o código do próximo acessório com o código real do equipamento
+        if (typeof atualizarCodigoEdicaoAcessorio === 'function') atualizarCodigoEdicaoAcessorio();
+
+        // --- PASSO 6: OBSERVAÇÕES ---
         const obs = formEditar.querySelector('textarea[name="observations"]');
         if (obs) obs.value = eq.observacoes || '';
+
+        // Volta ao Passo 1 sempre que se abre o modal e reseta as badges
+        if (typeof mudarSeparadorEdit === 'function') mudarSeparadorEdit('#edit-step1-pane');
+
+        // --- PREENCHER LISTAS DINÂMICAS (localização + fornecedores) ---
+        const preencherListas = (fd) => {
+            if (!fd) return;
+
+                // -- EDIFÍCIOS --
+                const listaEd = document.getElementById('edit-listaEdificio');
+                listaEd.innerHTML = fd.edificios.map(e =>
+                    `<li data-id="${e.id_edificio}">
+                        <a class="dropdown-item py-1 small" href="#"
+                           onclick="selecionarLocalizacaoEdit('Edificio', '${e.nome.replace(/'/g,"\\'")}', 'Piso', ${e.id_edificio})">
+                           ${e.nome}
+                        </a>
+                    </li>`
+                ).join('');
+
+                // -- PISOS (todos, filtrados por data-parent no momento da selecção do edifício) --
+                const listaPiso = document.getElementById('edit-listaPiso');
+                listaPiso.innerHTML = fd.pisos.map(p =>
+                    `<li data-parent-id="${p.id_edificio}" data-id="${p.id_piso}" style="display:none;">
+                        <a class="dropdown-item py-1 small" href="#"
+                           onclick="selecionarLocalizacaoEdit('Piso', '${p.designacao.replace(/'/g,"\\'")}', 'Servico', ${p.id_piso})">
+                           ${p.designacao}
+                        </a>
+                    </li>`
+                ).join('');
+
+                // -- SERVIÇOS --
+                const listaServ = document.getElementById('edit-listaServico');
+                listaServ.innerHTML = fd.servicos.map(s =>
+                    `<li data-parent-id="${s.id_piso}" data-id="${s.id_servico}" style="display:none;">
+                        <a class="dropdown-item py-1 small" href="#"
+                           onclick="selecionarLocalizacaoEdit('Servico', '${s.nome.replace(/'/g,"\\'")}', 'Sala', ${s.id_servico})">
+                           ${s.nome}
+                        </a>
+                    </li>`
+                ).join('');
+
+                // -- SALAS --
+                const listaSala = document.getElementById('edit-listaSala');
+                listaSala.innerHTML = fd.salas.map(s =>
+                    `<li data-parent-id="${s.id_servico}" data-id="${s.id_sala}" style="display:none;">
+                        <a class="dropdown-item py-1 small" href="#"
+                           onclick="selecionarDropdownEdit('Sala', '${s.identificacao.replace(/'/g,"\\'")}')">
+                           ${s.identificacao}
+                        </a>
+                    </li>`
+                ).join('');
+
+                // Mostrar itens do nível correcto com base nos valores já preenchidos
+                const idEdificio = fd.edificios.find(e => e.nome === eq.nome_edificio)?.id_edificio;
+                const idPiso     = fd.pisos.find(p => p.designacao === eq.nome_piso && p.id_edificio === idEdificio)?.id_piso;
+                const idServico  = fd.servicos.find(s => s.nome === eq.nome_servico && s.id_piso === idPiso)?.id_servico;
+
+                if (idEdificio) {
+                    listaPiso.querySelectorAll(`li[data-parent-id="${idEdificio}"]`).forEach(li => li.style.display = '');
+                }
+                if (idPiso) {
+                    listaServ.querySelectorAll(`li[data-parent-id="${idPiso}"]`).forEach(li => li.style.display = '');
+                }
+                if (idServico) {
+                    listaSala.querySelectorAll(`li[data-parent-id="${idServico}"]`).forEach(li => li.style.display = '');
+                }
+
+                // -- FORNECEDORES (os três dropdowns) --
+                // Apenas estes têm a opção "Nenhum" (são opcionais)
+                const nomesOpcionais = ['Consumiveis', 'EntidadeContrato', 'Manufacturer'];
+                const nomesDropForn = ['Fornecedor', 'Assistencia', 'Consumiveis', 'EntidadeContrato', 'Manufacturer'];
+                nomesDropForn.forEach(nome => {
+                    const lista = document.getElementById('edit-lista' + nome);
+                    if (!lista) return;
+                    const opcaoNenhum = nomesOpcionais.includes(nome)
+                        ? '<li><a class="dropdown-item py-1 small text-muted" href="#" onclick="selecionarDropdownEdit(\'' + nome + '\', \'\')">— Nenhum —</a></li>'
+                        : '';
+                    lista.innerHTML = opcaoNenhum
+                        + fd.fornecedores.map(f =>
+                            `<li><a class="dropdown-item py-1 small" href="#"
+                                onclick="selecionarDropdownEdit('${nome}', '${f.nome_empresa.replace(/'/g,"\\'")}')">
+                                ${f.nome_empresa}
+                            </a></li>`
+                        ).join('');
+                });
+            };
+
+        if (dadosFormulario) {
+            preencherListas(dadosFormulario);
+        } else {
+            fetch('api/get_dados_formulario.php')
+                .then(r => r.json())
+                .then(fd => { if (fd.sucesso) { dadosFormulario = fd; preencherListas(fd); } });
+        }
     }
  
     // ---- Botões "Ver" na tabela ----
@@ -504,8 +765,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
  
                     preencherModalDetalhes(data);
-                    preencherModalEditar(data.dados);
-                    new bootstrap.Modal(document.getElementById('modalDetalhes')).show();
+                    preencherModalEditar(data.dados, data);
+                    const modalDetEl = document.getElementById('modalDetalhes');
+                    const modalDetInst = bootstrap.Modal.getOrCreateInstance(modalDetEl);
+                    modalDetInst.show();
                 })
                 .catch(error => {
                     btn.innerHTML = textoOriginal;
@@ -532,9 +795,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(data => {
                     if (!data.sucesso) return;
                     preencherModalDetalhes(data);
-                    preencherModalEditar(data.dados);
-                    new bootstrap.Modal(document.getElementById('modalDetalhes')).show();
+                    preencherModalEditar(data.dados, data);
+                    const modalDetEl2 = document.getElementById('modalDetalhes');
+                    bootstrap.Modal.getOrCreateInstance(modalDetEl2).show();
                 });
-        }
+       }
     }
+
+    // ---- Botão confirmar abate ----
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('#btnConfirmarRemover')) return;
+
+        const btn = document.getElementById('btnConfirmarRemover');
+        const id  = btn.getAttribute('data-id');
+        if (!id) return;
+
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> A processar...';
+        btn.disabled  = true;
+
+        const formData = new FormData();
+        formData.append('id_equipamento', id);
+
+        fetch('api/remover_equipamento.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.sucesso) {
+                document.querySelectorAll('.modal.show').forEach(m => {
+                    bootstrap.Modal.getInstance(m)?.hide();
+                });
+                window.location.reload();
+            } else {
+                alert('Erro ao abater equipamento: ' + (data.erro || 'Erro desconhecido.'));
+                btn.innerHTML = textoOriginal;
+                btn.disabled  = false;
+            }
+        })
+        .catch(() => {
+            alert('Erro de comunicação com o servidor.');
+            btn.innerHTML = textoOriginal;
+            btn.disabled  = false;
+        });
+    });
 });
