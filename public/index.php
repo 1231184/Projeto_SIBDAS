@@ -193,79 +193,26 @@ function c(string $chave, array $rows): string {
                     </p>
                 </div>
 
+                <?php
+                $icones_servicos = [
+                    'fa-clipboard-list', 'fa-folder-open', 'fa-file-contract',
+                    'fa-map-pin', 'fa-chart-pie', 'fa-truck-medical'
+                ];
+                ?>
                 <div class="row g-4">
+                    <?php for ($i = 1; $i <= 6; $i++): ?>
                     <div class="col-md-6 col-lg-4">
                         <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
                             <div class="card-body p-4">
                                 <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-clipboard-list fs-4"></i>
+                                    <i class="fa-solid <?= $icones_servicos[$i-1] ?> fs-4"></i>
                                 </div>
-                                <h5 class="fw-bold text-dark mb-2">Inventário Completo</h5>
-                                <p class="text-muted small mb-0 lh-lg">Registo detalhado de todos os equipamentos com
-                                    dados técnicos, localização, estado e criticidade clínica.</p>
+                                <h5 class="fw-bold text-dark mb-2"><?= c('servico'.$i.'_titulo', $rows) ?></h5>
+                                <p class="text-muted small mb-0 lh-lg"><?= c('servico'.$i.'_descricao', $rows) ?></p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
-                            <div class="card-body p-4">
-                                <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-folder-open fs-4"></i>
-                                </div>
-                                <h5 class="fw-bold text-dark mb-2">Gestão Documental</h5>
-                                <p class="text-muted small mb-0 lh-lg">Centralização de manuais, certificados de
-                                    calibração, contratos e relatórios de manutenção.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
-                            <div class="card-body p-4">
-                                <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-file-contract fs-4"></i>
-                                </div>
-                                <h5 class="fw-bold text-dark mb-2">Garantias e Contratos</h5>
-                                <p class="text-muted small mb-0 lh-lg">Acompanhamento de garantias e contratos de
-                                    manutenção com alertas automáticos de expiração.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
-                            <div class="card-body p-4">
-                                <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-map-pin fs-4"></i>
-                                </div>
-                                <h5 class="fw-bold text-dark mb-2">Localização por Serviço</h5>
-                                <p class="text-muted small mb-0 lh-lg">Consulta imediata da localização atual de cada
-                                    equipamento, organizada por edifício, piso, serviço e sala.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
-                            <div class="card-body p-4">
-                                <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-chart-pie fs-4"></i>
-                                </div>
-                                <h5 class="fw-bold text-dark mb-2">Relatórios e Dashboard</h5>
-                                <p class="text-muted small mb-0 lh-lg">Painéis de controlo com indicadores chave,
-                                    gráficos e exportação de relatórios.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card border border-light shadow-sm rounded-4 h-100 card-hover-elevate">
-                            <div class="card-body p-4">
-                                <div class="bg-brand-subtle text-brand rounded-3 p-3 mb-4 d-inline-flex">
-                                    <i class="fa-solid fa-truck-medical fs-4"></i>
-                                </div>
-                                <h5 class="fw-bold text-dark mb-2">Gestão de Fornecedores</h5>
-                                <p class="text-muted small mb-0 lh-lg">Registo de fabricantes, distribuidores e
-                                    prestadores de serviços de assistência técnica.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endfor; ?>
                 </div>
             </div>
         </section>
@@ -281,54 +228,14 @@ function c(string $chave, array $rows): string {
                 </div>
 
                 <div class="row g-3">
+                    <?php for ($i = 1; $i <= 8; $i++): ?>
                     <div class="col-sm-6 col-lg-3">
                         <div class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
                             <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                            <span class="text-secondary small fw-medium">Pesquisa avançada por múltiplos critérios</span>
+                            <span class="text-secondary small fw-medium"><?= c('func'.$i, $rows) ?></span>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                            <span class="text-secondary small fw-medium">Alertas automáticos de garantias e documentos</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                            <span class="text-secondary small fw-medium">Controlo de acesso com autenticação segura</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                            <span class="text-secondary small fw-medium">Rastreamento por número de série</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                            <span class="text-secondary small fw-medium">Classificação por criticidade clínica</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                            <span class="text-secondary small fw-medium">Registo do estado atual e evolução de cada equipamento</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                            <span class="text-secondary small fw-medium">Associação de fornecedores por equipamento</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="d-flex align-items-center gap-3 p-4 bg-white rounded-4 border border-light shadow-sm h-100 card-hover-elevate">
-                            <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                            <span class="text-secondary small fw-medium">Interface responsiva para mobile e desktop</span>
-                        </div>
-                    </div>
+                    <?php endfor; ?>
                 </div>
             </div>
         </section>

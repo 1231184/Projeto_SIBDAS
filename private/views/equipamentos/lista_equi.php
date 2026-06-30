@@ -482,7 +482,7 @@ try {
                                 data-bs-target="#fornecedores-pane" type="button" role="tab" aria-selected="false">
                                 Fornecedores
                                 <span class="badge bg-secondary rounded-pill ms-1"
-                                    style="font-size: 0.65rem;">3</span>
+                                    style="font-size: 0.8rem;">3</span>
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -496,7 +496,7 @@ try {
                                 data-bs-target="#documentos-pane" type="button" role="tab" aria-selected="false">
                                 Documentos
                                 <span class="badge bg-secondary rounded-pill ms-1"
-                                    style="font-size: 0.65rem;">3</span>
+                                    style="font-size: 0.8rem;">3</span>
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -504,7 +504,7 @@ try {
                                 data-bs-target="#acessorios-pane" type="button" role="tab" aria-selected="false">
                                 Acessórios
                                 <span class="badge bg-secondary rounded-pill ms-1"
-                                    style="font-size: 0.65rem;">2</span>
+                                    style="font-size: 0.8rem;">2</span>
                             </button>
                         </li>
                     </ul>
@@ -643,7 +643,7 @@ try {
                     </div>
 
                     <!-- Rodapé de Metadados -->
-                    <div class="d-flex gap-4 text-muted px-2" style="font-size: 0.75rem;">
+                    <div class="d-flex gap-4 text-muted px-2" style="font-size: 0.8rem;">
                         <span>Criado a: <span id="det-data-registo">—</span></span>
                     </div>
 
@@ -728,7 +728,7 @@ try {
                                             <label class="form-label small fw-medium mb-1">Designação *</label>
                                             <input type="text" name="name" class="form-control shadow-sm"
                                                 value="Monitor Multiparamétrico IntelliVue MP5" required>
-                                            <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                            <div class="invalid-feedback" style="font-size: 0.80rem;">Campo
                                                 obrigatório.</div>
                                         </div>
 
@@ -736,14 +736,14 @@ try {
                                             <label class="form-label small fw-medium mb-1">Marca *</label>
                                             <input type="text" name="brand" class="form-control shadow-sm"
                                                 value="Philips" required>
-                                            <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                            <div class="invalid-feedback" style="font-size: 0.80rem;">Campo
                                                 obrigatório.</div>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label small fw-medium mb-1">Modelo *</label>
                                             <input type="text" name="model" class="form-control shadow-sm"
                                                 value="MP5" required>
-                                            <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                            <div class="invalid-feedback" style="font-size: 0.80rem;">Campo
                                                 obrigatório.</div>
                                         </div>
                                         <div class="col-md-4">
@@ -751,7 +751,7 @@ try {
                                             <input type="text" name="serialNumber" class="form-control shadow-sm"
                                                 value="SN-PH-2024-001" required>
                                             <div class="invalid-feedback" id="edit-feedbackSerial"
-                                                style="font-size: 0.70rem;">Campo obrigatório.</div>
+                                                style="font-size: 0.80rem;">Campo obrigatório.</div>
                                         </div>
 
                                         <div class="col-md-8">
@@ -797,7 +797,7 @@ try {
                                                 class="form-control form-control-sm shadow-sm" value="2023"
                                                 min="1900">
                                             <div class="invalid-feedback" id="edit-feedbackAno"
-                                                style="font-size: 0.70rem;">Data inválida.</div>
+                                                style="font-size: 0.80rem;">Data inválida.</div>
                                         </div>
 
                                         <div class="col-md-6">
@@ -831,7 +831,7 @@ try {
                                                                 de vida</a></li>
                                                     </div>
                                                 </ul>
-                                                <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
+                                                <div class="invalid-feedback" style="font-size: 0.80rem;">Campo
                                                     obrigatório.</div>
                                             </div>
                                         </div>

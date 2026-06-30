@@ -511,7 +511,7 @@ section[id] {
 
 /* Labels pequeninas (ex: CATEGORIA, MARCA) */
 .detail-label {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     /* text-xs */
     font-weight: 500;
     color: #64748b;
@@ -632,7 +632,7 @@ section[id] {
 
 /* Texto extra pequeno do rodapé */
 .text-xxs {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
 }
 
 .conteudo-icon-box{
@@ -838,7 +838,7 @@ section[id] {
 }
 .filter-accordion .accordion-button {
     padding: 12px 16px;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     letter-spacing: 0.5px;
     color: #64748b;
 }
@@ -865,7 +865,7 @@ section[id] {
     gap: 5px;
     padding: 4px 10px;
     border-radius: 6px;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     font-weight: 700;
     white-space: nowrap;
 }

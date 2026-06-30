@@ -152,19 +152,19 @@ $ligacao = null;
                     <div class="d-flex justify-content-between text-center mt-3 pt-3 border-top">
                         <div>
                             <div class="text-success fw-bold small"><?= $inv ? $inv->ativos : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Ativos</div>
+                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Ativos</div>
                         </div>
                         <div>
                             <div class="text-warning text-darken fw-bold small"><?= $inv ? $inv->manutencao : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Manutenção</div>
+                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Manutenção</div>
                         </div>
                         <div>
                             <div class="text-info fw-bold small"><?= $inv ? $inv->calibracao : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Calibração</div>
+                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Calibração</div>
                         </div>
                         <div>
                             <div class="text-secondary fw-bold small"><?= $inv ? $inv->inativos : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Inativos</div>
+                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Inativos</div>
                         </div>
                     </div>
                 </div>
@@ -198,11 +198,11 @@ $ligacao = null;
                     <div class="d-flex justify-content-between text-center mt-3 pt-3 border-top">
                         <div>
                             <div class="text-danger fw-bold small"><?= $gar ? $gar->expiradas : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Expiradas</div>
+                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Expiradas</div>
                         </div>
                         <div>
                             <div class="text-warning text-darken fw-bold small"><?= $gar ? $gar->a_expirar : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">A Expirar (30d)</div>
+                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">A Expirar (30d)</div>
                         </div>
                     </div>
                 </div>
@@ -359,7 +359,7 @@ $ligacao = null;
                         maintainAspectRatio: false,
                         scales: {
                             x: { stacked: true, grid: { display: false }, ticks: { font: { size: 11, family: "'Inter', sans-serif" } } },
-                            y: { stacked: true, beginAtZero: true, grid: { borderDash: [4,4], color: '#e9ecef' }, ticks: { font: { size: 11, family: "'Inter', sans-serif" } } }
+                            y: { stacked: true, beginAtZero: true, grid: { borderDash: [4,4], color: '#e9ecef' }, ticks: { stepSize: 1, precision: 0, font: { size: 11, family: "'Inter', sans-serif" } } }
                         },
                         plugins: {
                             legend: { position: 'top', labels: { boxWidth: 12, padding: 15, font: { size: 11, family: "'Inter', sans-serif" } } }
