@@ -78,7 +78,10 @@ try {
     echo json_encode([
         'sucesso'      => true,
         'dados'        => $fornecedor,
-        'equipamentos' => $equipamentos
+        'equipamentos' => array_map(function($eq) {
+            $eq['id_equipamento_enc'] = aes_encrypt($eq['id_equipamento']);
+            return $eq;
+        }, $equipamentos)
     ]);
 
 } catch (PDOException $e) {

@@ -11,7 +11,12 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit;
 }
 
-$id_equipamento = (int)$_GET['id'];
+$id_equipamento = aes_decrypt($_GET['id'] ?? '');
+if (!$id_equipamento || !is_numeric($id_equipamento)) {
+    echo json_encode(['sucesso' => false, 'erro' => 'ID inválido ou manipulado.']);
+    exit;
+}
+$id_equipamento = (int)$id_equipamento;
 
 try {
     $ligacao = new PDO(

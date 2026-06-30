@@ -1,6 +1,123 @@
 <?php
 require_once __DIR__ . '/../../includes/funcoes.php';
 redirect_if_not_logged();
+
+try {
+    $ligacao = new PDO(
+        "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
+        MYSQL_USERNAME,
+        MYSQL_PASSWORD
+    );
+    $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $hoje = date('Y-m-d');
+
+    // --- CARD 1: INVENTÁRIO GLOBAL ---
+    $stmtInv = $ligacao->query("
+        SELECT
+            COUNT(*) AS total,
+            SUM(CASE WHEN estado = 'Ativo' THEN 1 ELSE 0 END) AS ativos,
+            SUM(CASE WHEN estado = 'Em Manutenção' THEN 1 ELSE 0 END) AS manutencao,
+            SUM(CASE WHEN estado = 'Em Calibração' THEN 1 ELSE 0 END) AS calibracao,
+            SUM(CASE WHEN estado = 'Inativo' THEN 1 ELSE 0 END) AS inativos
+        FROM equipamentos
+        WHERE estado != 'Abatido'
+    ");
+    $inv = $stmtInv->fetch(PDO::FETCH_OBJ);
+
+    // --- CARD 2: SUPORTE DE VIDA ---
+    $stmtSV = $ligacao->query("
+        SELECT COUNT(*) AS total
+        FROM equipamentos
+        WHERE criticidade = 'Suporte de Vida'
+          AND estado NOT IN ('Abatido', 'Inativo')
+    ");
+    $sv = $stmtSV->fetch(PDO::FETCH_OBJ);
+
+    // --- CARD 3: GARANTIAS E CONTRATOS ---
+    $stmtGar = $ligacao->query("
+        SELECT
+            COUNT(*) AS total,
+            SUM(CASE WHEN data_fim < '$hoje' THEN 1 ELSE 0 END) AS expiradas,
+            SUM(CASE WHEN data_fim >= '$hoje' AND data_fim <= DATE_ADD('$hoje', INTERVAL 30 DAY) THEN 1 ELSE 0 END) AS a_expirar
+        FROM garantias_contratos
+    ");
+    $gar = $stmtGar->fetch(PDO::FETCH_OBJ);
+
+    // --- CARD 4: DOCUMENTAÇÃO EM FALTA ---
+    $stmtDoc = $ligacao->query("
+        SELECT COUNT(*) AS total
+        FROM equipamentos
+        WHERE estado != 'Abatido'
+          AND (falta_declaracao_ce = 1 OR falta_manual_utilizador = 1 OR falta_fatura_guia = 1)
+    ");
+    $docFalta = $stmtDoc->fetch(PDO::FETCH_OBJ);
+
+    // --- GRÁFICO 1: EQUIPAMENTOS POR CATEGORIA ---
+    $stmtCat = $ligacao->query("
+        SELECT categoria, COUNT(*) AS total
+        FROM equipamentos
+        WHERE estado != 'Abatido'
+        GROUP BY categoria
+        ORDER BY total DESC
+    ");
+    $categorias = $stmtCat->fetchAll(PDO::FETCH_OBJ);
+
+    // --- GRÁFICO 2: EQUIPAMENTOS POR SERVIÇO ---
+    $stmtServ = $ligacao->query("
+        SELECT
+            s.nome AS servico,
+            SUM(CASE WHEN e.criticidade = 'Suporte de Vida' THEN 1 ELSE 0 END) AS suporte_vida,
+            SUM(CASE WHEN e.criticidade != 'Suporte de Vida' THEN 1 ELSE 0 END) AS outros
+        FROM equipamentos e
+        INNER JOIN servicos s ON s.id_servico = e.id_servico
+        WHERE e.estado != 'Abatido'
+        GROUP BY s.id_servico, s.nome
+        ORDER BY (suporte_vida + outros) DESC
+    ");
+    $servicos = $stmtServ->fetchAll(PDO::FETCH_OBJ);
+
+    // --- ALERTAS ---
+    $stmtAlertas = $ligacao->query("
+        SELECT e.designacao, e.codigo_interno, 'Em Manutenção' AS tipo_alerta
+        FROM equipamentos e
+        WHERE e.estado = 'Em Manutenção'
+
+        UNION
+
+        SELECT e.designacao, e.codigo_interno, 'Documentação em Falta' AS tipo_alerta
+        FROM equipamentos e
+        WHERE e.estado != 'Abatido'
+          AND (e.falta_declaracao_ce = 1 OR e.falta_manual_utilizador = 1 OR e.falta_fatura_guia = 1)
+
+        UNION
+
+        SELECT e.designacao, e.codigo_interno, 'Garantia Expirada' AS tipo_alerta
+        FROM equipamentos e
+        INNER JOIN garantias_contratos gc ON gc.id_equipamento = e.id_equipamento
+        WHERE gc.data_fim < '$hoje'
+          AND e.estado != 'Abatido'
+
+        UNION
+
+        SELECT e.designacao, e.codigo_interno, 'Garantia a Expirar' AS tipo_alerta
+        FROM equipamentos e
+        INNER JOIN garantias_contratos gc ON gc.id_equipamento = e.id_equipamento
+        WHERE gc.data_fim >= '$hoje'
+          AND gc.data_fim <= DATE_ADD('$hoje', INTERVAL 30 DAY)
+          AND e.estado != 'Abatido'
+
+        ORDER BY tipo_alerta ASC
+        LIMIT 10
+    ");
+    $alertas = $stmtAlertas->fetchAll(PDO::FETCH_OBJ);
+
+    $erroDb = '';
+} catch (PDOException $err) {
+    $erroDb = 'Erro na ligação à base de dados.';
+    $inv = $sv = $gar = $docFalta = null;
+    $categorias = $servicos = $alertas = [];
+}
+$ligacao = null;
 ?>
 
 <?php include '../../includes/header.php'; ?>
@@ -29,20 +146,24 @@ redirect_if_not_logged();
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
                             <p class="text-muted small fw-bold text-uppercase mb-1">Inventário Global</p>
-                            <h2 class="fw-bold text-dark mb-0 fs-1">1,500</h2>
+                            <h2 class="fw-bold text-dark mb-0 fs-1"><?= $inv ? number_format($inv->total) : '—' ?></h2>
                         </div>
                     </div>
                     <div class="d-flex justify-content-between text-center mt-3 pt-3 border-top">
                         <div>
-                            <div class="text-success fw-bold small">1,410</div>
+                            <div class="text-success fw-bold small"><?= $inv ? $inv->ativos : '—' ?></div>
                             <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Ativos</div>
                         </div>
                         <div>
-                            <div class="text-warning text-darken fw-bold small">65</div>
+                            <div class="text-warning text-darken fw-bold small"><?= $inv ? $inv->manutencao : '—' ?></div>
                             <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Manutenção</div>
                         </div>
                         <div>
-                            <div class="text-secondary fw-bold small">25</div>
+                            <div class="text-info fw-bold small"><?= $inv ? $inv->calibracao : '—' ?></div>
+                            <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Calibração</div>
+                        </div>
+                        <div>
+                            <div class="text-secondary fw-bold small"><?= $inv ? $inv->inativos : '—' ?></div>
                             <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Inativos</div>
                         </div>
                     </div>
@@ -54,7 +175,7 @@ redirect_if_not_logged();
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
                             <p class="text-muted small fw-bold text-uppercase mb-1">Suporte de Vida</p>
-                            <h2 class="fw-bold text-danger mb-0 fs-1">215</h2>
+                            <h2 class="fw-bold text-danger mb-0 fs-1"><?= $sv ? $sv->total : '—' ?></h2>
                         </div>
                         <div class="rounded-4 bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
                             <i class="fa-solid fa-heart-pulse fs-4"></i>
@@ -71,16 +192,16 @@ redirect_if_not_logged();
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
                             <p class="text-muted small fw-bold text-uppercase mb-1">Garantias e Contratos</p>
-                            <h2 class="fw-bold text-dark mb-0 fs-1">20</h2>
+                            <h2 class="fw-bold text-dark mb-0 fs-1"><?= $gar ? $gar->total : '—' ?></h2>
                         </div>
                     </div>
                     <div class="d-flex justify-content-between text-center mt-3 pt-3 border-top">
                         <div>
-                            <div class="text-danger fw-bold small">12</div>
+                            <div class="text-danger fw-bold small"><?= $gar ? $gar->expiradas : '—' ?></div>
                             <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Expiradas</div>
                         </div>
                         <div>
-                            <div class="text-warning text-darken fw-bold small">8</div>
+                            <div class="text-warning text-darken fw-bold small"><?= $gar ? $gar->a_expirar : '—' ?></div>
                             <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">A Expirar (30d)</div>
                         </div>
                     </div>
@@ -92,7 +213,7 @@ redirect_if_not_logged();
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
                             <p class="text-muted small fw-bold text-uppercase mb-1">Documentação em Falta</p>
-                            <h2 class="fw-bold text-info text-darken mb-0 fs-1">28</h2>
+                            <h2 class="fw-bold text-info text-darken mb-0 fs-1"><?= $docFalta ? $docFalta->total : '—' ?></h2>
                         </div>
                     </div>
                     <div class="mt-3 pt-3 border-top">
@@ -122,51 +243,34 @@ redirect_if_not_logged();
                             <h5 class="fw-bold text-dark mb-1">Alertas de Gestão</h5>
                             <p class="text-muted small mb-0">Ações e inconformidades que requerem atenção</p>
                         </div>
-                        <span class="badge bg-danger rounded-pill">4 Ações</span>
+                        <span class="badge bg-danger rounded-pill"><?= count($alertas) ?> Ações</span>
                     </div>
                     
                     <div class="d-flex flex-column gap-2 overflow-auto pe-2" style="max-height: 250px;">
-                        
-                        <div class="p-3 bg-light rounded-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1 fw-bold text-dark small">Ventilador Pulmonar Evita V500</h6>
-                                    <p class="text-muted mb-0 font-monospace" style="font-size: 0.75rem;">EQ-0042</p>
+                        <?php if (empty($alertas)): ?>
+                            <p class="text-muted small mb-0">Sem alertas activos.</p>
+                        <?php else: ?>
+                            <?php foreach ($alertas as $alerta): ?>
+                                <?php
+                                $badgeClass = match($alerta->tipo_alerta) {
+                                    'Em Manutenção'       => 'bg-warning bg-opacity-10 text-warning border border-warning-subtle text-darken',
+                                    'Documentação em Falta' => 'bg-info bg-opacity-10 text-info border border-info-subtle',
+                                    'Garantia Expirada'   => 'bg-danger bg-opacity-10 text-danger border border-danger-subtle',
+                                    'Garantia a Expirar'  => 'bg-warning bg-opacity-10 text-warning border border-warning-subtle text-darken',
+                                    default               => 'bg-secondary bg-opacity-10 text-secondary border'
+                                };
+                                ?>
+                                <div class="p-3 bg-light rounded-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1 fw-bold text-dark small"><?= htmlspecialchars($alerta->designacao) ?></h6>
+                                            <p class="text-muted mb-0 font-monospace" style="font-size: 0.75rem;"><?= htmlspecialchars($alerta->codigo_interno) ?></p>
+                                        </div>
+                                        <span class="badge <?= $badgeClass ?> px-2 py-1"><?= htmlspecialchars($alerta->tipo_alerta) ?></span>
+                                    </div>
                                 </div>
-                                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle px-2 py-1">Em Quarentena</span>
-                            </div>
-                        </div>
-
-                        <div class="p-3 bg-light rounded-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1 fw-bold text-dark small">Monitor Multiparamétrico IntelliVue</h6>
-                                    <p class="text-muted mb-0 font-monospace" style="font-size: 0.75rem;">EQ-2024-001</p>
-                                </div>
-                                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning-subtle text-darken px-2 py-1">Documentação em Falta</span>
-                            </div>
-                        </div>
-
-                        <div class="p-3 bg-light rounded-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1 fw-bold text-dark small">Bomba de Infusão Infusomat Space</h6>
-                                    <p class="text-muted mb-0 font-monospace" style="font-size: 0.75rem;">EQ-0010</p>
-                                </div>
-                                <span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle px-2 py-1">Garantia Expirada</span>
-                            </div>
-                        </div>
-
-                        <div class="p-3 bg-light rounded-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1 fw-bold text-dark small">Ecógrafo GE Healthcare</h6>
-                                    <p class="text-muted mb-0 font-monospace" style="font-size: 0.75rem;">EQ-0105</p>
-                                </div>
-                                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning-subtle text-darken px-2 py-1">Contrato a Expirar</span>
-                            </div>
-                        </div>
-
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -190,91 +294,80 @@ redirect_if_not_logged();
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Dados da BD passados via PHP para JS
+        const dadosCategorias = <?= json_encode(array_map(fn($c) => ['label' => $c->categoria, 'valor' => (int)$c->total], $categorias)) ?>;
+        const dadosServicos   = <?= json_encode(array_map(fn($s) => ['label' => $s->servico, 'sv' => (int)$s->suporte_vida, 'outros' => (int)$s->outros], $servicos)) ?>;
+
         document.addEventListener("DOMContentLoaded", function() {
-    
-    // Capturar os elementos canvas
-    const canvasCategoria = document.getElementById('categoriaChart');
-    const canvasServicos = document.getElementById('servicosChart');
 
-    if (canvasCategoria && canvasServicos) {
-        
-        // 1. GRÁFICO CIRCULAR - Equipamentos por Categoria
-        const ctxCategoria = canvasCategoria.getContext('2d');
-        new Chart(ctxCategoria, {
-            type: 'doughnut',
-            data: {
-                labels: ['Monitorização', 'Terapia/Suporte', 'Diagnóstico', 'Laboratório'],
-                datasets: [{
-                    data: [450, 320, 185, 90],
-                    backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545'],
-                    borderWidth: 2,
-                    borderColor: '#ffffff',
-                    hoverOffset: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { 
-                        position: 'bottom', 
-                        labels: { boxWidth: 12, padding: 15, font: { size: 11, family: "'Inter', sans-serif" } } 
+            const canvasCategoria = document.getElementById('categoriaChart');
+            const canvasServicos  = document.getElementById('servicosChart');
+
+            if (canvasCategoria) {
+                const cores = ['#0d6efd','#198754','#ffc107','#dc3545','#6f42c1','#0dcaf0','#fd7e14'];
+                new Chart(canvasCategoria.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels:   dadosCategorias.map(d => d.label),
+                        datasets: [{
+                            data:            dadosCategorias.map(d => d.valor),
+                            backgroundColor: dadosCategorias.map((_, i) => cores[i % cores.length]),
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            hoverOffset: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { boxWidth: 12, padding: 15, font: { size: 11, family: "'Inter', sans-serif" } }
+                            }
+                        },
+                        cutout: '60%'
                     }
-                },
-                cutout: '60%'
+                });
+            }
+
+            if (canvasServicos) {
+                new Chart(canvasServicos.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels:   dadosServicos.map(d => d.label),
+                        datasets: [
+                            {
+                                label: 'Suporte de Vida',
+                                data:  dadosServicos.map(d => d.sv),
+                                backgroundColor: '#dc3545',
+                                stack: 'ServicosStack',
+                                maxBarThickness: 45
+                            },
+                            {
+                                label: 'Outros Equipamentos',
+                                data:  dadosServicos.map(d => d.outros),
+                                backgroundColor: '#4169a1',
+                                stack: 'ServicosStack',
+                                borderRadius: { topLeft: 6, topRight: 6 },
+                                maxBarThickness: 45
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { stacked: true, grid: { display: false }, ticks: { font: { size: 11, family: "'Inter', sans-serif" } } },
+                            y: { stacked: true, beginAtZero: true, grid: { borderDash: [4,4], color: '#e9ecef' }, ticks: { font: { size: 11, family: "'Inter', sans-serif" } } }
+                        },
+                        plugins: {
+                            legend: { position: 'top', labels: { boxWidth: 12, padding: 15, font: { size: 11, family: "'Inter', sans-serif" } } }
+                        }
+                    }
+                });
             }
         });
-
-        // 2. GRÁFICO DE BARRAS EMPILHADAS (Com barras mais elegantes/finas)
-        const ctxServicos = canvasServicos.getContext('2d');
-        new Chart(ctxServicos, {
-            type: 'bar',
-            data: {
-                labels: ['UCI', 'Bloco Operatório', 'Serviço de Urgência', 'Enfermaria Geral', 'Imagiologia', 'Laboratório'],
-                datasets: [
-                    {
-                        label: 'Suporte de Vida',
-                        data: [112, 68, 30, 0, 0, 5],
-                        backgroundColor: '#dc3545',
-                        stack: 'ServicosStack',
-                        maxBarThickness: 45 // Limita a largura máxima da barra!
-                    },
-                    {
-                        label: 'Outros Equipamentos',
-                        data: [168, 127, 120, 300, 120, 85],
-                        backgroundColor: '#4169a1',
-                        stack: 'ServicosStack',
-                        borderRadius: { topLeft: 6, topRight: 6 },
-                        maxBarThickness: 45 // Limita a largura máxima da barra!
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { 
-                        stacked: true, 
-                        grid: { display: false },
-                        ticks: { font: { size: 11, family: "'Inter', sans-serif" } }
-                    },
-                    y: { 
-                        stacked: true, 
-                        beginAtZero: true, 
-                        grid: { borderDash: [4, 4], color: '#e9ecef' },
-                        ticks: { font: { size: 11, family: "'Inter', sans-serif" } }
-                    }
-                },
-                plugins: {
-                    legend: { 
-                        position: 'top', 
-                        labels: { boxWidth: 12, padding: 15, font: { size: 11, family: "'Inter', sans-serif" } } 
-                    }
-                }
-            }
-        });
-    }
-});
     </script>
 
 

@@ -13,4 +13,11 @@ define('MYSQL_PORT', '10464');
 define('MYSQL_DATABASE', 'db1231184');
 define('MYSQL_USERNAME', '1231184');  
 define('MYSQL_PASSWORD', 'almeida_184'); 
+
+// ----------------------------------------------------------------
+// Segurança – Encriptação com OpenSSL (Ficha 13 - Página 7)
+// ----------------------------------------------------------------
+define('AES_METHOD', 'AES-256-CBC');
+define('AES_KEY',    'H0SDRQzIGqclX2kbYBk9xspdn9U5f3Wa');
+define('AES_IV',     'BzKAbjuREsHgnw56');
 ?>

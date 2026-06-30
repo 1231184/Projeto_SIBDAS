@@ -1,3 +1,24 @@
+<?php
+require_once __DIR__ . '/../config/config.php';
+
+try {
+    $ligacao = new PDO(
+        "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
+        MYSQL_USERNAME,
+        MYSQL_PASSWORD
+    );
+    $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $rows = $ligacao->query("SELECT chave, valor FROM conteudos_site")->fetchAll(PDO::FETCH_KEY_PAIR);
+    $ligacao = null;
+} catch (PDOException $err) {
+    $rows = [];
+}
+
+function c(string $chave, array $rows): string {
+    return htmlspecialchars($rows[$chave] ?? '', ENT_QUOTES);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-PT">
 
@@ -60,13 +81,10 @@
                 <div class="row">
                     <div class="col-lg-8 col-md-10">
 
-    <h1 class="hero-title fw-bold text-white mb-4 fade-up fade-up-delay-1">Gestão Inteligente de<br>Equipamentos Médicos
-    </h1>
+    <h1 class="hero-title fw-bold text-white mb-4 fade-up fade-up-delay-1"><?= c('hero_titulo', $rows) ?></h1>
 
     <p class="lead text-light mb-4 fs-5 fade-up fade-up-delay-2" style="max-width: 600px; color: #cbd5e1 !important;">
-        Plataforma integrada para inventário, documentação e ciclo de vida de equipamento hospitalar.
-        Desenvolvida para apoiar as equipas de engenharia biomédica em hospitais e clínicas de todo
-        o país.
+        <?= c('hero_subtitulo', $rows) ?>
     </p>
 </div>
                 </div>
@@ -77,21 +95,21 @@
             <div class="container">
                 <div class="row g-4 text-white text-center">
                     <div class="col-6 col-md-3">
-    <div class="fs-1 fw-bold metric-value">ISO 13485</div>
-    <div class="fs-6 opacity-75 mt-1">Certificação para Eq. Médico</div>
-</div>
-<div class="col-6 col-md-3">
-    <div class="fs-1 fw-bold metric-value">+50 000</div>
-    <div class="fs-6 opacity-75 mt-1">Equipamentos Suportados</div>
-</div>
-<div class="col-6 col-md-3">
-    <div class="fs-1 fw-bold metric-value">24/7</div>
-    <div class="fs-6 opacity-75 mt-1">Suporte Técnico</div>
-</div>
-<div class="col-6 col-md-3">
-    <div class="fs-1 fw-bold metric-value">RGPD</div>
-    <div class="fs-6 opacity-75 mt-1">Proteção de Dados</div>
-</div>
+                        <div class="fs-1 fw-bold metric-value"><?= c('metrica1_valor', $rows) ?></div>
+                        <div class="fs-6 opacity-75 mt-1"><?= c('metrica1_label', $rows) ?></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="fs-1 fw-bold metric-value"><?= c('metrica2_valor', $rows) ?></div>
+                        <div class="fs-6 opacity-75 mt-1"><?= c('metrica2_label', $rows) ?></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="fs-1 fw-bold metric-value"><?= c('metrica3_valor', $rows) ?></div>
+                        <div class="fs-6 opacity-75 mt-1"><?= c('metrica3_label', $rows) ?></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="fs-1 fw-bold metric-value"><?= c('metrica4_valor', $rows) ?></div>
+                        <div class="fs-6 opacity-75 mt-1"><?= c('metrica4_label', $rows) ?></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -100,30 +118,15 @@
             <div class="container py-5">
                 <div class="row align-items-center g-5">
                     <div class="col-lg-6">
-                        <h2 class="fw-bold mb-4 fs-2 text-dark">Sobre a MedStock Solutions</h2>
-                        <p class="text-muted mb-4 lh-base">
-                            A MedStock Solutions é uma empresa portuguesa especializada no desenvolvimento de soluções
-                            de gestão para o setor da saúde. Com mais de 10 anos de experiência, apoiamos hospitais,
-                            clínicas e centros de saúde na modernização dos seus processos de gestão de equipamento
-                            médico.
-                        </p>
+                        <h2 class="fw-bold mb-4 fs-2 text-dark"><?= c('sobre_titulo', $rows) ?></h2>
+                        <p class="text-muted mb-4 lh-base"><?= c('sobre_texto', $rows) ?></p>
                         <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
+                            <?php foreach (explode(',', $rows['sobre_topicos'] ?? '') as $topico): ?>
                             <li class="d-flex align-items-center gap-3 text-secondary">
                                 <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                                <span>Certificação ISO 13485 para equipamento médico</span>
+                                <span><?= htmlspecialchars(trim($topico)) ?></span>
                             </li>
-                            <li class="d-flex align-items-center gap-3 text-secondary">
-                                <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                                <span>Conformidade com RGPD e legislação portuguesa</span>
-                            </li>
-                            <li class="d-flex align-items-center gap-3 text-secondary">
-                                <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                                <span>Suporte técnico especializado 24/7</span>
-                            </li>
-                            <li class="d-flex align-items-center gap-3 text-secondary">
-                                <i class="fa-regular fa-circle-check text-brand fs-5 flex-shrink-0"></i>
-                                <span>Formação incluída na implementação</span>
-                            </li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
 
@@ -184,9 +187,9 @@
             <div class="container-fluid py-5 px-4 px-lg-5" style="max-width: 1280px; margin: 0 auto;">
 
                 <div class="text-center mb-5">
-                    <h2 class="fw-bold mb-3 fs-2 text-dark">O que oferecemos</h2>
+                    <h2 class="fw-bold mb-3 fs-2 text-dark"><?= c('servicos_titulo', $rows) ?></h2>
                     <p class="text-muted" style="max-width: 600px; margin: 0 auto;">
-                        Soluções completas para a gestão do ciclo de vida dos equipamentos médicos
+                        <?= c('servicos_subtitulo', $rows) ?>
                     </p>
                 </div>
 
@@ -271,9 +274,9 @@
             <div class="container-fluid py-5 px-4 px-lg-5" style="max-width: 1280px; margin: 0 auto;">
 
                 <div class="text-center mb-5">
-                    <h2 class="fw-bold mb-3 fs-2 text-dark">Tecnologia ao serviço da saúde</h2>
+                    <h2 class="fw-bold mb-3 fs-2 text-dark"><?= c('funcionalidades_titulo', $rows) ?></h2>
                     <p class="text-muted" style="max-width: 600px; margin: 0 auto;">
-                        Desenvolvido especificamente para responder às exigências da engenharia biomédica hospitalar
+                        <?= c('funcionalidades_subtitulo', $rows) ?>
                     </p>
                 </div>
 
@@ -334,10 +337,8 @@
             <div class="container py-5">
                 <div class="row g-5">
                     <div class="col-lg-5">
-                        <h2 class="fw-bold mb-4 fs-2 text-dark">Fale connosco</h2>
-                        <p class="text-muted mb-4">
-                            Tem alguma dúvida sobre a plataforma MedStock Solutions ou quer agendar uma demonstração para a sua unidade de saúde? O nosso suporte está aqui para o ajudar.
-                        </p>
+                        <h2 class="fw-bold mb-4 fs-2 text-dark"><?= c('contactos_titulo', $rows) ?></h2>
+                        <p class="text-muted mb-4"><?= c('contactos_texto', $rows) ?></p>
                         <div class="d-flex flex-column gap-4 mt-4">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="bg-brand-subtle text-brand p-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
@@ -345,7 +346,7 @@
                                 </div>
                                 <div>
                                     <h6 class="fw-bold mb-1 text-dark">Sede / Morada</h6>
-                                    <span class="text-muted small">ISEP - Instituto Superior de Engenharia do Porto<br>Rua Dr. António Bernardino de Almeida, 431</span>
+                                    <span class="text-muted small"><?= c('contactos_morada', $rows) ?></span>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center gap-3">
@@ -354,7 +355,7 @@
                                 </div>
                                 <div>
                                     <h6 class="fw-bold mb-1 text-dark">Telefone (Geral)</h6>
-                                    <span class="text-muted small">+351 228 340 500</span>
+                                    <span class="text-muted small"><?= c('contactos_telefone', $rows) ?></span>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center gap-3">
@@ -363,7 +364,7 @@
                                 </div>
                                 <div>
                                     <h6 class="fw-bold mb-1 text-dark">E-mail de Suporte</h6>
-                                    <span class="text-muted small">suporte@medstock.isep.ipp.pt</span>
+                                    <span class="text-muted small"><?= c('contactos_email', $rows) ?></span>
                                 </div>
                             </div>
                         </div>
@@ -410,7 +411,7 @@
             <div class="row g-4 mb-4 pb-4 border-bottom border-secondary">
                 <div class="col-lg-4 pe-lg-5">
                     <img src="../assets/img/logotipo.png" alt="MedStock Logo" style="height: 45px; filter: brightness(0) invert(1);" class="mb-4">
-                    <p class="text-white-50 small mb-0 lh-lg">A plataforma líder para a gestão inteligente do ciclo de vida de equipamentos médicos. Simplifique a sua operação hospitalar connosco.</p>
+                    <p class="text-white-50 small mb-0 lh-lg"><?= c('rodape_texto', $rows) ?></p>
                 </div>
                 
                 <div class="col-lg-4 col-md-6">
@@ -426,15 +427,15 @@
                 <div class="col-lg-4 col-md-6">
                     <h6 class="fw-bold mb-3 text-uppercase mt-2" style="letter-spacing: 1px; font-size: 0.85rem;">Siga-nos</h6>
                     <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-outline-secondary border-0 bg-white bg-opacity-10 text-white rounded-circle" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="#" class="btn btn-outline-secondary border-0 bg-white bg-opacity-10 text-white rounded-circle" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fa-brands fa-github"></i></a>
-                        <a href="#" class="btn btn-outline-secondary border-0 bg-white bg-opacity-10 text-white rounded-circle" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="<?= c('rodape_linkedin', $rows) ?: '#' ?>" class="btn btn-outline-secondary border-0 bg-white bg-opacity-10 text-white rounded-circle" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="<?= c('rodape_github', $rows) ?: '#' ?>" class="btn btn-outline-secondary border-0 bg-white bg-opacity-10 text-white rounded-circle" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fa-brands fa-github"></i></a>
+                        <a href="<?= c('rodape_twitter', $rows) ?: '#' ?>" class="btn btn-outline-secondary border-0 bg-white bg-opacity-10 text-white rounded-circle" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"><i class="fa-brands fa-twitter"></i></a>
                     </div>
                 </div>
             </div>
             
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 pt-2 mt-4">
-                <span class="text-white-50 small">&copy; 2026 MedStock Solutions. Todos os direitos reservados.</span>
+                <span class="text-white-50 small"><?= c('rodape_copyright', $rows) ?></span>
             </div>
         </div>
     </footer>

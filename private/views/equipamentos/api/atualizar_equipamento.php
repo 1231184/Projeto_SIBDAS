@@ -11,11 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$id_equipamento = (int)($_POST['id_equipamento'] ?? 0);
-if (!$id_equipamento) {
-    echo json_encode(['sucesso' => false, 'erro' => 'ID do equipamento não fornecido.']);
+$id_equipamento = aes_decrypt($_POST['id_equipamento'] ?? '');
+if (!$id_equipamento || !is_numeric($id_equipamento)) {
+    echo json_encode(['sucesso' => false, 'erro' => 'ID inválido ou manipulado.']);
     exit;
 }
+$id_equipamento = (int)$id_equipamento;
 
 try {
     $ligacao = new PDO(

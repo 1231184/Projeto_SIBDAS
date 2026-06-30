@@ -1324,7 +1324,7 @@ if (idFornAbrir) {
                 '<td class="px-3 py-3 text-muted small">' + eq.relacao + '</td>' +
                 '<td class="px-3 py-3"><span class="badge-eq ' + classeEstado + '" style="font-size: 0.75rem; padding: 0.3rem 0.5rem;"><span class="dot"></span>' + eq.estado + '</span></td>' +
                 '<td class="px-3 py-3 text-end">' +
-    '<a href="../../views/equipamentos/lista_equi.php?abrir=' + eq.id_equipamento + '&origem=fornecedor&id_fornecedor=' + f.id_fornecedor + '" ' +
+    '<a href="../../views/equipamentos/lista_equi.php?abrir=' + eq.id_equipamento_enc + '&origem=fornecedor&id_fornecedor=' + f.id_fornecedor + '" ' +
     'class="btn btn-sm btn-brand-subtle text-brand fw-semibold shadow-none" ' +
     'style="font-size: 0.75rem;">Ver ficha →</a>' +
 '</td>'

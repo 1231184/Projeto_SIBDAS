@@ -653,88 +653,83 @@ document.addEventListener('DOMContentLoaded', function() {
         // Volta ao Passo 1 sempre que se abre o modal e reseta as badges
         if (typeof mudarSeparadorEdit === 'function') mudarSeparadorEdit('#edit-step1-pane');
 
-        // --- PREENCHER LISTAS DINÂMICAS (localização + fornecedores) ---
+        }
+
+    // --- PREENCHER LISTAS DINÂMICAS quando o modal Editar abre ---
+    document.getElementById('modalEditar')?.addEventListener('show.bs.modal', function() {
+        const formEditar = document.getElementById('formEditar');
+
         const preencherListas = (fd) => {
             if (!fd) return;
 
-                // -- EDIFÍCIOS --
-                const listaEd = document.getElementById('edit-listaEdificio');
-                listaEd.innerHTML = fd.edificios.map(e =>
-                    `<li data-id="${e.id_edificio}">
-                        <a class="dropdown-item py-1 small" href="#"
-                           onclick="selecionarLocalizacaoEdit('Edificio', '${e.nome.replace(/'/g,"\\'")}', 'Piso', ${e.id_edificio})">
-                           ${e.nome}
-                        </a>
-                    </li>`
+            const listaEd = document.getElementById('edit-listaEdificio');
+            listaEd.innerHTML = fd.edificios.map(e =>
+                `<li data-id="${e.id_edificio}">
+                    <a class="dropdown-item py-1 small" href="#"
+                       onclick="selecionarLocalizacaoEdit('Edificio', '${e.nome.replace(/'/g,"\\'")}', 'Piso', ${e.id_edificio})">
+                       ${e.nome}
+                    </a>
+                </li>`
+            ).join('');
+
+            const listaPiso = document.getElementById('edit-listaPiso');
+            listaPiso.innerHTML = fd.pisos.map(p =>
+                `<li data-parent-id="${p.id_edificio}" data-id="${p.id_piso}" style="display:none;">
+                    <a class="dropdown-item py-1 small" href="#"
+                       onclick="selecionarLocalizacaoEdit('Piso', '${p.designacao.replace(/'/g,"\\'")}', 'Servico', ${p.id_piso})">
+                       ${p.designacao}
+                    </a>
+                </li>`
+            ).join('');
+
+            const listaServ = document.getElementById('edit-listaServico');
+            listaServ.innerHTML = fd.servicos.map(s =>
+                `<li data-parent-id="${s.id_piso}" data-id="${s.id_servico}" style="display:none;">
+                    <a class="dropdown-item py-1 small" href="#"
+                       onclick="selecionarLocalizacaoEdit('Servico', '${s.nome.replace(/'/g,"\\'")}', 'Sala', ${s.id_servico})">
+                       ${s.nome}
+                    </a>
+                </li>`
+            ).join('');
+
+            const listaSala = document.getElementById('edit-listaSala');
+            listaSala.innerHTML = fd.salas.map(s =>
+                `<li data-parent-id="${s.id_servico}" data-id="${s.id_sala}" style="display:none;">
+                    <a class="dropdown-item py-1 small" href="#"
+                       onclick="selecionarDropdownEdit('Sala', '${s.identificacao.replace(/'/g,"\\'")}')">
+                       ${s.identificacao}
+                    </a>
+                </li>`
+            ).join('');
+
+            // Mostrar os itens do nível correcto com base nos valores já preenchidos
+            const inputEd = document.getElementById('edit-inputEdificio');
+            const inputP  = document.getElementById('edit-inputPiso');
+            const inputS  = document.getElementById('edit-inputServico');
+            const idEd = fd.edificios.find(e => e.nome === (inputEd?.value || ''))?.id_edificio;
+            const idP  = fd.pisos.find(p => p.designacao === (inputP?.value || '') && p.id_edificio === idEd)?.id_piso;
+            const idS  = fd.servicos.find(s => s.nome === (inputS?.value || '') && s.id_piso === idP)?.id_servico;
+
+            if (idEd) listaPiso.querySelectorAll(`li[data-parent-id="${idEd}"]`).forEach(li => li.style.display = '');
+            if (idP)  listaServ.querySelectorAll(`li[data-parent-id="${idP}"]`).forEach(li => li.style.display = '');
+            if (idS)  listaSala.querySelectorAll(`li[data-parent-id="${idS}"]`).forEach(li => li.style.display = '');
+
+            const nomesOpcionais = ['Consumiveis', 'EntidadeContrato', 'Manufacturer'];
+            const nomesDropForn  = ['Fornecedor', 'Assistencia', 'Consumiveis', 'EntidadeContrato', 'Manufacturer'];
+            nomesDropForn.forEach(nome => {
+                const lista = document.getElementById('edit-lista' + nome);
+                if (!lista) return;
+                const opcaoNenhum = nomesOpcionais.includes(nome)
+                    ? `<li><a class="dropdown-item py-1 small text-muted" href="#" onclick="selecionarDropdownEdit('${nome}', '')">— Nenhum —</a></li>`
+                    : '';
+                lista.innerHTML = opcaoNenhum + fd.fornecedores.map(f =>
+                    `<li><a class="dropdown-item py-1 small" href="#"
+                        onclick="selecionarDropdownEdit('${nome}', '${f.nome_empresa.replace(/'/g,"\\'")}')">
+                        ${f.nome_empresa}
+                    </a></li>`
                 ).join('');
-
-                // -- PISOS (todos, filtrados por data-parent no momento da selecção do edifício) --
-                const listaPiso = document.getElementById('edit-listaPiso');
-                listaPiso.innerHTML = fd.pisos.map(p =>
-                    `<li data-parent-id="${p.id_edificio}" data-id="${p.id_piso}" style="display:none;">
-                        <a class="dropdown-item py-1 small" href="#"
-                           onclick="selecionarLocalizacaoEdit('Piso', '${p.designacao.replace(/'/g,"\\'")}', 'Servico', ${p.id_piso})">
-                           ${p.designacao}
-                        </a>
-                    </li>`
-                ).join('');
-
-                // -- SERVIÇOS --
-                const listaServ = document.getElementById('edit-listaServico');
-                listaServ.innerHTML = fd.servicos.map(s =>
-                    `<li data-parent-id="${s.id_piso}" data-id="${s.id_servico}" style="display:none;">
-                        <a class="dropdown-item py-1 small" href="#"
-                           onclick="selecionarLocalizacaoEdit('Servico', '${s.nome.replace(/'/g,"\\'")}', 'Sala', ${s.id_servico})">
-                           ${s.nome}
-                        </a>
-                    </li>`
-                ).join('');
-
-                // -- SALAS --
-                const listaSala = document.getElementById('edit-listaSala');
-                listaSala.innerHTML = fd.salas.map(s =>
-                    `<li data-parent-id="${s.id_servico}" data-id="${s.id_sala}" style="display:none;">
-                        <a class="dropdown-item py-1 small" href="#"
-                           onclick="selecionarDropdownEdit('Sala', '${s.identificacao.replace(/'/g,"\\'")}')">
-                           ${s.identificacao}
-                        </a>
-                    </li>`
-                ).join('');
-
-                // Mostrar itens do nível correcto com base nos valores já preenchidos
-                const idEdificio = fd.edificios.find(e => e.nome === eq.nome_edificio)?.id_edificio;
-                const idPiso     = fd.pisos.find(p => p.designacao === eq.nome_piso && p.id_edificio === idEdificio)?.id_piso;
-                const idServico  = fd.servicos.find(s => s.nome === eq.nome_servico && s.id_piso === idPiso)?.id_servico;
-
-                if (idEdificio) {
-                    listaPiso.querySelectorAll(`li[data-parent-id="${idEdificio}"]`).forEach(li => li.style.display = '');
-                }
-                if (idPiso) {
-                    listaServ.querySelectorAll(`li[data-parent-id="${idPiso}"]`).forEach(li => li.style.display = '');
-                }
-                if (idServico) {
-                    listaSala.querySelectorAll(`li[data-parent-id="${idServico}"]`).forEach(li => li.style.display = '');
-                }
-
-                // -- FORNECEDORES (os três dropdowns) --
-                // Apenas estes têm a opção "Nenhum" (são opcionais)
-                const nomesOpcionais = ['Consumiveis', 'EntidadeContrato', 'Manufacturer'];
-                const nomesDropForn = ['Fornecedor', 'Assistencia', 'Consumiveis', 'EntidadeContrato', 'Manufacturer'];
-                nomesDropForn.forEach(nome => {
-                    const lista = document.getElementById('edit-lista' + nome);
-                    if (!lista) return;
-                    const opcaoNenhum = nomesOpcionais.includes(nome)
-                        ? '<li><a class="dropdown-item py-1 small text-muted" href="#" onclick="selecionarDropdownEdit(\'' + nome + '\', \'\')">— Nenhum —</a></li>'
-                        : '';
-                    lista.innerHTML = opcaoNenhum
-                        + fd.fornecedores.map(f =>
-                            `<li><a class="dropdown-item py-1 small" href="#"
-                                onclick="selecionarDropdownEdit('${nome}', '${f.nome_empresa.replace(/'/g,"\\'")}')">
-                                ${f.nome_empresa}
-                            </a></li>`
-                        ).join('');
-                });
-            };
+            });
+        };
 
         if (dadosFormulario) {
             preencherListas(dadosFormulario);
@@ -743,7 +738,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(r => r.json())
                 .then(fd => { if (fd.sucesso) { dadosFormulario = fd; preencherListas(fd); } });
         }
-    }
+    });
  
     // ---- Botões "Ver" na tabela ----
     document.querySelectorAll('.btn-ver-eq').forEach(botao => {
@@ -754,6 +749,11 @@ document.addEventListener('DOMContentLoaded', function() {
  
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
  
+            // Garantir que o modal Editar está fechado antes de abrir o Detalhes
+            const modalEditarEl = document.getElementById('modalEditar');
+            const modalEditarInst = bootstrap.Modal.getInstance(modalEditarEl);
+            if (modalEditarInst) modalEditarInst.hide();
+
             fetch('api/get_equipamento.php?id=' + id)
                 .then(response => response.json())
                 .then(data => {
@@ -766,9 +766,12 @@ document.addEventListener('DOMContentLoaded', function() {
  
                     preencherModalDetalhes(data);
                     preencherModalEditar(data.dados, data);
-                    const modalDetEl = document.getElementById('modalDetalhes');
-                    const modalDetInst = bootstrap.Modal.getOrCreateInstance(modalDetEl);
-                    modalDetInst.show();
+
+                    // Pequeno delay para garantir que o Bootstrap terminou de fechar o modal Editar
+                    setTimeout(() => {
+                        const modalDetEl = document.getElementById('modalDetalhes');
+                        bootstrap.Modal.getOrCreateInstance(modalDetEl).show();
+                    }, 150);
                 })
                 .catch(error => {
                     btn.innerHTML = textoOriginal;

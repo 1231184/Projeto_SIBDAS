@@ -1,7 +1,61 @@
 <?php
 require_once __DIR__ . '/../../includes/funcoes.php';
 redirect_if_not_logged();
-start_session();
+
+$sucesso = '';
+$erro    = '';
+
+try {
+    $ligacao = new PDO(
+        "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
+        MYSQL_USERNAME,
+        MYSQL_PASSWORD
+    );
+    $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // --- GUARDAR (POST) ---
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $campos = [
+            'hero_titulo', 'hero_subtitulo',
+            'metrica1_valor', 'metrica1_label', 'metrica2_valor', 'metrica2_label',
+            'metrica3_valor', 'metrica3_label', 'metrica4_valor', 'metrica4_label',
+            'sobre_titulo', 'sobre_texto', 'sobre_topicos',
+            'servicos_titulo', 'servicos_subtitulo', 'funcionalidades_titulo', 'funcionalidades_subtitulo',
+            'contactos_titulo', 'contactos_texto', 'contactos_morada', 'contactos_telefone', 'contactos_email',
+            'rodape_texto', 'rodape_linkedin', 'rodape_github', 'rodape_twitter', 'rodape_copyright'
+        ];
+
+        $stmt = $ligacao->prepare("
+            UPDATE conteudos_site
+            SET valor = :valor, data_atualizacao = NOW(), id_utilizador = :id_utilizador
+            WHERE chave = :chave
+        ");
+
+        $id_utilizador = $_SESSION['utilizador']['id_utilizador'] ?? null;
+
+        foreach ($campos as $chave) {
+            $stmt->execute([
+                ':valor'        => $_POST[$chave] ?? '',
+                ':chave'        => $chave,
+                ':id_utilizador' => $id_utilizador
+            ]);
+        }
+        $sucesso = 'Conteúdo guardado com sucesso!';
+    }
+
+    // --- LER CONTEÚDOS ---
+    $rows = $ligacao->query("SELECT chave, valor FROM conteudos_site")->fetchAll(PDO::FETCH_KEY_PAIR);
+
+} catch (PDOException $err) {
+    $erro = 'Erro na base de dados: ' . $err->getMessage();
+    $rows = [];
+}
+$ligacao = null;
+
+// Helper para imprimir valor com segurança
+function c(string $chave, array $rows): string {
+    return htmlspecialchars($rows[$chave] ?? '', ENT_QUOTES);
+}
 ?>
 
 <?php include '../../includes/header.php'; ?>
@@ -26,6 +80,13 @@ start_session();
             </div>
         </div>
 
+        <?php if ($sucesso): ?>
+            <div class="alert alert-success shadow-sm mb-4" style="max-width: 1024px; margin: 0 auto;"><?= htmlspecialchars($sucesso) ?></div>
+        <?php endif; ?>
+        <?php if ($erro): ?>
+            <div class="alert alert-danger shadow-sm mb-4" style="max-width: 1024px; margin: 0 auto;"><?= htmlspecialchars($erro) ?></div>
+        <?php endif; ?>
+
         <form action="#" method="POST" style="max-width: 1024px; margin: 0 auto;">
 
             <div class="card dash-card mb-4">
@@ -38,11 +99,11 @@ start_session();
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label small fw-medium mb-1">Título de Destaque</label>
-                            <input type="text" class="form-control shadow-sm bg-white" value="Gestão Inteligente de Equipamentos Médicos">
+                            <input type="text" name="hero_titulo" class="form-control shadow-sm bg-white" value="<?= c('hero_titulo', $rows) ?>">
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-medium mb-1">Texto Introdutório (Lead)</label>
-                            <textarea class="form-control shadow-sm bg-white" rows="2">Plataforma integrada para inventário, documentação e ciclo de vida de equipamento hospitalar. Desenvolvida para apoiar as equipas de engenharia biomédica em hospitais e clínicas de todo o país.</textarea>
+                            <textarea name="hero_subtitulo" class="form-control shadow-sm bg-white" rows="2"><?= c('hero_subtitulo', $rows) ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -58,23 +119,23 @@ start_session();
                     <div class="row g-4">
                         <div class="col-md-3 col-sm-6">
                             <label class="form-label small fw-medium mb-1">Métrica 1</label>
-                            <input type="text" class="form-control shadow-sm bg-white mb-2" value="ISO 13485">
-                            <input type="text" class="form-control shadow-sm bg-light" value="Certificação para Eq. Médico">
+                            <input type="text" name="metrica1_valor" class="form-control shadow-sm bg-white mb-2" value="<?= c('metrica1_valor', $rows) ?>">
+                            <input type="text" name="metrica1_label" class="form-control shadow-sm bg-light" value="<?= c('metrica1_label', $rows) ?>">
                         </div>
                         <div class="col-md-3 col-sm-6">
                             <label class="form-label small fw-medium mb-1">Métrica 2</label>
-                            <input type="text" class="form-control shadow-sm bg-white mb-2" value="+50 000">
-                            <input type="text" class="form-control shadow-sm bg-light" value="Equipamentos Suportados">
+                            <input type="text" name="metrica2_valor" class="form-control shadow-sm bg-white mb-2" value="<?= c('metrica2_valor', $rows) ?>">
+                            <input type="text" name="metrica2_label" class="form-control shadow-sm bg-light" value="<?= c('metrica2_label', $rows) ?>">
                         </div>
                         <div class="col-md-3 col-sm-6">
                             <label class="form-label small fw-medium mb-1">Métrica 3</label>
-                            <input type="text" class="form-control shadow-sm bg-white mb-2" value="24/7">
-                            <input type="text" class="form-control shadow-sm bg-light" value="Suporte Técnico">
+                            <input type="text" name="metrica3_valor" class="form-control shadow-sm bg-white mb-2" value="<?= c('metrica3_valor', $rows) ?>">
+                            <input type="text" name="metrica3_label" class="form-control shadow-sm bg-light" value="<?= c('metrica3_label', $rows) ?>">
                         </div>
                         <div class="col-md-3 col-sm-6">
                             <label class="form-label small fw-medium mb-1">Métrica 4</label>
-                            <input type="text" class="form-control shadow-sm bg-white mb-2" value="RGPD">
-                            <input type="text" class="form-control shadow-sm bg-light" value="Proteção de Dados">
+                            <input type="text" name="metrica4_valor" class="form-control shadow-sm bg-white mb-2" value="<?= c('metrica4_valor', $rows) ?>">
+                            <input type="text" name="metrica4_label" class="form-control shadow-sm bg-light" value="<?= c('metrica4_label', $rows) ?>">
                         </div>
                     </div>
                 </div>
@@ -90,15 +151,15 @@ start_session();
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label small fw-medium mb-1">Título da Secção</label>
-                            <input type="text" class="form-control shadow-sm bg-white" value="Sobre a MedStock Solutions">
+                            <input type="text" name="sobre_titulo" class="form-control shadow-sm bg-white" value="<?= c('sobre_titulo', $rows) ?>">
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-medium mb-1">Texto Descritivo</label>
-                            <textarea class="form-control shadow-sm bg-white" rows="3">A MedStock Solutions é uma empresa portuguesa especializada no desenvolvimento de soluções de gestão para o setor da saúde. Com mais de 10 anos de experiência, apoiamos hospitais, clínicas e centros de saúde na modernização dos seus processos de gestão de equipamento médico.</textarea>
+                            <textarea name="sobre_texto" class="form-control shadow-sm bg-white" rows="3"><?= c('sobre_texto', $rows) ?></textarea>
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-medium mb-1">Tópicos de Destaque (Separados por vírgula)</label>
-                            <textarea class="form-control shadow-sm bg-white" rows="2">Certificação ISO 13485 para equipamento médico, Conformidade com RGPD e legislação portuguesa, Suporte técnico especializado 24/7, Formação incluída na implementação</textarea>
+                            <textarea name="sobre_topicos" class="form-control shadow-sm bg-white" rows="2"><?= c('sobre_topicos', $rows) ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -114,13 +175,13 @@ start_session();
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label small fw-medium mb-1 text-muted">Título "O que oferecemos"</label>
-                            <input type="text" class="form-control shadow-sm bg-white" value="O que oferecemos">
-                            <input type="text" class="form-control shadow-sm bg-white mt-2" value="Soluções completas para a gestão do ciclo de vida dos equipamentos médicos">
+                            <input type="text" name="servicos_titulo" class="form-control shadow-sm bg-white" value="<?= c('servicos_titulo', $rows) ?>">
+                            <input type="text" name="servicos_subtitulo" class="form-control shadow-sm bg-white mt-2" value="<?= c('servicos_subtitulo', $rows) ?>">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-medium mb-1 text-muted">Título "Funcionalidades"</label>
-                            <input type="text" class="form-control shadow-sm bg-white" value="Tecnologia ao serviço da saúde">
-                            <input type="text" class="form-control shadow-sm bg-white mt-2" value="Desenvolvido especificamente para responder às exigências da engenharia biomédica hospitalar">
+                            <input type="text" name="funcionalidades_titulo" class="form-control shadow-sm bg-white" value="<?= c('funcionalidades_titulo', $rows) ?>">
+                            <input type="text" name="funcionalidades_subtitulo" class="form-control shadow-sm bg-white mt-2" value="<?= c('funcionalidades_subtitulo', $rows) ?>">
                         </div>
                         <div class="col-12 mt-3">
                             <div class="alert alert-secondary small border-0 mb-0 py-2">
@@ -141,23 +202,23 @@ start_session();
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label small fw-medium mb-1">Título da Secção</label>
-                            <input type="text" class="form-control shadow-sm bg-white" value="Fale connosco">
+                            <input type="text" name="contactos_titulo" class="form-control shadow-sm bg-white" value="<?= c('contactos_titulo', $rows) ?>">
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-medium mb-1">Texto Introdutório</label>
-                            <textarea class="form-control shadow-sm bg-white" rows="2">Tem alguma dúvida sobre a plataforma MedStock Solutions ou quer agendar uma demonstração para a sua unidade de saúde? O nosso suporte está aqui para o ajudar.</textarea>
+                            <textarea name="contactos_texto" class="form-control shadow-sm bg-white" rows="2"><?= c('contactos_texto', $rows) ?></textarea>
                         </div>
                         <div class="col-md-12">
                             <label class="form-label small fw-medium mb-1">Sede / Morada</label>
-                            <input type="text" class="form-control shadow-sm bg-white" value="ISEP - Instituto Superior de Engenharia do Porto, Rua Dr. António Bernardino de Almeida, 431">
+                            <input type="text" name="contactos_morada" class="form-control shadow-sm bg-white" value="<?= c('contactos_morada', $rows) ?>">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-medium mb-1">Telefone (Geral)</label>
-                            <input type="text" class="form-control shadow-sm bg-white" value="+351 228 340 500">
+                            <input type="text" name="contactos_telefone" class="form-control shadow-sm bg-white" value="<?= c('contactos_telefone', $rows) ?>">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-medium mb-1">E-mail de Suporte</label>
-                            <input type="email" class="form-control shadow-sm bg-white" value="suporte@medstock.isep.ipp.pt">
+                            <input type="email" name="contactos_email" class="form-control shadow-sm bg-white" value="<?= c('contactos_email', $rows) ?>">
                         </div>
                     </div>
                 </div>
@@ -173,23 +234,23 @@ start_session();
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label small fw-medium mb-1">Texto Descritivo Curto</label>
-                            <textarea class="form-control shadow-sm bg-white" rows="2">A plataforma líder para a gestão inteligente do ciclo de vida de equipamentos médicos. Simplifique a sua operação hospitalar connosco.</textarea>
+                            <textarea name="rodape_texto" class="form-control shadow-sm bg-white" rows="2"><?= c('rodape_texto', $rows) ?></textarea>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label small fw-medium mb-1">Link LinkedIn</label>
-                            <input type="url" class="form-control shadow-sm bg-white" placeholder="https://linkedin.com/...">
+                            <input type="url" name="rodape_linkedin" class="form-control shadow-sm bg-white" value="<?= c('rodape_linkedin', $rows) ?>" placeholder="https://linkedin.com/...">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label small fw-medium mb-1">Link GitHub</label>
-                            <input type="url" class="form-control shadow-sm bg-white" placeholder="https://github.com/...">
+                            <input type="url" name="rodape_github" class="form-control shadow-sm bg-white" value="<?= c('rodape_github', $rows) ?>" placeholder="https://github.com/...">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label small fw-medium mb-1">Link Twitter / X</label>
-                            <input type="url" class="form-control shadow-sm bg-white" placeholder="https://twitter.com/...">
+                            <input type="url" name="rodape_twitter" class="form-control shadow-sm bg-white" value="<?= c('rodape_twitter', $rows) ?>" placeholder="https://twitter.com/...">
                         </div>
                         <div class="col-12 mt-3">
                             <label class="form-label small fw-medium mb-1">Texto de Copyright</label>
-                            <input type="text" class="form-control shadow-sm bg-white" value="&copy; 2026 MedStock Solutions. Todos os direitos reservados.">
+                            <input type="text" name="rodape_copyright" class="form-control shadow-sm bg-white" value="<?= c('rodape_copyright', $rows) ?>">
                         </div>
                     </div>
                 </div>

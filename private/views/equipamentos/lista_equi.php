@@ -394,13 +394,13 @@ try {
                                         <td class="px-3 py-3 text-end">
                                             <div class="d-flex justify-content-end gap-1">
                                                 <button class="btn btn-sm btn-brand-subtle text-brand fw-bold shadow-none btn-ver-eq"
-                                                    data-id="<?= $equip->id_equipamento ?>" style="font-size: 1.0rem;">
+                                                    data-id="<?= aes_encrypt($equip->id_equipamento) ?>" style="font-size: 1.0rem;">
                                                     Ver
                                                 </button>
 
                                                 <?php if ($equip->estado !== 'Abatido'): ?>
                                                 <button class="btn btn-sm btn-light border text-danger shadow-none btn-remover-eq"
-                                                    data-id="<?= $equip->id_equipamento ?>" title="Remover">
+                                                    data-id="<?= aes_encrypt($equip->id_equipamento) ?>" title="Remover">
                                                     <i class="fa-solid fa-trash-can"></i>
                                                 </button>
                                                 <?php endif; ?>
@@ -1617,8 +1617,15 @@ try {
     }
 
     function mudarSeparadorEdit(target) {
-        new bootstrap.Tab(document.querySelector(target)).show();
-        const tabCerta = target.replace('-pane', '-tab').replace('#', '');
+        // 1. Converte o que entra na função para ser SEMPRE o ID do botão (tab)
+        const idBotao = target.replace('-pane', '-tab');
+        
+        // 2. Chama o Bootstrap com o botão correto
+        new bootstrap.Tab(document.querySelector(idBotao)).show();
+        
+        // 3. Pega no ID limpo para tratar das cores e badges
+        const tabCerta = idBotao.replace('#', '');
+        
         document.querySelectorAll('#editarTabs .nav-link').forEach(nav => {
             const badge = nav.querySelector('.badge');
             if (nav.id === tabCerta) {

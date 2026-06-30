@@ -22,6 +22,32 @@ function redirect_if_not_logged($redirect_to = '/login/login.php') {
     }
 }
 
+// ============================================================
+// Encriptação e desencriptação de IDs com OpenSSL (Ficha 13)
+// Objectivo: evitar que IDs numéricos fiquem visíveis no HTML
+// e possam ser manipulados pelo utilizador.
+// ============================================================
+function aes_encrypt($value) {
+    return bin2hex(openssl_encrypt(
+        $value,
+        AES_METHOD,
+        AES_KEY,
+        OPENSSL_RAW_DATA,
+        AES_IV
+    ));
+}
+
+function aes_decrypt($value) {
+    if (!is_string($value) || strlen($value) % 2 !== 0) return false;
+    return openssl_decrypt(
+        hex2bin($value),
+        AES_METHOD,
+        AES_KEY,
+        OPENSSL_RAW_DATA,
+        AES_IV
+    );
+}
+
 // Destrói a sessão e redireciona
 function logout_and_redirect($redirect_to = '/login/login.php') {
     start_session();
