@@ -280,7 +280,7 @@ try {
             <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
             <h1 class="h5 fw-bold mb-0 text-dark">MedStock</h1>
         </div>
-        <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
+        <button class="btn btn-light border-0 shadow-sm d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile"><i class="fa-solid fa-bars"></i></button>
     </header>
 
     <div id="view-lista" class="fornecedor-view">
@@ -289,7 +289,7 @@ try {
                 <h1 class="h3 fw-bold text-dark mb-1">Fornecedores</h1>
                 <p class="text-muted small mb-0">8 fornecedores registados</p>
             </div>
-            <button class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm fw-bold"
+            <button class="btn btn-brand d-inline-flex align-items-center gap-2 shadow-sm fw-bold flex-shrink-0 align-self-start"
                 data-bs-toggle="modal" data-bs-target="#modalNovoFornecedor">
                 <i class="fa-solid fa-plus fs-6"></i> Novo Fornecedor
             </button>

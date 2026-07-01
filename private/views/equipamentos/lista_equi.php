@@ -5,7 +5,6 @@ redirect_if_not_logged();
 $filtro_servico = isset($_GET['id_servico']) ? (int)$_GET['id_servico'] : null;
 $filtro_sala    = isset($_GET['id_sala'])    ? (int)$_GET['id_sala']    : null;
 
-// Ficha 13: contexto de origem para o botão "Voltar ao Fornecedor"
 $origem        = $_GET['origem'] ?? 'equipamentos';
 $id_fornecedor = isset($_GET['id_fornecedor']) ? (int)$_GET['id_fornecedor'] : null;
 
@@ -24,17 +23,15 @@ if (isset($_GET['sucesso']) && $_GET['sucesso'] == "1") {
 
 // --- INÍCIO DA LIGAÇÃO À BASE DE DADOS ---
 try {
-    // Cria a ligação usando as credenciais do config.php (AGORA COM A PORTA INCLUÍDA!)
     $ligacao = new PDO(
         "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
         MYSQL_USERNAME,
         MYSQL_PASSWORD
     );
 
-    // Diz ao PDO para atirar erros se algo falhar
+
     $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Faz a consulta (Query) para ir buscar todos os equipamentos!
     $sql_equip = "
     SELECT
         e.*,
@@ -51,16 +48,13 @@ try {
     $resultados = $ligacao->query($sql_equip)->fetchAll(PDO::FETCH_OBJ);
     $erro = '';
 } catch (PDOException $err) {
-    // Se a password estiver errada ou a BD em baixo, ele captura o erro aqui!
     $erro = "Aconteceu um erro na ligação à Base de Dados: " . $err->getMessage();
     $resultados = [];
 }
 
-// Fecha a Ligação
 $ligacao = null;
 // --- FIM DA LIGAÇÃO À BASE DE DADOS ---
 
-// --- DADOS PARA OS FILTROS DA SIDEBAR ---
 try {
     $ligacao2 = new PDO(
         "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
@@ -94,7 +88,7 @@ try {
             <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
             <h1 class="h5 fw-bold mb-0 text-dark">MedStock</h1>
         </div>
-        <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
+        <button class="btn btn-light border-0 shadow-sm d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile"><i class="fa-solid fa-bars"></i></button>
     </header>
 
     <div
@@ -109,7 +103,6 @@ try {
                 </div>
 
                 <script>
-                    // Limpar o ?sucesso=1 do URL para que F5 não volte a mostrar a mensagem
                     if (window.history.replaceState) {
                         const urlLimpa = window.location.protocol + "//" + window.location.host + window.location.pathname;
                         window.history.replaceState({
@@ -117,7 +110,6 @@ try {
                         }, '', urlLimpa);
                     }
 
-                    // Auto-fechar a mensagem ao fim de 4 segundos com fade suave
                     setTimeout(function() {
                         const alerta = document.getElementById('alertaSucesso');
                         if (alerta) {
@@ -359,15 +351,13 @@ try {
                                             <?php endif; ?>
                                         </td>
                                         <?php
-                                        // Lógica para as cores da Criticidade
-                                        $classeCrit = 'bg-secondary text-white'; // default
+                                        $classeCrit = 'bg-secondary text-white'; 
                                         if ($equip->criticidade == 'Alta') $classeCrit = 'cr-alta';
                                         elseif ($equip->criticidade == 'Média') $classeCrit = 'cr-media';
                                         elseif ($equip->criticidade == 'Baixa') $classeCrit = 'cr-baixa';
                                         elseif ($equip->criticidade == 'Suporte de Vida') $classeCrit = 'cr-vida';
 
-                                        // Lógica para as cores do Estado
-                                        $classeEstado = 'bg-secondary text-white'; // default
+                                        $classeEstado = 'bg-secondary text-white'; 
                                         $pontoHmtl = '';
                                         if ($equip->estado == 'Ativo') {
                                             $classeEstado = 'st-ativo';
@@ -1580,9 +1570,7 @@ try {
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Script para permitir que os botões "Próximo" e "Anterior" mudem a aba selecionada no topo
         document.querySelectorAll('[data-bs-wizard-step]').forEach(button => {
-            // Excluir os botões do modal editar — esses têm validação própria
             if (button.classList.contains('btn-edit-wizard')) return;
             button.addEventListener('click', function() {
                 const targetTabId = this.getAttribute('data-bs-wizard-step');
@@ -1597,7 +1585,6 @@ try {
 </script>
 
 <script>
-    // Funções Auxiliares para o modal de Edição (Dropwdowns)
     function selecionarDropdownEdit(campoSufixo, valor) {
         const span = document.getElementById('edit-text' + campoSufixo);
         const input = document.getElementById('edit-input' + campoSufixo);
@@ -1644,13 +1631,10 @@ try {
     }
 
     function mudarSeparadorEdit(target) {
-        // 1. Converte o que entra na função para ser SEMPRE o ID do botão (tab)
         const idBotao = target.replace('-pane', '-tab');
         
-        // 2. Chama o Bootstrap com o botão correto
         new bootstrap.Tab(document.querySelector(idBotao)).show();
         
-        // 3. Pega no ID limpo para tratar das cores e badges
         const tabCerta = idBotao.replace('#', '');
         
         document.querySelectorAll('#editarTabs .nav-link').forEach(nav => {
@@ -1671,7 +1655,6 @@ try {
             const tbody = document.getElementById('edit-tabelaAcessoriosBody');
             let numeros = [];
 
-            // 1. Guarda todos os números
             for (let tr of tbody.children) {
                 const tdCode = tr.querySelector('td:first-child');
                 if (tdCode && tdCode.innerText.includes('.')) {
@@ -1682,10 +1665,8 @@ try {
                 }
             }
 
-            // 2. Ordena
             numeros.sort((a, b) => a - b);
 
-            // 3. Procura a primeira lacuna livre
             let proximoNum = 1;
             for (let i = 0; i < numeros.length; i++) {
                 if (numeros[i] === proximoNum) {
@@ -1695,10 +1676,8 @@ try {
                 }
             }
 
-            // 4. Aplica
             const proximoNumStr = proximoNum.toString().padStart(2, '0');
 
-            // Vai buscar o código do equipamento que está a ser editado (Passo 1 do modal)
             const codigoPrincipal = document.querySelector('input[name="internalCode"]').value || 'EQ-0001';
 
             document.getElementById('edit-acessorioCodigo').value = `${codigoPrincipal}.${proximoNumStr}`;
@@ -1718,31 +1697,25 @@ try {
 
     document.addEventListener('DOMContentLoaded', function() {
 
-        // ---- Botões "Remover" na tabela ----
         document.querySelectorAll('.btn-remover-eq').forEach(btn => {
             btn.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
-                // Encontrar a linha da tabela para obter designação e código
                 const tr = this.closest('tr');
                 const designacao = tr.querySelector('td:nth-child(2) .fw-bold')?.textContent || '—';
                 const codigo     = tr.querySelector('td:nth-child(1)')?.textContent?.trim() || '—';
 
-                // Preencher o modal
                 const el = document.getElementById('remover-designacao');
                 const ec = document.getElementById('remover-codigo');
                 if (el) el.textContent = '"' + designacao + '"';
                 if (ec) ec.textContent = codigo;
 
-                // Guardar ID no botão de confirmar
                 const btnConf = document.getElementById('btnConfirmarRemover');
                 if (btnConf) btnConf.setAttribute('data-id', id);
 
-                // Abrir modal
                 bootstrap.Modal.getOrCreateInstance(document.getElementById('modalRemover')).show();
             });
         });
 
-        // Reativar a remoção manual de linhas pré-existentes na tabela
         document.querySelectorAll('#modalEditar .btn-remover-doc').forEach(btn => {
             btn.addEventListener('click', function() {
                 this.closest('tr').remove();
@@ -1754,7 +1727,6 @@ try {
             });
         });
 
-        // LÓGICA ANEXAR DOC (Edição)
         const btnAnexarDocEdit = document.getElementById('edit-btnAnexarDoc');
         if (btnAnexarDocEdit) {
             btnAnexarDocEdit.addEventListener('click', function() {
@@ -1791,7 +1763,6 @@ try {
                 tbody.appendChild(tr);
                 tr.querySelector('.btn-remover-doc').addEventListener('click', () => tr.remove());
 
-                // Limpa formulário
                 document.getElementById('edit-inputTipoDocumento').value = '';
                 document.getElementById('edit-docTitulo').value = '';
                 document.getElementById('edit-docEmissao').value = '';
@@ -1800,14 +1771,9 @@ try {
             });
         }
 
-        // =========================================================================
-        // LÓGICA ANEXAR ACESSÓRIO (Edição) - COM AUTO-INCREMENTO
-        // =========================================================================
-
         const btnAdcAcc = document.getElementById('edit-btnAdicionarAcessorio');
         if (btnAdcAcc) {
 
-            // Permitir que os botões de lixo que já vêm no HTML também recalculem o código
             document.querySelectorAll('#edit-tabelaAcessoriosBody .btn-remover-acessorio').forEach(btn => {
                 btn.addEventListener('click', function() {
                     this.closest('tr').remove();
@@ -1839,19 +1805,16 @@ try {
 
                 tr.querySelector('.btn-remover-acessorio').addEventListener('click', () => {
                     tr.remove();
-                    atualizarCodigoEdicaoAcessorio(); // Recalcula se apagarmos
+                    atualizarCodigoEdicaoAcessorio(); 
                 });
 
-                // Limpa formulário
                 document.getElementById('edit-acessorioDesignacao').value = '';
                 document.getElementById('edit-acessorioSerie').value = '';
 
-                // Gera o próximo código imediatamente!
                 atualizarCodigoEdicaoAcessorio();
             });
         }
 
-        // MOTOR DE VALIDAÇÃO WIZARD (EDIÇÃO)
         document.querySelectorAll('#modalEditar .btn-edit-wizard').forEach(button => {
             button.addEventListener('click', function() {
                 const painelAtual = document.querySelector('#modalEditar .tab-pane.active');
@@ -1864,13 +1827,11 @@ try {
                 const alertasGerais = painelAtual.querySelectorAll('.edit-alertaGlobal');
                 alertasGerais.forEach(a => a.classList.add('d-none'));
 
-                // Reset
                 const fAno = document.getElementById('edit-feedbackAno');
                 if (fAno) fAno.innerText = "Data inválida.";
                 const fCusto = document.getElementById('edit-feedbackCusto');
                 if (fCusto) fCusto.innerText = "Campo obrigatório.";
 
-                // Validar Required
                 painelAtual.querySelectorAll('input[required], select[required]').forEach(campo => {
                     if (campo.closest('.d-none')) return;
                     let elemento = campo.type === 'hidden' ? campo.nextElementSibling : campo;
@@ -1882,7 +1843,6 @@ try {
                     }
                 });
 
-                // Datas Contrato e Garantia
                 const cGar = document.getElementById('edit-camposGarantia');
                 if (cGar && !cGar.classList.contains('d-none')) {
                     const dIni = painelAtual.querySelector('input[name="garantiaInicio"]');
@@ -1904,7 +1864,6 @@ try {
                     }
                 }
 
-                // Validação de Documentos (Passo 4)
                 if (painelAtual.id === 'edit-step4-pane') {
                     const alerta = document.getElementById('edit-alertaPasso4');
                     const texto = document.getElementById('edit-textoAlertaPasso4');
@@ -1936,7 +1895,6 @@ try {
                     }
                 }
 
-                // Ano e Custo
                 const anoInp = painelAtual.querySelector('input[name="manufacturingYear"]');
                 if (anoInp && anoInp.value && (parseInt(anoInp.value) < 1900 || parseInt(anoInp.value) > new Date().getFullYear())) {
                     anoInp.classList.add('is-invalid');
@@ -1948,13 +1906,11 @@ try {
                     tudoValido = false;
                 }
 
-                // Sucesso
                 if (tudoValido) mudarSeparadorEdit(this.getAttribute('data-bs-wizard-step'));
                 else alertasGerais.forEach(a => a.classList.remove('d-none'));
             });
         });
 
-        // SUBMETER EDIÇÃO (Passo 6)
         const formEdicao = document.getElementById('formEditar');
         if (formEdicao) {
             formEdicao.addEventListener('submit', function(e) {

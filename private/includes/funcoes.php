@@ -1,19 +1,16 @@
 <?php
 require_once __DIR__ . '/../../config/config.php';
 
-// Inicia a sessão se ainda não estiver iniciada
 function start_session() {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
 }
 
-// Verifica se a sessão do utilizador está ativa
 function check_session() {
     return isset($_SESSION['utilizador']);
 }
 
-// Redireciona automaticamente se não houver sessão iniciada
 function redirect_if_not_logged($redirect_to = '/login/login.php') {
     start_session();
     if (!check_session()) {
@@ -22,7 +19,6 @@ function redirect_if_not_logged($redirect_to = '/login/login.php') {
     }
 }
 
-// Redireciona se o perfil não estiver na lista de perfis permitidos
 function redirect_if_not_profile(array $perfis_permitidos) {
     start_session();
     $perfil_atual = $_SESSION['perfil'] ?? '';
@@ -32,11 +28,6 @@ function redirect_if_not_profile(array $perfis_permitidos) {
     }
 }
 
-// ============================================================
-// Encriptação e desencriptação de IDs com OpenSSL (Ficha 13)
-// Objectivo: evitar que IDs numéricos fiquem visíveis no HTML
-// e possam ser manipulados pelo utilizador.
-// ============================================================
 function aes_encrypt($value) {
     return bin2hex(openssl_encrypt(
         $value,
@@ -58,10 +49,6 @@ function aes_decrypt($value) {
     );
 }
 
-// ============================================================
-// Registo de eventos de autenticação na tabela log_acessos
-// (Guia de Submissão - secção 3.3.5)
-// ============================================================
 function registar_log(string $tipo_evento, ?string $email = null, ?int $id_utilizador = null, ?string $detalhe = null) {
     try {
         $ligacao = new PDO(
@@ -84,11 +71,9 @@ function registar_log(string $tipo_evento, ?string $email = null, ?int $id_utili
         ]);
         $ligacao = null;
     } catch (PDOException $e) {
-        // Silencioso — o log não deve interromper o fluxo principal
     }
 }
 
-// Destrói a sessão e redireciona
 function logout_and_redirect($redirect_to = '/login/login.php') {
     start_session();
     session_unset();

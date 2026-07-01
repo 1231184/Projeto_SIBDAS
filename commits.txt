@@ -1,0 +1,35 @@
+456032f - Diogo Almeida - 2026-07-01 20:34:40 +0100 - Submissão final - README, SQL, DBML, commits e documentação de equipamentos
+f6c2991 - Diogo Almeida - 2026-07-01 11:25:48 +0100 - final
+b0d82d0 - Diogo Almeida - 2026-06-30 21:29:50 +0100 - conteúdo do site editável via BD com preview ao vivo, uniformização de tamanhos de letra e gráfico de barras corrigido
+91ca139 - Diogo Almeida - 2026-06-30 19:57:25 +0100 - dashboard ligado à base de dados com KPIs reais, alertas dinâmicos e conteúdo do site
+45ef50c - Diogo Almeida - 2026-06-29 13:00:22 +0100 - Modal editar completo, abate lógico de equipamentos e filtros dinâmicos
+d16362a - Diogo Almeida - 2026-06-26 00:27:42 +0100 - Novo equipamento completo - upload docs, acessórios, garantias e fornecedores inseridos na BD
+317f34b - Diogo Almeida - 2026-06-25 15:10:09 +0100 - Implementação da listagem das garantias e contratos com a BD e os filtros
+1a7f523 - Diogo Almeida - 2026-06-25 15:03:00 +0100 - Implementação da listagem da documentação ligada à BD
+5942ab3 - Diogo Almeida - 2026-06-25 02:06:58 +0100 - Implementação da listagem dinâmica, o CRUD completo e navegação hierárquica
+f7d18c0 - Diogo Almeida - 2026-06-24 23:06:28 +0100 - Adicionar processamento php (INSERT/UPDATE/DELETE) para edificios, pisos, servicos e salas
+b97673d - Diogo Almeida - 2026-06-24 15:32:22 +0100 - Correção de filtros DataTables e criação de api get
+05c2949 - Diogo Almeida - 2026-06-20 19:12:49 +0100 - implementação
+a38b6ea - Diogo Almeida - 2026-06-16 16:20:56 +0100 - Ligação à base de dados concluída
+7e8685a - Diogo Almeida - 2026-06-12 19:00:27 +0100 - Implementacao completa de sessões, segurança de rotas privadas e autenticação
+2b4e938 - Diogo Almeida - 2026-06-12 01:15:47 +0100 - Implementação do fim de uma sessão (logout.php)
+91c248e - Diogo Almeida - 2026-06-12 00:15:18 +0100 - Implementação do formulário de login e Criação do processa_login.php com validação de dados
+d775c1f - Diogo Almeida - 2026-06-11 21:01:49 +0100 - Conversão de html para php e implementação de componentes reutilizáveis
+8d288a6 - Diogo Almeida - 2026-06-11 12:12:50 +0100 - Nova implemntação para o código interno e codigo componente
+effa5e0 - Diogo Almeida - 2026-06-11 01:08:13 +0100 - atualização
+7c9c168 - Diogo Almeida - 2026-06-10 13:24:30 +0100 - Finalização do frontend
+01b7db1 - Diogo Almeida - 2026-06-08 22:21:32 +0100 - Ajuste nos fornecedores, localizações e dashboard
+f97a867 - Diogo Almeida - 2026-06-05 02:08:32 +0100 - Ajustes na página de novo Equipamento.
+0d3efc4 - Diogo Almeida - 2026-06-03 19:48:50 +0100 - Ajustes de algumas páginas private
+995e95c - Diogo Almeida - 2026-05-29 10:13:52 +0100 - Implementação da página Gestão de Conteúdo - incompleta
+c4c3c5e - Diogo Almeida - 2026-05-27 00:50:44 +0100 - Implementação do login
+50674b2 - Diogo Almeida - 2026-05-26 22:52:22 +0100 - Implementação da página Dashboard
+62b5c04 - Diogo Almeida - 2026-05-26 00:14:21 +0100 - Implementação da página Garantias
+a52fbe0 - Diogo Almeida - 2026-05-25 19:44:08 +0100 - Implementação da página Documentação
+f7b3c52 - Diogo Almeida - 2026-05-24 04:51:12 +0100 - Implementação módulos Equipamentos, Localização e Fornecedores
+6095cc9 - Diogo Almeida - 2026-05-19 01:19:01 +0100 - Implementação da página de listagem de equipamentos
+f2856e8 - Diogo Almeida - 2026-04-30 13:12:27 +0100 - Estrutura index atualizada-funcionalidades
+eb45fa9 - Diogo Almeida - 2026-04-17 00:26:43 +0100 - Atualização index
+0aa0fa9 - Diogo Almeida - 2026-04-11 02:57:28 +0100 - fix: Ficheiros css e js para pagina index
+b3cb1a9 - Diogo Almeida - 2026-04-11 02:07:35 +0100 - feat: Página index com algumas informações
+1b85141 - Diogo Almeida - 2026-04-10 19:45:16 +0100 - feat: Estruturação inicial de diretórios e criação do README

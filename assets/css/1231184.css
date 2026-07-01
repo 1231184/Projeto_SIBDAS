@@ -1070,3 +1070,52 @@ section[id] {
         font-size: 1.8rem;
     }
 }
+
+/* ============================================================
+   RESPONSIVIDADE MOBILE — Área Privada
+   ============================================================ */
+@media (max-width: 767.98px) {
+
+    /* Layout: em mobile passa de linha para coluna */
+    body.d-flex.vh-100.overflow-hidden.bg-backend {
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: 100vh;
+        overflow: auto !important;
+    }
+
+    /* Sidebar desktop fica oculta (já tem d-none d-md-flex) */
+
+    /* Main content ocupa toda a largura e tem scroll normal */
+    body.bg-backend > main.flex-grow-1 {
+        overflow: visible !important;
+        height: auto !important;
+        padding: 1.25rem 1rem !important;
+    }
+
+    /* Tabela — scroll horizontal */
+    #tabelaDados,
+    .table-responsive,
+    .dataTables_wrapper {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Modais — ocupam quase toda a largura */
+    .modal-dialog {
+        margin: 0.5rem auto;
+        max-width: calc(100vw - 1rem);
+    }
+
+    /* Dashboard — cards em coluna */
+    .row.g-3 > [class*="col-xl-3"] {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* Botão Novo Equipamento — não transborda */
+    .btn-action-custom.py-2 {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.75rem !important;
+    }
+}

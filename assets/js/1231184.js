@@ -5,9 +5,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log("MedStock Frontend iniciado com sucesso.");
 
-    // ==========================================
-    // 1. COMPORTAMENTOS GERAIS (Navbar, etc.)
-    // ==========================================
     const navbar = document.querySelector('.navbar');
     if (navbar) {
         window.addEventListener('scroll', function () {
@@ -21,9 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ==========================================
-    // 2. MOTOR DE FILTROS VISUAIS (Pills e Sidebar)
-    // ==========================================
     const sidebar = document.getElementById('filterSidebar');
     const btnToggle = document.getElementById('btnToggleSidebar');
     const txtToggle = document.getElementById('textToggleSidebar');
@@ -32,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const badgeContador = document.getElementById('badgeContadorFiltros');
     const btnLimpar = document.getElementById('btnLimparFiltros');
 
-    // Função 2.1: Toggle da Barra Lateral
     if (btnToggle) {
         btnToggle.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
@@ -48,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Função 2.2: Atualizar interface visual quando se clica numa checkbox
     function atualizarUI() {
         if (!activePillsContainer) return; // Se não estivermos na página dos equipamentos, ignora
         
@@ -82,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Função 2.3: Botão de Limpar todos os filtros
     if (btnLimpar) {
         btnLimpar.addEventListener('click', () => {
             checkboxes.forEach(cb => cb.checked = false);
@@ -93,18 +84,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Ativa os eventos nas checkboxes
     checkboxes.forEach(cb => cb.addEventListener('change', atualizarUI));
 });
 
 
-// ==========================================
-// 3. INICIALIZAÇÃO DATATABLES (jQuery)
-// ==========================================
 $(document).ready(function() {
     if ($('#tabelaDados').length > 0) {
         
-        // 1. Configuração Base da Tabela
         window.tabelaEquipamentos = $('#tabelaDados').DataTable({
             pageLength: 5,
             pagingType: "full_numbers",
@@ -130,33 +116,23 @@ $(document).ready(function() {
             }
         });
 
-        // ----------------------------------------------------
-        // LÓGICA ESPECÍFICA: PÁGINA DE EQUIPAMENTOS
-        // ----------------------------------------------------
         if (document.getElementById('inputPesquisa')) { // Se a barra de equipamentos existir
             
-            // Ligar a barra de pesquisa de Equipamentos
             $('#inputPesquisa').on('keyup', function() {
                 window.tabelaEquipamentos.search(this.value).draw();
             });
 
-            // Atualiza a tabela quando clicas nas checkboxes
             $('.filter-check input[type="checkbox"]').on('change', function() {
                 window.tabelaEquipamentos.draw();
             });
         }
 
-        // ----------------------------------------------------
-        // LÓGICA ESPECÍFICA: PÁGINA DE FORNECEDORES
-        // ----------------------------------------------------
         if (document.getElementById('pesquisaFornecedores')) { // Se a barra de fornecedores existir
             
-            // Ligar a barra de pesquisa de Fornecedores
             $('#pesquisaFornecedores').on('keyup', function() {
                 window.tabelaEquipamentos.search(this.value).draw();
             });
 
-            // Ligar os botões de Filtro Rápido (Fabricante, Distribuidor, etc.)
             $('.btn-filter').on('click', function() {
                 $('.btn-filter').removeClass('active');
                 $(this).addClass('active');
@@ -164,17 +140,12 @@ $(document).ready(function() {
             });
         }
 
-        // ----------------------------------------------------
-        // LÓGICA ESPECÍFICA: PÁGINA DE DOCUMENTAÇÃO
-        // ----------------------------------------------------
         if (document.getElementById('pesquisaDocs')) {
 
-            // Ligar a barra de pesquisa
             $('#pesquisaDocs').on('keyup', function() {
                 window.tabelaEquipamentos.search(this.value).draw();
             });
 
-            // Ligar os botões de filtro por tipo
             $('.btn-filter').on('click', function() {
                 $('.btn-filter').removeClass('active');
                 $(this).addClass('active');
@@ -182,9 +153,6 @@ $(document).ready(function() {
             });
         }
 
-        // ----------------------------------------------------
-        // LÓGICA ESPECÍFICA: PÁGINA DE GARANTIAS
-        // ----------------------------------------------------
         if (document.getElementById('pesquisaGarantias')) {
 
             $('#pesquisaGarantias').on('keyup', function() {
@@ -198,16 +166,12 @@ $(document).ready(function() {
             });
         }
 
-        // ----------------------------------------------------
-        // MOTOR DE FILTRAGEM GLOBAL (Protegido contra erros)
-        // ----------------------------------------------------
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             if (settings.nTable.id !== 'tabelaDados') return true;
 
             var tr = settings.aoData[dataIndex].nTr;
             if (!tr) return true;
 
-            // --- Regras para Equipamentos ---
             if (document.getElementById('inputPesquisa')) {
                 var estado      = tr.getAttribute('data-estado')      || '';
                 var criticidade = tr.getAttribute('data-criticidade') || '';
@@ -219,7 +183,6 @@ $(document).ready(function() {
                 var servAtivos = Array.from(document.querySelectorAll('input[data-group="servico"]:checked')).map(cb => cb.value);
                 var fabAtivos  = Array.from(document.querySelectorAll('input[data-group="fabricante"]:checked')).map(cb => cb.value);
 
-                // Se nenhum filtro de estado activo, esconder abatidos por defeito
                 var matchEstado;
                 if (estAtivos.length === 0) {
                     matchEstado = estado !== 'Abatido';
@@ -234,7 +197,6 @@ $(document).ready(function() {
                 return matchEstado && matchCrit && matchCat && matchServ && matchFab;
             }
 
-            // --- Regras para Fornecedores ---
             if (document.getElementById('pesquisaFornecedores')) {
                 var filtroAtivo = $('.btn-filter.active').text().trim();
 
@@ -248,7 +210,6 @@ $(document).ready(function() {
                 return tipoFornecedor === filtroAtivo;
             }
 
-            // --- Regras para Documentação ---
             if (document.getElementById('pesquisaDocs')) {
                 var filtroAtivo = $('.btn-filter.active').attr('data-tipo') || 'Todos';
 
@@ -258,7 +219,6 @@ $(document).ready(function() {
                 return tipoCelula === filtroAtivo;
             }
 
-            // --- Regras para Garantias ---
             if (document.getElementById('pesquisaGarantias')) {
                 var filtroAtivo = $('.btn-filter.active').attr('data-tipo') || 'Todos';
 
@@ -271,12 +231,10 @@ $(document).ready(function() {
             return true;
         });
 
-        // Forçar aplicação do filtro (ex: esconder abatidos) logo no carregamento
         if (window.tabelaEquipamentos && document.getElementById('inputPesquisa')) {
             window.tabelaEquipamentos.draw();
         }
 
-        // ---- Filtro automático vindo do Dashboard (ex: ?filtro=estado:Ativo) ----
         const urlParams = new URLSearchParams(window.location.search);
         const filtroParam = urlParams.get('filtro');
         const filtro2Param = urlParams.get('filtro2');
@@ -292,7 +250,6 @@ $(document).ready(function() {
                 checkbox.checked = true;
                 checkbox.dispatchEvent(new Event('change'));
             }
-            // Abrir o accordion do grupo
             const accordionCollapse = checkbox?.closest('.accordion-collapse');
             if (accordionCollapse) {
                 const bsCollapse = bootstrap.Collapse.getOrCreateInstance(accordionCollapse);
@@ -301,7 +258,6 @@ $(document).ready(function() {
         }
 
         if ((filtroParam || filtro2Param) && document.getElementById('inputPesquisa')) {
-            // Mostrar sidebar de filtros
             const filterSidebar = document.getElementById('filterSidebar');
             if (filterSidebar && filterSidebar.classList.contains('d-none')) {
                 filterSidebar.classList.remove('d-none');
@@ -312,12 +268,8 @@ $(document).ready(function() {
     }
 });
 
-// ==========================================
-// 4. LÓGICA AJAX PARA MODAIS (Ver / Editar)
-// ==========================================
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- PRÉ-CARREGAR listas de localização e fornecedores (uma única vez) ---
     let dadosFormulario = null;
     fetch('api/get_dados_formulario.php')
         .then(r => r.json())
@@ -328,7 +280,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const eq   = data.dados;
         const hoje = new Date();
  
-        // ---- HEADER ----
         document.getElementById('det-designacao').textContent = eq.designacao || '—';
         document.getElementById('det-codigo').textContent     = eq.codigo_interno || '—';
  
@@ -342,7 +293,6 @@ document.addEventListener('DOMContentLoaded', function() {
         badgeCrit.className   = 'badge ' + (mapaCrit[eq.criticidade] || 'badge-soft-secondary');
         badgeCrit.textContent = eq.criticidade || '—';
  
-        // ---- SEPARADOR GERAL ----
         document.getElementById('det-categoria').textContent    = eq.categoria    || '—';
         document.getElementById('det-marca').textContent        = eq.marca        || '—';
         document.getElementById('det-modelo').textContent       = eq.modelo       || '—';
@@ -367,11 +317,9 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('det-data-registo').textContent = eq.data_registo
             ? new Date(eq.data_registo).toLocaleDateString('pt-PT') : '—';
 
-        // Resetar para a aba Geral sempre que o modal abre
         const tabGeral = document.getElementById('geral-tab');
         if (tabGeral) new bootstrap.Tab(tabGeral).show();
 
-        // Esconder/mostrar botões consoante estado
         const isAbatido = eq.estado === 'Abatido';
         const btnEditarDet   = document.querySelector('#modalDetalhes .btn-action-custom[data-bs-target="#modalEditar"]');
         const btnRemoverDet  = document.querySelector('#modalDetalhes .btn-action-custom.btn-action-danger');
@@ -380,14 +328,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (btnEditarDet)   btnEditarDet.style.display   = isAbatido ? 'none' : '';
         if (btnRemoverDet)  btnRemoverDet.style.display  = isAbatido ? 'none' : '';
 
-        // Esconder todos os btn-action-custom excepto o fechar quando abatido
         document.querySelectorAll('#modalDetalhes .modal-header .btn-action-custom').forEach(btn => {
             if (!btn.classList.contains('btn-close')) {
                 btn.style.display = isAbatido ? 'none' : '';
             }
         });
  
-        // ---- SEPARADOR LOCALIZAÇÃO ----
         const divLocalizacaoAtual = document.getElementById('det-localizacao-atual');
         if (divLocalizacaoAtual) {
             divLocalizacaoAtual.style.display = isAbatido ? 'none' : '';
@@ -418,7 +364,6 @@ document.addEventListener('DOMContentLoaded', function() {
             divHist.innerHTML = '<p class="text-muted small mb-0">Sem histórico registado.</p>';
         }
  
-        // ---- SEPARADOR FORNECEDORES ----
         const divForn = document.getElementById('det-fornecedores');
         document.querySelector('#fornecedores-tab .badge').textContent = data.fornecedores.length;
         if (data.fornecedores && data.fornecedores.length > 0) {
@@ -437,7 +382,6 @@ document.addEventListener('DOMContentLoaded', function() {
             divForn.innerHTML = '<p class="text-muted small mb-0">Sem fornecedores associados.</p>';
         }
  
-        // ---- SEPARADOR GARANTIAS ----
         const divGar = document.getElementById('det-garantias');
         if (data.garantias && data.garantias.length > 0) {
             divGar.innerHTML = data.garantias.map(g => {
@@ -470,7 +414,6 @@ document.addEventListener('DOMContentLoaded', function() {
             divGar.innerHTML = '<p class="text-muted small mb-0">Sem garantias ou contratos registados.</p>';
         }
  
-        // ---- SEPARADOR DOCUMENTOS ----
         const divDoc = document.getElementById('det-documentos');
         document.querySelector('#documentos-tab .badge').textContent = data.documentos.length;
         if (data.documentos && data.documentos.length > 0) {
@@ -499,7 +442,6 @@ document.addEventListener('DOMContentLoaded', function() {
             divDoc.innerHTML = '<p class="text-muted small mb-0">Sem documentos associados.</p>';
         }
  
-        // ---- SEPARADOR ACESSÓRIOS ----
         const divAce = document.getElementById('det-acessorios');
         document.querySelector('#acessorios-tab .badge').textContent = data.acessorios.length;
         if (data.acessorios && data.acessorios.length > 0) {
@@ -523,7 +465,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const formEditar = document.getElementById('formEditar');
         if (!formEditar) return;
 
-        // --- CAMPO OCULTO COM ID (encriptado para o atualizar_equipamento.php) ---
         let inputId = formEditar.querySelector('input[name="id_equipamento"]');
         if (!inputId) {
             inputId = document.createElement('input');
@@ -533,17 +474,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         inputId.value = window._idEquipamentoEncriptado || '';
 
-        // --- GUARDAR DADOS PARA O MODAL REMOVER ---
         const removerDesignacao = document.getElementById('remover-designacao');
         const removerCodigo     = document.getElementById('remover-codigo');
         if (removerDesignacao) removerDesignacao.textContent = '"' + (eq.designacao || '—') + '"';
         if (removerCodigo)     removerCodigo.textContent     = eq.codigo_interno || '—';
 
-        // Guardar o ID no botão de confirmar abate
         const btnConfirmar = document.getElementById('btnConfirmarRemover');
         if (btnConfirmar) btnConfirmar.setAttribute('data-id', window._idEquipamentoEncriptado || '');
 
-        // --- PASSO 1: IDENTIFICAÇÃO ---
         formEditar.querySelector('input[name="internalCode"]').value  = eq.codigo_interno  || '';
         formEditar.querySelector('input[name="name"]').value          = eq.designacao       || '';
         formEditar.querySelector('input[name="brand"]').value         = eq.marca            || '';
@@ -555,13 +493,11 @@ document.addEventListener('DOMContentLoaded', function() {
         selecionarDropdownEdit('Criticidade',  eq.criticidade  || '');
         selecionarDropdownEdit('Manufacturer', eq.nome_fabricante || '');
 
-        // --- PASSO 2: RECEÇÃO E LOCALIZAÇÃO ---
         formEditar.querySelector('input[name="acquisitionDate"]').value = eq.data_aquisicao  || '';
         formEditar.querySelector('input[name="cost"]').value            = (eq.custo_aquisicao !== null && eq.custo_aquisicao !== undefined) ? eq.custo_aquisicao : '';
         formEditar.querySelector('select[name="entryType"]').value      = eq.tipo_entrada    || '';
         formEditar.querySelector('select[name="status"]').value         = eq.estado          || '';
 
-        // Localização hierárquica — preenche os 4 níveis directamente sem activar a lógica de cascata
         const edificio = eq.nome_edificio || '';
         const piso     = eq.nome_piso     || '';
         const servico  = eq.nome_servico  || '';
@@ -578,8 +514,6 @@ document.addEventListener('DOMContentLoaded', function() {
         setLocalizacao('Servico',  servico);
         setLocalizacao('Sala',     sala);
 
-        // --- PASSO 3: ENTIDADES E CONTRATOS ---
-        // Fornecedores por papel
         const fornComercial  = (data.fornecedores || []).find(f => f.papel === 'Comercial');
         const fornAssistencia = (data.fornecedores || []).find(f => f.papel === 'Assistência');
         const fornConsumiveis = (data.fornecedores || []).find(f => f.papel === 'Consumíveis');
@@ -588,7 +522,6 @@ document.addEventListener('DOMContentLoaded', function() {
         selecionarDropdownEdit('Assistencia', fornAssistencia ? fornAssistencia.nome_empresa : '');
         selecionarDropdownEdit('Consumiveis', fornConsumiveis ? fornConsumiveis.nome_empresa : '');
 
-        // Garantia
         const garantia = (data.garantias || []).find(g => g.tipo_cobertura === 'Garantia');
         const switchGarantia = document.getElementById('edit-temGarantia');
         if (switchGarantia) {
@@ -598,7 +531,6 @@ document.addEventListener('DOMContentLoaded', function() {
         formEditar.querySelector('input[name="garantiaInicio"]').value = garantia ? garantia.data_inicio : '';
         formEditar.querySelector('input[name="garantiaFim"]').value    = garantia ? garantia.data_fim    : '';
 
-        // Contrato de manutenção
         const contrato = (data.garantias || []).find(g => g.tipo_cobertura === 'Contrato Manutenção');
         const switchContrato = document.getElementById('edit-temContrato');
         if (switchContrato) {
@@ -612,8 +544,6 @@ document.addEventListener('DOMContentLoaded', function() {
         formEditar.querySelector('input[name="contratoInicio"]').value         = contrato ? (contrato.data_inicio    || '') : '';
         formEditar.querySelector('input[name="contratoFim"]').value            = contrato ? (contrato.data_fim       || '') : '';
 
-        // --- PASSO 4: DOCUMENTOS ---
-        // Limpa os documentos hardcoded e repõe com os reais da BD
         const tabelaDocsBody = document.getElementById('edit-tabelaDocsBody');
         tabelaDocsBody.innerHTML = '';
         (data.documentos || []).forEach(d => {
@@ -635,7 +565,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </td>`;
             tabelaDocsBody.appendChild(tr);
             tr.querySelector('.btn-remover-doc').addEventListener('click', function() {
-                // Adiciona o ID ao campo de remoção e remove a linha
                 const idDoc = this.getAttribute('data-id-doc');
                 if (idDoc) {
                     const hiddenRemover = document.createElement('input');
@@ -648,7 +577,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // Checkboxes de documentação em falta
         const faltaCE     = document.getElementById('edit-faltaCE');
         const faltaManual = document.getElementById('edit-faltaManual');
         const faltaFatura = document.getElementById('edit-faltaFatura');
@@ -656,7 +584,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (faltaManual) faltaManual.checked = eq.falta_manual_utilizador  == 1;
         if (faltaFatura) faltaFatura.checked = eq.falta_fatura_guia        == 1;
 
-        // --- PASSO 5: ACESSÓRIOS ---
         const tabelaAcesBody = document.getElementById('edit-tabelaAcessoriosBody');
         tabelaAcesBody.innerHTML = '';
         (data.acessorios || []).forEach(a => {
@@ -677,19 +604,15 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // Atualiza o código do próximo acessório com o código real do equipamento
         if (typeof atualizarCodigoEdicaoAcessorio === 'function') atualizarCodigoEdicaoAcessorio();
 
-        // --- PASSO 6: OBSERVAÇÕES ---
         const obs = formEditar.querySelector('textarea[name="observations"]');
         if (obs) obs.value = eq.observacoes || '';
 
-        // Volta ao Passo 1 sempre que se abre o modal e reseta as badges
         if (typeof mudarSeparadorEdit === 'function') mudarSeparadorEdit('#edit-step1-pane');
 
         }
 
-    // --- PREENCHER LISTAS DINÂMICAS quando o modal Editar abre ---
     document.getElementById('modalEditar')?.addEventListener('show.bs.modal', function() {
         const formEditar = document.getElementById('formEditar');
 
@@ -736,7 +659,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </li>`
             ).join('');
 
-            // Mostrar os itens do nível correcto com base nos valores já preenchidos
             const inputEd = document.getElementById('edit-inputEdificio');
             const inputP  = document.getElementById('edit-inputPiso');
             const inputS  = document.getElementById('edit-inputServico');
@@ -781,19 +703,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const textoOriginal = this.innerHTML;
             const btn           = this;
 
-            // Atualizar links de exportação CSV e JSON com o ID encriptado
             const btnCsv  = document.getElementById('btn-exportar-csv');
             const btnJson = document.getElementById('btn-exportar-json');
             const baseUrl = window.BASE_URL || '';
             if (btnCsv)  btnCsv.href  = baseUrl + '/private/views/equipamentos/api/exportar_csv.php?id='  + id;
             if (btnJson) btnJson.href = baseUrl + '/private/views/equipamentos/api/exportar_json.php?id=' + id;
 
-            // Guardar ID encriptado para o PDF
             window._idEquipamentoEncriptado = id;
  
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
  
-            // Garantir que o modal Editar está fechado antes de abrir o Detalhes
             const modalEditarEl = document.getElementById('modalEditar');
             const modalEditarInst = bootstrap.Modal.getInstance(modalEditarEl);
             if (modalEditarInst) modalEditarInst.hide();
@@ -811,7 +730,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     preencherModalDetalhes(data);
                     preencherModalEditar(data.dados, data);
 
-                    // Pequeno delay para garantir que o Bootstrap terminou de fechar o modal Editar
                     setTimeout(() => {
                         const modalDetEl = document.getElementById('modalDetalhes');
                         bootstrap.Modal.getOrCreateInstance(modalDetEl).show();
@@ -825,7 +743,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
  
-    // ---- Abrir via URL ?abrir=ID (vindo de fornecedores ou localizações) ----
     const params  = new URLSearchParams(window.location.search);
     const idAbrir = params.get('abrir');
  
@@ -833,10 +750,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const botaoAlvo = document.querySelector('.btn-ver-eq[data-id="' + idAbrir + '"]');
  
         if (botaoAlvo) {
-            // Se o botão existir na tabela (página não filtrada), clica nele diretamente
             botaoAlvo.click();
         } else {
-            // Se não existir (página filtrada por serviço/sala), faz fetch direto
             fetch('api/get_equipamento.php?id=' + idAbrir)
                 .then(r => r.json())
                 .then(data => {
@@ -849,7 +764,6 @@ document.addEventListener('DOMContentLoaded', function() {
        }
     }
 
-    // ---- Botão confirmar abate ----
     document.addEventListener('click', function(e) {
         if (!e.target.closest('#btnConfirmarRemover')) return;
 
@@ -889,9 +803,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// ==========================================
-// ETIQUETA — Impressão de etiqueta com QR Code
-// ==========================================
 function gerarEtiqueta() {
     const codigo     = document.getElementById('det-codigo')?.textContent?.trim()     || '—';
     const designacao = document.getElementById('det-designacao')?.textContent?.trim() || '—';
@@ -903,12 +814,9 @@ function gerarEtiqueta() {
     const criticidade = document.getElementById('det-badge-criticidade')?.textContent?.trim() || '—';
     const estado     = document.getElementById('det-badge-estado')?.textContent?.trim() || '—';
 
-    // QR Code via API gratuita (sem instalar nada)
-    // Conteúdo: código interno + designação + localização
     const qrContent  = encodeURIComponent(`${codigo} | ${designacao} | ${servico} | ${edificio}`);
     const qrUrl      = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrContent}`;
 
-    // Cor da criticidade
     const coresCrit  = { 'Suporte de Vida': '#dc2626', 'Alta': '#f97316', 'Média': '#eab308', 'Baixa': '#22c55e' };
     const corCrit    = coresCrit[criticidade] || '#6b7280';
 
@@ -983,12 +891,7 @@ function gerarEtiqueta() {
     janela.focus();
 }
 
-// ==========================================
-// EXPORTAÇÃO PDF — Impressão via window.print()
-// (Guia de Submissão - secção 3.3.5)
-// ==========================================
 function imprimirFichaEquipamento() {
-    // Recolher dados visíveis no modal — tab Geral
     const designacao  = document.getElementById('det-designacao')?.textContent  || '—';
     const codigo      = document.getElementById('det-codigo')?.textContent       || '—';
     const estado      = document.getElementById('det-badge-estado')?.textContent || '—';
@@ -1009,7 +912,6 @@ function imprimirFichaEquipamento() {
     const observacoes = document.getElementById('det-observacoes')?.textContent  || '—';
     const dataRegisto = document.getElementById('det-data-registo')?.textContent || '—';
 
-    // Fornecedores
     let fornHtml = '';
     document.querySelectorAll('#det-fornecedores .list-box').forEach(el => {
         const nome  = el.querySelector('.fw-semibold')?.textContent || '—';
@@ -1019,7 +921,6 @@ function imprimirFichaEquipamento() {
         fornHtml += `<tr><td>${nome}</td><td>${papel}</td><td>${tel}</td><td>${email}</td></tr>`;
     });
 
-    // Garantias
     let garHtml = '';
     document.querySelectorAll('#det-garantias .list-box').forEach(el => {
         const tipo     = el.querySelector('.fw-bold')?.textContent || '—';
@@ -1029,7 +930,6 @@ function imprimirFichaEquipamento() {
         garHtml += `<tr><td>${tipo}</td><td>${ref}</td><td>${entidade}</td><td>${datas}</td></tr>`;
     });
 
-    // Acessórios
     let aceHtml = '';
     document.querySelectorAll('#det-acessorios .list-box').forEach(el => {
         const cod  = el.querySelector('.custom-monospace')?.textContent || '—';
@@ -1038,7 +938,6 @@ function imprimirFichaEquipamento() {
         aceHtml += `<tr><td>${cod}</td><td>${des}</td><td>${ser}</td></tr>`;
     });
 
-    // Histórico
     let histHtml = '';
     document.querySelectorAll('#det-historico .list-box').forEach(el => {
         const motivo  = el.querySelector('.fw-bold')?.textContent || '—';

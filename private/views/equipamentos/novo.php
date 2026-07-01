@@ -5,12 +5,8 @@ redirect_if_not_logged();
 $erros = [];
 $erro_sistema = "";
 
-// --------------------------------------------------------------------
-// PROCESSAR FORMULÁRIO (Ficha 12 - Método POST)
-// --------------------------------------------------------------------
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // 1. RECOLHER DADOS
     $codigo_interno       = $_POST["internalCode"]       ?? "";
     $designacao           = $_POST["name"]               ?? "";
     $marca                = $_POST["brand"]              ?? "";
@@ -30,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $falta_manual_utilizador  = isset($_POST["faltaManual"])  ? 1 : 0;
     $falta_fatura_guia        = isset($_POST["faltaFatura"])  ? 1 : 0;
 
-    // 2. VALIDAR DADOS
     $designacao   = trim($designacao);
     $marca        = trim($marca);
     $modelo       = trim($modelo);
@@ -54,29 +49,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($data_aquisicao)) $erros["acquisitionDate"] = "Campo obrigatório.";
     if (empty($ano_fabrico))    $erros["manufacturingYear"] = "Campo obrigatório.";
 
-    // Designação: mínimo 3 caracteres
     if (!empty($designacao) && strlen($designacao) < 3) {
         $erros["name"] = "A designação deve ter pelo menos 3 caracteres.";
     }
 
-    // Marca: não pode conter números
     if (!empty($marca) && preg_match('/\d/', $marca)) {
         $erros["brand"] = "A marca não pode conter números.";
     }
 
-    // Número de série: apenas letras, números, hífen, ponto e underscore
     if (!empty($numero_serie) && !preg_match('/^[a-zA-Z0-9\-_.]+$/', $numero_serie)) {
         $erros["serialNumber"] = "Número de série contém caracteres inválidos.";
     }
 
-    // Ano de fabrico: obrigatório, entre 1900 e ano atual
     if (!empty($ano_fabrico)) {
         if (!preg_match('/^\d{4}$/', $ano_fabrico) || (int)$ano_fabrico < 1900 || (int)$ano_fabrico > (int)date('Y')) {
             $erros["manufacturingYear"] = "Ano inválido. Deve ser entre 1900 e " . date('Y') . ".";
         }
     }
 
-    // Data de aquisição: obrigatória e não pode ser no futuro
     if (!empty($data_aquisicao)) {
         $hoje = date('Y-m-d');
         if ($data_aquisicao > $hoje) {
@@ -84,14 +74,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Custo: obrigatório e positivo
     if ($custo === '' || $custo === null) {
         $erros["cost"] = "Campo obrigatório.";
     } elseif (!is_numeric($custo) || (float)$custo < 0) {
         $erros["cost"] = "O custo deve ser um valor positivo.";
     }
 
-    // 3. SE NÃO HÁ ERROS — NORMALIZAR E GUARDAR NA BASE DE DADOS
     if (empty($erros)) {
  
         $designacao  = ucwords(strtolower($designacao));
@@ -112,9 +100,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $ligacao->beginTransaction();
  
-            // -------------------------------------------------------
-            // A) Resolver id_servico, id_sala e id_fabricante
-            // -------------------------------------------------------
             $nome_servico = trim($_POST['servico'] ?? '');
             $nome_sala    = trim($_POST['sala']    ?? '');
  
@@ -143,9 +128,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($row) $id_fabricante = $row->id_fornecedor;
             }
  
-            // -------------------------------------------------------
-            // B) INSERT principal na tabela equipamentos
-            // -------------------------------------------------------
             $sql = "INSERT INTO equipamentos (
                         codigo_interno, designacao, marca, modelo, numero_serie,
                         ano_fabrico, categoria, criticidade,
@@ -185,9 +167,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
             $id_equipamento = (int)$ligacao->lastInsertId();
  
-            // -------------------------------------------------------
-            // C) INSERT na equipamento_fornecedor
-            // -------------------------------------------------------
             $nome_fornecedor  = trim($_POST['fornecedor']  ?? '');
             $nome_assistencia = trim($_POST['assistencia'] ?? '');
             $nome_consumiveis = trim($_POST['consumiveis'] ?? '');
@@ -207,9 +186,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
  
-            // -------------------------------------------------------
-            // D) INSERT em garantias_contratos
-            // -------------------------------------------------------
             $tem_garantia = isset($_POST['temGarantia']);
             $tem_contrato = isset($_POST['temContrato']);
  
@@ -260,9 +236,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
  
-            // -------------------------------------------------------
-            // E) INSERT em acessorios
-            // -------------------------------------------------------
             $acessorios_post = $_POST['acessorios'] ?? [];
             foreach ($acessorios_post as $ace) {
                 $ace_codigo     = trim($ace['codigo']     ?? '');
@@ -282,9 +255,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ]);
             }
  
-            // -------------------------------------------------------
-            // F) UPLOAD e INSERT em documentos
-            // -------------------------------------------------------
             $docs_post = $_POST['docs'] ?? [];
             $pastas = [
                 'Manual de utilizador'        => 'manuais',
@@ -307,7 +277,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
                 if (empty($doc_tipo)) continue;
  
-                // Resolver id_fornecedor do documento
                 $id_forn_doc = null;
                 if (!empty($doc_fornec) && $doc_fornec !== 'Nenhuma') {
                     $stmtFD = $ligacao->prepare("SELECT id_fornecedor FROM fornecedores WHERE nome_empresa = :nome LIMIT 1");
@@ -316,7 +285,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($rowFD) $id_forn_doc = $rowFD->id_fornecedor;
                 }
  
-                // Upload do ficheiro
                 $caminho_ficheiro = 'assets/docs/sem_ficheiro.pdf'; // fallback
                 if (isset($_FILES['docFicheiros']['tmp_name'][$doc_index]) && $_FILES['docFicheiros']['error'][$doc_index] === UPLOAD_ERR_OK) {
                     $pasta_tipo = $pastas[$doc_tipo] ?? 'outros';
@@ -351,9 +319,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $doc_index++;
             }
  
-            // -------------------------------------------------------
-            // G) INSERT em historico_movimentacoes (entrada em inventário)
-            // -------------------------------------------------------
             if ($id_servico) {
                 $id_utilizador = $_SESSION['id_utilizador'] ?? null;
                 $stmtHist = $ligacao->prepare("
@@ -387,7 +352,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <?php
-// Gerar o próximo código interno automaticamente
 try {
     $ligacao_codigo = new PDO(
         "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8",
@@ -395,7 +359,6 @@ try {
         MYSQL_PASSWORD
     );
 
-    // Vai buscar todos os códigos e encontra o maior número
     $stmt = $ligacao_codigo->query("SELECT codigo_interno FROM equipamentos WHERE codigo_interno LIKE 'EQ-%'");
     $todos = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
@@ -427,10 +390,9 @@ try {
             <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
             <h1 class="h5 fw-bold mb-0 text-dark">MedStock</h1>
         </div>
-        <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
+        <button class="btn btn-light border-0 shadow-sm d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile"><i class="fa-solid fa-bars"></i></button>
     </header>
 
-    <!-- Título da Página -->
     <div class="d-flex align-items-center gap-3 mb-4" style="max-width: 1024px;">
         <a href="lista_equi.php"
             class="btn btn-light border shadow-sm d-flex align-items-center justify-content-center"
@@ -441,7 +403,6 @@ try {
             <h1 class="h3 fw-bold text-dark mb-0">Novo Equipamento</h1>
             <p class="text-muted small mt-1 mb-0">Registe um novo equipamento no inventário</p>
         </div>
-        <!-- Botão de preenchimento automático (Fase de Testes) -->
         <button type="button" id="btn-preencher-auto"
             class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 shadow-sm"
             title="Preenche os campos com dados de demonstração">
@@ -560,22 +521,10 @@ try {
                                                 onclick="event.stopPropagation()">
                                         </li>
                                         <div id="listaManufacturer">
-                                            <!-- preenchido pelo JS via API -->
                                         </div>
                                     </ul>
                                     <div class="invalid-feedback" style="font-size: 0.70rem;">Campo obrigatório.
                                     </div>
-                                </div>
-                                <div class="form-text mt-1 d-flex justify-content-between"
-                                    style="font-size: 0.65rem;">
-                                    <a href="../fornecedores/lista_fornecedores.html" target="_blank"
-                                        class="text-decoration-none text-secondary hover-brand">
-                                        <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Criar novo
-                                    </a>
-                                    <a href="#" onclick="carregarDadosFormulario(); event.preventDefault();"
-                                        class="text-decoration-none text-brand">
-                                        <i class="fa-solid fa-rotate me-1"></i>Atualizar lista
-                                    </a>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -798,7 +747,6 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaEdificio">
-                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -826,7 +774,6 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaPiso">
-                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -854,7 +801,6 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaServico">
-                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -882,7 +828,6 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaSala">
-                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                         </div>
@@ -948,7 +893,6 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaFornecedor">
-                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -978,7 +922,6 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaAssistencia">
-                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                             <div class="invalid-feedback" style="font-size: 0.70rem;">Campo
@@ -1008,7 +951,6 @@ try {
                                                         onclick="event.stopPropagation()">
                                                 </li>
                                                 <div id="listaConsumiveis">
-                                                    <!-- preenchido pelo JS via API -->
                                                 </div>
                                             </ul>
                                         </div>
@@ -1099,7 +1041,6 @@ try {
                                                                 onclick="event.stopPropagation()">
                                                         </li>
                                                         <div id="listaEntidadeContrato">
-                                                            <!-- preenchido pelo JS via API -->
                                                         </div>
                                                     </ul>
                                                     <div class="invalid-feedback" style="font-size: 0.70rem;">
@@ -1280,7 +1221,6 @@ try {
                                                     onclick="event.stopPropagation()">
                                             </li>
                                             <div id="listaDocFornecedor">
-                                                <!-- preenchido pelo JS via API -->
                                             </div>
                                         </ul>
                                     </div>
@@ -1459,21 +1399,16 @@ try {
     </form>
 </main>
 
-<!-- JS DO WIZARD -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        // 1. Preencher automaticamente a data de hoje na Aquisição (Passo 2)
-        //    APENAS se o campo estiver vazio (não estiver a repopular após erro)
         const campoData = document.getElementById('dataAquisicao');
         if (campoData && !campoData.value) {
             const hoje = new Date().toISOString().split('T')[0];
             campoData.value = hoje;
         }
 
-        // =========================================================================
         // LÓGICA DO BOTÃO "ANEXAR" (PASSO 4)
-        // =========================================================================
         const btnAnexar = document.getElementById('btnAnexarDoc');
         if (btnAnexar) {
             btnAnexar.addEventListener('click', function() {
@@ -1484,7 +1419,6 @@ try {
                 const ficheiroInput = document.getElementById('docFicheiro');
                 const ficheiro = ficheiroInput.value;
 
-                // Validações antes de anexar
                 if (!tipo || !ficheiro) {
                     alert("Por favor, selecione o Tipo de Documento e escolha um Ficheiro para anexar.");
                     return;
@@ -1495,7 +1429,6 @@ try {
                     return;
                 }
 
-                // A TUA SUGESTÃO APLICADA AQUI: Validação de Datas do Documento
                 if (emissao && validade) {
                     if (new Date(validade) < new Date(emissao)) {
                         alert("Atenção: A Data de Validade não pode ser anterior à Data de Emissão.");
@@ -1508,10 +1441,8 @@ try {
                 const emptyRow = document.getElementById('emptyDocRow');
                 if (emptyRow) emptyRow.remove();
 
-                // Obter só o nome do ficheiro (ex: manual.pdf)
                 const fileName = ficheiro.split('\\').pop();
 
-                // Criar a nova linha
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                         <td class="px-3 py-2 small fw-medium text-dark">
@@ -1523,7 +1454,6 @@ try {
                     `;
                 tbody.appendChild(tr);
 
-                // Criar inputs hidden para o PHP receber os dados deste documento
                 const idDoc = Date.now();
                 const form = document.querySelector('form');
 
@@ -1557,10 +1487,8 @@ try {
                 hFornDoc.value = document.getElementById('inputDocFornecedor').value || '';
                 form.appendChild(hFornDoc);
 
-                // Guardar referência do idDoc na linha para remoção posterior
                 tr.dataset.docId = idDoc;
 
-                // Adicionar evento ao botão do lixo para remover a linha e os inputs hidden
                 tr.querySelector('.btn-remover-doc').addEventListener('click', function() {
                     const docId = tr.dataset.docId;
                     if (docId) {
@@ -1572,7 +1500,6 @@ try {
                     }
                 });
 
-                // Limpar os campos depois de anexar para estar pronto para o próximo
                 document.getElementById('docTitulo').value = '';
                 document.getElementById('docEmissao').value = '';
                 document.getElementById('dataValidadeDoc').value = '';
@@ -1584,15 +1511,12 @@ try {
             });
         }
 
-        // =========================================================================
         // LÓGICA DO BOTÃO "ADICIONAR ACESSÓRIO" (PASSO 5) - COM AUTO-INCREMENTO E LEITURA DINÂMICA
-        // =========================================================================
 
         function atualizarCodigoNovoAcessorio() {
             const tbody = document.getElementById('tabelaAcessoriosBody');
             let numeros = [];
 
-            // 1. Guarda todos os números atuais (.XX) num array
             for (let tr of tbody.children) {
                 if (tr.id !== 'emptyAcessorioRow') {
                     const tdCode = tr.querySelector('td:first-child');
@@ -1605,10 +1529,8 @@ try {
                 }
             }
 
-            // 2. Ordena os números do menor para o maior
             numeros.sort((a, b) => a - b);
 
-            // 3. Descobre o primeiro número em falta (A lacuna)
             let proximoNum = 1;
             for (let i = 0; i < numeros.length; i++) {
                 if (numeros[i] === proximoNum) {
@@ -1618,7 +1540,6 @@ try {
                 }
             }
 
-            // 4. Formata e aplica (Ex: 01, 02...)
             const proximoNumStr = proximoNum.toString().padStart(2, '0');
             const codigoPrincipal = document.getElementById('equipamentoCodigoPrincipal').value || 'EQ-0002';
 
@@ -1627,7 +1548,6 @@ try {
 
         const btnAdicionarAcessorio = document.getElementById('btnAdicionarAcessorio');
         if (btnAdicionarAcessorio) {
-            // Ao carregar a página, garante que o código está certo
             atualizarCodigoNovoAcessorio();
 
             btnAdicionarAcessorio.addEventListener('click', function() {
@@ -1661,7 +1581,6 @@ try {
                     `;
                 tbody.appendChild(tr);
 
-                // Criar inputs hidden para o PHP receber os dados deste acessório
                 const idAce = Date.now();
                 const form = document.querySelector('form');
 
@@ -1704,9 +1623,7 @@ try {
             });
         }
 
-        // =========================================================================
         // LÓGICA INTELIGENTE DOS BOTÕES "PRÓXIMO" E "ANTERIOR"
-        // =========================================================================
         document.querySelectorAll('[data-bs-wizard-step]').forEach(button => {
             button.addEventListener('click', function(e) {
 
@@ -1719,13 +1636,11 @@ try {
                     return;
                 }
 
-                // --- INÍCIO DA VALIDAÇÃO GERAL ---
                 let tudoValido = true;
 
                 const alertaGlobal = painelAtual.querySelector('.alert-danger');
                 if (alertaGlobal) alertaGlobal.classList.add('d-none');
 
-                // Reset aos textos de erro dinâmicos 
                 const feedbackSerial = document.getElementById('feedbackSerial');
                 if (feedbackSerial) feedbackSerial.innerText = "Campo obrigatório.";
                 const feedbackAno = document.getElementById('feedbackAno');
@@ -1737,7 +1652,6 @@ try {
                 const erroDataContrato = document.getElementById('erroDataContrato');
                 if (erroDataContrato) erroDataContrato.innerText = "Obrigatório.";
 
-                // B) Verificar os vazios (Inputs normais e Dropdowns hidden)
                 const camposObrigatorios = painelAtual.querySelectorAll('input[required], select[required]');
                 camposObrigatorios.forEach(campo => {
                     if (campo.closest('.d-none')) return;
@@ -1755,7 +1669,6 @@ try {
                     }
                 });
 
-                // C) Lógica Específica (Passo 3): Datas
                 const contGarantia = document.getElementById('camposGarantia');
                 if (contGarantia && !contGarantia.classList.contains('d-none')) {
                     const dIniG = painelAtual.querySelector('input[name="garantiaInicio"]');
@@ -1782,7 +1695,6 @@ try {
                     }
                 }
 
-                // D) Lógica Específica (Passo 4): Validação de Documentos Cruzada
                 if (painelAtual.id === 'step4-pane') {
                     const alertaPasso4 = document.getElementById('alertaPasso4');
                     const textoAlertaPasso4 = document.getElementById('textoAlertaPasso4');
@@ -1792,26 +1704,22 @@ try {
 
                     let mensagemErroDocs = "";
 
-                    // Validação 1: O Contrato (Se disse que tinha no Passo 3)
                     const temContrato = document.getElementById('temContrato');
                     if (temContrato && temContrato.checked && !docsNaTabela.includes('Contrato de manutenção')) {
                         mensagemErroDocs += "Como indicou no Passo 3 que possui Contrato, tem de anexar o <strong>Contrato de manutenção</strong>.<br>";
                         tudoValido = false;
                     }
 
-                    // Validação 2: A Declaração CE
                     if (!document.getElementById('faltaCE').checked && !docsNaTabela.includes('Declaração de conformidade')) {
                         mensagemErroDocs += "Anexe a <strong>Declaração de conformidade</strong> ou assinale-a como em falta.<br>";
                         tudoValido = false;
                     }
 
-                    // Validação 3: O Manual de Utilizador
                     if (!document.getElementById('faltaManual').checked && !docsNaTabela.includes('Manual de utilizador')) {
                         mensagemErroDocs += "Anexe o <strong>Manual de utilizador</strong> ou assinale-o como em falta.<br>";
                         tudoValido = false;
                     }
 
-                    // Validação 4: A Fatura
                     if (!document.getElementById('faltaFatura').checked && !docsNaTabela.includes('Fatura ou guia de aquisição')) {
                         mensagemErroDocs += "Anexe a <strong>Fatura ou guia de aquisição</strong> ou assinale-a como em falta.<br>";
                         tudoValido = false;
@@ -1825,9 +1733,7 @@ try {
                     }
                 }
 
-                // E) Validações específicas por campo
 
-                // Designação: mínimo 3 caracteres
                 const nomeInput = painelAtual.querySelector('input[name="name"]');
                 if (nomeInput && nomeInput.value.trim() !== '') {
                     if (nomeInput.value.trim().length < 3) {
@@ -1836,7 +1742,6 @@ try {
                     }
                 }
 
-                // Marca: não pode conter números
                 const marcaInput = painelAtual.querySelector('input[name="brand"]');
                 if (marcaInput && marcaInput.value.trim() !== '') {
                     if (/\d/.test(marcaInput.value.trim())) {
@@ -1846,7 +1751,6 @@ try {
                     }
                 }
 
-                // Número de série: formato válido 
                 const serialInput = painelAtual.querySelector('input[name="serialNumber"]');
                 if (serialInput && serialInput.value.trim() !== '') {
                     if (!/^[a-zA-Z0-9\-_.]+$/.test(serialInput.value.trim())) {
@@ -1856,7 +1760,6 @@ try {
                     }
                 }
 
-                // Ano de fabrico: obrigatório e entre 1900 e ano atual
                 const anoInput = painelAtual.querySelector('input[name="manufacturingYear"]');
                 if (anoInput) {
                     if (!anoInput.value.trim()) {
@@ -1876,7 +1779,6 @@ try {
                     }
                 }
 
-                // Data de aquisição: obrigatória e não pode ser no futuro
                 const dataAquisicaoInput = painelAtual.querySelector('input[name="acquisitionDate"]');
                 if (dataAquisicaoInput) {
                     if (!dataAquisicaoInput.value) {
@@ -1893,7 +1795,6 @@ try {
                     }
                 }
 
-                // Custo: obrigatório e positivo
                 const custoInput = painelAtual.querySelector('input[name="cost"]');
                 if (custoInput) {
                     if (!custoInput.value.trim()) {
@@ -1907,9 +1808,7 @@ try {
                     }
                 }
 
-                // F) RESULTADO
                 if (tudoValido) {
-                    // Se estamos no Passo 1, verificar o nº de série na BD antes de avançar
                     if (painelAtual.id === 'step1-pane') {
                         const serialVal = painelAtual.querySelector('input[name="serialNumber"]')?.value.trim();
                         if (serialVal) {
@@ -1918,7 +1817,6 @@ try {
                                 .then(res => res.json())
                                 .then(data => {
                                     if (data.existe) {
-                                        // Série duplicada — mostrar erro no campo e não avançar
                                         const sInput = painelAtual.querySelector('input[name="serialNumber"]');
                                         sInput.classList.add('is-invalid', 'border-danger');
                                         const fb = document.getElementById('feedbackSerial');
@@ -1926,13 +1824,10 @@ try {
                                         const alerta = painelAtual.querySelector('.alert-danger');
                                         if (alerta) alerta.classList.remove('d-none');
                                     } else {
-                                        // Série livre — avançar para o próximo passo
                                         mudarDeSeparador(targetStep);
                                     }
                                 })
                                 .catch(() => {
-                                    // Se o AJAX falhar por algum motivo, deixa avançar
-                                    // (a verificação PHP no submit final ainda protege)
                                     mudarDeSeparador(targetStep);
                                 });
                         } else {
@@ -1949,7 +1844,6 @@ try {
             });
         });
 
-        // Função que troca os painéis E pinta a aba correta
         function mudarDeSeparador(targetTabId) {
             const targetTabElement = document.querySelector(targetTabId);
             if (targetTabElement) {
@@ -1974,13 +1868,9 @@ try {
             });
         }
 
-        // =========================================================================
-        // LÓGICA FINAL: SUBMISSÃO DO FORMULÁRIO (PASSO 6)
-        // =========================================================================
         const formEquipamento = document.querySelector('form');
         if (formEquipamento) {
             formEquipamento.addEventListener('submit', function(e) {
-                // O formulário submete normalmente para o PHP processar via POST
                 const btnSubmit = document.getElementById('btnRegistarEquipamento');
                 btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> A registar...';
                 btnSubmit.disabled = true;
@@ -1990,7 +1880,6 @@ try {
 </script>
 
 <script>
-    // Função para gerir as escolhas dos Dropdowns customizados (Passo 1)
     function selecionarDropdown(campoId, valorSelecionado) {
         const spanTexto = document.getElementById('text' + campoId.charAt(0).toUpperCase() + campoId.slice(1));
         spanTexto.innerText = valorSelecionado;
@@ -1999,7 +1888,6 @@ try {
 
         document.getElementById('input' + campoId.charAt(0).toUpperCase() + campoId.slice(1)).value = valorSelecionado;
 
-        // Lógica especial: se o Tipo de Entrada for Doação, custo = 0 e fica bloqueado
         if (campoId === 'entryType') {
             const campoCusto = document.querySelector('input[name="cost"]');
             if (campoCusto) {
@@ -2012,14 +1900,12 @@ try {
                     campoCusto.readOnly = false;
                     campoCusto.classList.remove('bg-light', 'text-muted');
                     campoCusto.title = "";
-                    // Só limpa o valor se estava a 0 por causa da doação
                     if (campoCusto.value === '0') campoCusto.value = '';
                 }
             }
         }
     }
 
-    // Função para a barra de pesquisa dentro dos dropdowns
     function filtrarDropdown(inputId, listaId) {
         let input = document.getElementById(inputId);
         let filter = input.value.toLowerCase();
@@ -2036,16 +1922,13 @@ try {
         }
     }
 
-    // Função Específica para a Cascata de Localizações (Passo 2)
     function selecionarLocalizacao(nivelAtual, valorSelecionado, proximoNivel) {
-        // 1. Atualiza o botão do nível atual
         const spanTexto = document.getElementById('text' + nivelAtual.charAt(0).toUpperCase() + nivelAtual.slice(1));
         spanTexto.innerText = valorSelecionado;
         spanTexto.classList.remove('text-muted');
         spanTexto.classList.add('text-dark');
         document.getElementById('input' + nivelAtual.charAt(0).toUpperCase() + nivelAtual.slice(1)).value = valorSelecionado;
 
-        // 2. Regras de cascata — limpar níveis seguintes
         if (nivelAtual === 'edificio') {
             desativarNivelLocalizacao('piso', 'Aguardar edifício...');
             desativarNivelLocalizacao('servico', 'Aguardar piso...');
@@ -2057,7 +1940,6 @@ try {
             desativarNivelLocalizacao('sala', 'Aguardar serviço...');
         }
 
-        // 3. Preencher o próximo nível com dados da API
         if (proximoNivel) {
             const btnProximo = document.getElementById('btn' + proximoNivel.charAt(0).toUpperCase() + proximoNivel.slice(1));
             const listaProximo = document.getElementById('lista' + proximoNivel.charAt(0).toUpperCase() + proximoNivel.slice(1));
@@ -2067,7 +1949,6 @@ try {
             let itens = [];
 
             if (proximoNivel === 'piso') {
-                // Encontrar o id do edifício pelo nome
                 const ed = (window._dadosEdificios || []).find(e => e.nome === valorSelecionado);
                 if (ed) {
                     itens = (window._dadosPisos || [])
@@ -2078,7 +1959,6 @@ try {
                             ${p.designacao}</a></li>`);
                 }
             } else if (proximoNivel === 'servico') {
-                // Encontrar o id do piso pelo nome e edifício atual
                 const edNome = document.getElementById('textEdificio').innerText;
                 const ed = (window._dadosEdificios || []).find(e => e.nome === edNome);
                 const piso = (window._dadosPisos || []).find(p => p.designacao === valorSelecionado && p.id_edificio == ed?.id_edificio);
@@ -2091,7 +1971,6 @@ try {
                             ${s.nome}</a></li>`);
                 }
             } else if (proximoNivel === 'sala') {
-                // Encontrar o id do serviço pelo nome
                 const pisoNome = document.getElementById('textPiso').innerText;
                 const edNome = document.getElementById('textEdificio').innerText;
                 const ed = (window._dadosEdificios || []).find(e => e.nome === edNome);
@@ -2100,7 +1979,6 @@ try {
                 if (serv) {
                     const salasDeste = (window._dadosSalas || []).filter(sl => sl.id_servico == serv.id_servico);
                     if (salasDeste.length === 0) {
-                        // Serviço sem salas — manter opcional
                         listaProximo.innerHTML = '<li class="px-3 py-2 text-muted small">Sem salas registadas</li>';
                     } else {
                         itens = salasDeste.map(sl => `<li data-id="${sl.id_sala}" data-parent="${valorSelecionado}">
@@ -2117,7 +1995,6 @@ try {
         }
     }
 
-    // Função auxiliar para resetar os botões
     function desativarNivelLocalizacao(nivel, textoPlaceholder, bloquear = true) {
         const btn = document.getElementById('btn' + nivel.charAt(0).toUpperCase() + nivel.slice(1));
         const span = document.getElementById('text' + nivel.charAt(0).toUpperCase() + nivel.slice(1));
@@ -2130,7 +2007,6 @@ try {
         document.getElementById('input' + nivel.charAt(0).toUpperCase() + nivel.slice(1)).value = '';
     }
 
-    // Função para mostrar/esconder campos com base num switch (botão)
     function toggleCampos(switchId, containerId) {
         const checkBox = document.getElementById(switchId);
         const container = document.getElementById(containerId);
@@ -2142,9 +2018,6 @@ try {
         }
     }
 
-    // =========================================================================
-    // CARREGAR DROPDOWNS DA BD VIA API (Passo B)
-    // =========================================================================
     async function carregarDadosFormulario() {
         try {
             const resposta = await fetch('api/get_dados_formulario.php');
@@ -2155,7 +2028,6 @@ try {
                 return;
             }
 
-            // ---- FABRICANTE (Passo 1) ----
             const listaManuf = document.getElementById('listaManufacturer');
             if (listaManuf) {
                 listaManuf.innerHTML = dados.fornecedores.map(f =>
@@ -2165,7 +2037,6 @@ try {
                 ).join('');
             }
 
-            // ---- FORNECEDOR COMERCIAL (Passo 3) ----
             const listaForn = document.getElementById('listaFornecedor');
             if (listaForn) {
                 listaForn.innerHTML = dados.fornecedores.map(f =>
@@ -2175,7 +2046,6 @@ try {
                 ).join('');
             }
 
-            // ---- ASSISTÊNCIA TÉCNICA (Passo 3) ----
             const listaAss = document.getElementById('listaAssistencia');
             if (listaAss) {
                 listaAss.innerHTML = dados.fornecedores.map(f =>
@@ -2185,7 +2055,6 @@ try {
                 ).join('');
             }
 
-            // ---- CONSUMÍVEIS (Passo 3) ----
             const listaCons = document.getElementById('listaConsumiveis');
             if (listaCons) {
                 listaCons.innerHTML = dados.fornecedores.map(f =>
@@ -2195,7 +2064,6 @@ try {
                 ).join('');
             }
 
-            // ---- ENTIDADE CONTRATO (Passo 3) ----
             const listaEnt = document.getElementById('listaEntidadeContrato');
             if (listaEnt) {
                 listaEnt.innerHTML = dados.fornecedores.map(f =>
@@ -2205,7 +2073,6 @@ try {
                 ).join('');
             }
 
-            // ---- FORNECEDOR DO DOCUMENTO (Passo 4) ----
             const listaDocForn = document.getElementById('listaDocFornecedor');
             if (listaDocForn) {
                 listaDocForn.innerHTML =
@@ -2218,7 +2085,6 @@ try {
                     ).join('');
             }
 
-            // ---- EDIFÍCIOS (Passo 2) ----
             const listaEd = document.getElementById('listaEdificio');
             if (listaEd) {
                 listaEd.innerHTML = dados.edificios.map(e =>
@@ -2229,12 +2095,10 @@ try {
                 ).join('');
             }
 
-            // ---- PISOS (Passo 2) — guardados globalmente para filtrar por edifício ----
             window._dadosPisos = dados.pisos;
             window._dadosServicos = dados.servicos;
             window._dadosSalas = dados.salas;
 
-            // Guarda também os edifícios para lookup por nome
             window._dadosEdificios = dados.edificios;
 
         } catch (erro) {
@@ -2242,15 +2106,11 @@ try {
         }
     }
 
-    // Chama a API ao carregar a página
     carregarDadosFormulario();
 
-    // Função para ativar/desativar a Data de Validade na Documentação
     function verificarValidadeDoc(tipoSelecionado) {
         const campoValidade = document.getElementById('dataValidadeDoc');
 
-        // As datas de Garantia e Contrato já estão no Passo 3. 
-        // Logo, aqui a validade serve quase em exclusivo para a Calibração!
         const tiposComValidade = [
             'Certificado de calibração'
         ];
@@ -2267,16 +2127,8 @@ try {
         }
     }
 
-    // =========================================================================
-    // REPOPULAR DROPDOWNS CUSTOMIZADOS EM CASO DE ERRO DE VALIDAÇÃO
-    // =========================================================================
-    // Quando o PHP devolve erro de validação, os dropdowns customizados perdem
-    // o valor selecionado (são botões + input hidden, não <select> nativos).
-    // Este bloco lê os valores de $_POST e chama selecionarDropdown() para
-    // repor o estado visual de cada dropdown.
     document.addEventListener('DOMContentLoaded', function() {
 
-        // Passo 1: Fabricante, Categoria, Criticidade
         <?php if (!empty($_POST['manufacturer'])): ?>
             selecionarDropdown('manufacturer', <?= json_encode($_POST['manufacturer']) ?>);
         <?php endif; ?>
@@ -2289,7 +2141,6 @@ try {
             selecionarDropdown('criticidade', <?= json_encode($_POST['criticidade']) ?>);
         <?php endif; ?>
 
-        // Passo 2: Tipo de Entrada, Estado
         <?php if (!empty($_POST['entryType'])): ?>
             selecionarDropdown('entryType', <?= json_encode($_POST['entryType']) ?>);
         <?php endif; ?>
@@ -2298,7 +2149,6 @@ try {
             selecionarDropdown('status', <?= json_encode($_POST['status']) ?>);
         <?php endif; ?>
 
-        // Passo 2: Localização hierárquica (cascata: edifício -> piso -> serviço -> sala)
         <?php if (!empty($_POST['edificio'])): ?>
             selecionarLocalizacao('edificio', <?= json_encode($_POST['edificio']) ?>, 'piso');
         <?php endif; ?>
@@ -2315,7 +2165,6 @@ try {
             selecionarLocalizacao('sala', <?= json_encode($_POST['sala']) ?>, null);
         <?php endif; ?>
 
-        // Passo 3: Fornecedores e entidades
         <?php if (!empty($_POST['fornecedor'])): ?>
             selecionarDropdown('fornecedor', <?= json_encode($_POST['fornecedor']) ?>);
         <?php endif; ?>
@@ -2332,7 +2181,6 @@ try {
             selecionarDropdown('entidadeContrato', <?= json_encode($_POST['entidadeContrato']) ?>);
         <?php endif; ?>
 
-        // Passo 3: Datas de garantia e contrato
         <?php if (!empty($_POST['garantiaInicio'])): ?>
             document.querySelector('input[name="garantiaInicio"]').value = <?= json_encode($_POST['garantiaInicio']) ?>;
         <?php endif; ?>
@@ -2361,46 +2209,35 @@ try {
             document.querySelector('input[name="contratoFim"]').value = <?= json_encode($_POST['contratoFim']) ?>;
         <?php endif; ?>
 
-        // Passo 6: Observações
         <?php if (!empty($_POST['observations'])): ?>
             document.querySelector('textarea[name="observations"]').value = <?= json_encode($_POST['observations']) ?>;
         <?php endif; ?>
     });
 </script>
 
-<!-- ============================================================ -->
-<!-- PREENCHIMENTO AUTOMÁTICO — Dados de demonstração             -->
-<!-- ============================================================ -->
 <script>
 document.getElementById('btn-preencher-auto').addEventListener('click', function() {
 
-    // --- STEP 1: Identificação ---
     document.querySelector('input[name="name"]').value           = 'Desfibrilhador Automático Externo';
     document.querySelector('input[name="brand"]').value          = 'Philips';
     document.querySelector('input[name="model"]').value          = 'HeartStart FRx';
 
-    // Número de série único a cada clique
     const anoAtual  = new Date().getFullYear();
     const aleatorio = Math.floor(10000 + Math.random() * 90000);
     document.querySelector('input[name="serialNumber"]').value   = `DAE-${anoAtual}-PH-${aleatorio}`;
 
     document.querySelector('input[name="manufacturingYear"]').value = '2024';
 
-    // Categoria
     selecionarDropdown('categoria', 'Suporte de Vida');
 
-    // Criticidade
     selecionarDropdown('criticidade', 'Suporte de Vida');
 
-    // --- STEP 2: Receção e Localização ---
     document.querySelector('input[name="acquisitionDate"]').value = '2024-03-15';
     document.querySelector('input[name="cost"]').value            = '2850.00';
 
-    // Tipo de Entrada e Estado
     selecionarDropdown('entryType', 'Compra');
     selecionarDropdown('status',    'Ativo');
 
-    // --- STEP 4: Garantias (campos de texto simples) ---
     const chkGarantia = document.getElementById('temGarantia');
     if (chkGarantia && !chkGarantia.checked) chkGarantia.click();
     setTimeout(() => {
@@ -2410,11 +2247,9 @@ document.getElementById('btn-preencher-auto').addEventListener('click', function
         if (gFim) gFim.value = '2027-03-15';
     }, 300);
 
-    // --- STEP 6: Observações ---
     const obsField = document.querySelector('textarea[name="observations"]');
     if (obsField) obsField.value = 'Equipamento adquirido no âmbito do reforço do inventário de suporte de vida. Instalado na UCI com formação da equipa realizada em Abril de 2024.';
 
-    // Feedback visual
     const btn = document.getElementById('btn-preencher-auto');
     const textoOriginal = btn.innerHTML;
     btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Preenchido!</span>';

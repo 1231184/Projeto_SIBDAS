@@ -380,7 +380,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover
             <i class="fa-solid fa-stethoscope fs-5 text-brand"></i>
             <h1 class="h5 fw-bold mb-0 text-dark">MedStock</h1>
         </div>
-        <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
+        <button class="btn btn-light border-0 shadow-sm d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile"><i class="fa-solid fa-bars"></i></button>
     </header>
 
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-3 gap-3">

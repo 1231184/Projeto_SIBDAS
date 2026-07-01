@@ -131,7 +131,7 @@ $ligacao = null;
             <div class="d-flex align-items-center gap-2">
                 <img src="/sibdas/1231184/medstock-solutions/assets/img/logotipo.png" alt="MedStock Logo" style="height: 45px; width: auto;">
             </div>
-            <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
+            <button class="btn btn-light border-0 shadow-sm d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMobile"><i class="fa-solid fa-bars"></i></button>
         </header>
 
         <div class="mb-4">

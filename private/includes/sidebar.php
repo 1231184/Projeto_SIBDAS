@@ -85,3 +85,48 @@ $iconContent   = '<i class="fa-regular fa-pen-to-square" style="width:20px; text
         </a>
     </div>
 </aside>
+
+<!-- ============================================================
+     MOBILE: Offcanvas (só em mobile)
+     ============================================================ --><div class="offcanvas offcanvas-start sidebar-backend text-white d-md-none"
+    tabindex="-1" id="sidebarMobile" style="width: 256px;">
+    <div class="offcanvas-header border-bottom sidebar-border-light">
+        <img src="/sibdas/1231184/medstock-solutions/assets/img/logotipo.png"
+            alt="MedStock Logo" style="height: 45px; width: auto;">
+        <button type="button" class="btn-close btn-close-white"
+            data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column p-0">
+        <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
+            <ul class="nav flex-column gap-1">
+                <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/dashboard/dashboard.php', 'Dashboard', '/dashboard/', $iconDashboard); ?>
+                <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/equipamentos/lista_equi.php', 'Equipamentos', '/equipamentos/', $iconEquip); ?>
+                <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/localizacoes/lista_loc.php', 'Localizações', '/localizacoes/', $iconLoc); ?>
+                <?php if ($isAdmin): ?>
+                    <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/fornecedores/lista_fornecedores.php', 'Fornecedores', '/fornecedores/', $iconForn); ?>
+                <?php endif; ?>
+                <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/documentacao/lista_docs.php', 'Documentação', '/documentacao/', $iconDoc); ?>
+                <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/garantias/lista_garantias.php', 'Garantias', '/garantias/', $iconGar); ?>
+                <?php if ($isAdmin): ?>
+                    <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/conteudo/conteudo.php', 'Conteúdo', '/conteudo/', $iconContent); ?>
+                <?php endif; ?>
+            </ul>
+        </nav>
+        <div class="p-4 sidebar-border-light border-top">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold bg-brand-subtle text-brand"
+                    style="width: 40px; height: 40px; font-size: 1.1rem;">
+                    <?= htmlspecialchars(mb_substr($perfil, 0, 1)) ?>
+                </div>
+                <div class="overflow-hidden">
+                    <p class="mb-0 fw-semibold small text-white text-truncate"><?= htmlspecialchars($perfil) ?></p>
+                    <p class="mb-0 small text-white-50 text-truncate"><?= htmlspecialchars($_SESSION['utilizador'] ?? '') ?></p>
+                </div>
+            </div>
+            <a href="/sibdas/1231184/medstock-solutions/login/logout.php"
+                class="btn btn-outline-light btn-sm w-100 rounded-3">
+                <i class="fa-solid fa-sign-out-alt me-1"></i> Terminar Sessão
+            </a>
+        </div>
+    </div>
+</div>
