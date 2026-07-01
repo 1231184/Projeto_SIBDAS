@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../../includes/funcoes.php';
 redirect_if_not_logged();
 
+redirect_if_not_profile(['Administrador']);
+
 $erros = [];
 $erro_sistema = "";
 $sucesso = isset($_GET['sucesso']) ? $_GET['sucesso'] : 0;

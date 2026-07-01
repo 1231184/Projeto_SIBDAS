@@ -22,6 +22,16 @@ function redirect_if_not_logged($redirect_to = '/login/login.php') {
     }
 }
 
+// Redireciona se o perfil não estiver na lista de perfis permitidos
+function redirect_if_not_profile(array $perfis_permitidos) {
+    start_session();
+    $perfil_atual = $_SESSION['perfil'] ?? '';
+    if (!in_array($perfil_atual, $perfis_permitidos, true)) {
+        header('Location: ' . BASE_URL . '/private/views/dashboard/dashboard.php');
+        exit;
+    }
+}
+
 // ============================================================
 // Encriptação e desencriptação de IDs com OpenSSL (Ficha 13)
 // Objectivo: evitar que IDs numéricos fiquem visíveis no HTML

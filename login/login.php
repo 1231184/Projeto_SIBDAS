@@ -18,6 +18,13 @@ if (!empty($_SESSION['server_error'])) {
     unset($_SESSION['server_error']);
 }
 
+// Recolhe o último email introduzido (para manter após erro)
+$last_username = '';
+if (!empty($_SESSION['last_username'])) {
+    $last_username = $_SESSION['last_username'];
+    unset($_SESSION['last_username']);
+}
+
 $pagina = 'login';
 ?>
 
@@ -51,12 +58,12 @@ $pagina = 'login';
                     <p class="text-muted small mb-0">Introduza as suas credenciais para continuar</p>
                 </div>
 
-                <form action="../private/processa_login.php" method="post" autocomplete="off">
+                <form name="formulario" action="../private/processa_login.php" method="post" autocomplete="off">
 
                     <div class="mb-3">
                         <label class="form-label fw-medium text-dark small mb-2">Utilizador</label>
                         <input type="text" name="text_username" class="form-control px-3 py-2 shadow-sm rounded-2" placeholder="utilizador"
-                            required>
+                            value="<?= htmlspecialchars($last_username) ?>" required>
                     </div>
 
                     <div class="mb-4">
@@ -74,6 +81,16 @@ $pagina = 'login';
                     <button type="submit" class="btn btn-brand w-100 rounded-2 py-2 fw-medium mt-1">
                         Entrar
                     </button>
+
+                    <!-- Botões de preenchimento automático (Fase de Testes) - Ficha 14 página 17 -->
+                    <div class="mt-2 text-center">
+                        <button type="button" id="preencher_adm" class="btn btn-outline-primary btn-sm me-2">
+                            Preencher Admin
+                        </button>
+                        <button type="button" id="preencher_tec" class="btn btn-outline-secondary btn-sm">
+                            Preencher Técnico
+                        </button>
+                    </div>
 
                     <!-- Mensagens de erro de validação -->
                     <?php if (!empty($validation_errors)) : ?>
@@ -114,6 +131,19 @@ $pagina = 'login';
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
             this.innerHTML = type === 'password' ? '<i class="fa-regular fa-eye"></i>' : '<i class="fa-regular fa-eye-slash"></i>';
+        });
+
+        // Preenchimento automático para testes - Ficha 14 página 18
+        document.querySelector('#preencher_adm').addEventListener('click', () => {
+            const formulario = document.forms['formulario'];
+            formulario['text_username'].value = 'admin@medstock.pt';
+            formulario['text_password'].value = 'admin123';
+        });
+
+        document.querySelector('#preencher_tec').addEventListener('click', () => {
+            const formulario = document.forms['formulario'];
+            formulario['text_username'].value = 'tecnico@medstock.pt';
+            formulario['text_password'].value = 'tecnico123';
         });
     </script>
 

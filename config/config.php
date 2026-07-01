@@ -20,4 +20,9 @@ define('MYSQL_PASSWORD', 'almeida_184');
 define('AES_METHOD', 'AES-256-CBC');
 define('AES_KEY',    'H0SDRQzIGqclX2kbYBk9xspdn9U5f3Wa');
 define('AES_IV',     'BzKAbjuREsHgnw56');
+
+// ----------------------------------------------------------------
+// Chave AES para encriptação MySQL (Ficha 14 - Secção 3)
+// ----------------------------------------------------------------
+define('MYSQL_AES_KEY', 'H0SDRQzIGqclX2kbYBk9xspdn9U5f3Wa');
 ?>
