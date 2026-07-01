@@ -275,6 +275,40 @@ $(document).ready(function() {
         if (window.tabelaEquipamentos && document.getElementById('inputPesquisa')) {
             window.tabelaEquipamentos.draw();
         }
+
+        // ---- Filtro automático vindo do Dashboard (ex: ?filtro=estado:Ativo) ----
+        const urlParams = new URLSearchParams(window.location.search);
+        const filtroParam = urlParams.get('filtro');
+        const filtro2Param = urlParams.get('filtro2');
+
+        function aplicarFiltroURL(param) {
+            if (!param) return;
+            const [grupo, valor] = param.split(':');
+            if (!grupo || !valor) return;
+            const checkbox = document.querySelector(
+                `input[data-group="${grupo}"][value="${valor}"]`
+            );
+            if (checkbox && !checkbox.checked) {
+                checkbox.checked = true;
+                checkbox.dispatchEvent(new Event('change'));
+            }
+            // Abrir o accordion do grupo
+            const accordionCollapse = checkbox?.closest('.accordion-collapse');
+            if (accordionCollapse) {
+                const bsCollapse = bootstrap.Collapse.getOrCreateInstance(accordionCollapse);
+                bsCollapse.show();
+            }
+        }
+
+        if ((filtroParam || filtro2Param) && document.getElementById('inputPesquisa')) {
+            // Mostrar sidebar de filtros
+            const filterSidebar = document.getElementById('filterSidebar');
+            if (filterSidebar && filterSidebar.classList.contains('d-none')) {
+                filterSidebar.classList.remove('d-none');
+            }
+            aplicarFiltroURL(filtroParam);
+            aplicarFiltroURL(filtro2Param);
+        }
     }
 });
 
@@ -456,7 +490,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p class="text-muted custom-monospace small mb-0" style="font-size:0.75rem;"><i class="fa-solid fa-file-pdf text-danger me-1"></i>${d.caminho_ficheiro}</p>
                         ${validadeHtml}
                     </div>
-                    <a href="${d.caminho_ficheiro}" download class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 flex-shrink-0">
+                    <a href="${window.BASE_URL}/${d.caminho_ficheiro}" download class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1 flex-shrink-0">
                         <i class="fa-solid fa-download"></i><span class="d-none d-sm-inline">Download</span>
                     </a>
                 </div>`;
@@ -489,7 +523,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formEditar = document.getElementById('formEditar');
         if (!formEditar) return;
 
-        // --- CAMPO OCULTO COM ID ---
+        // --- CAMPO OCULTO COM ID (encriptado para o atualizar_equipamento.php) ---
         let inputId = formEditar.querySelector('input[name="id_equipamento"]');
         if (!inputId) {
             inputId = document.createElement('input');
@@ -497,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
             inputId.name = 'id_equipamento';
             formEditar.appendChild(inputId);
         }
-        inputId.value = eq.id_equipamento;
+        inputId.value = window._idEquipamentoEncriptado || '';
 
         // --- GUARDAR DADOS PARA O MODAL REMOVER ---
         const removerDesignacao = document.getElementById('remover-designacao');
@@ -507,7 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Guardar o ID no botão de confirmar abate
         const btnConfirmar = document.getElementById('btnConfirmarRemover');
-        if (btnConfirmar) btnConfirmar.setAttribute('data-id', eq.id_equipamento);
+        if (btnConfirmar) btnConfirmar.setAttribute('data-id', window._idEquipamentoEncriptado || '');
 
         // --- PASSO 1: IDENTIFICAÇÃO ---
         formEditar.querySelector('input[name="internalCode"]').value  = eq.codigo_interno  || '';
@@ -746,6 +780,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const id            = this.getAttribute('data-id');
             const textoOriginal = this.innerHTML;
             const btn           = this;
+
+            // Atualizar links de exportação CSV e JSON com o ID encriptado
+            const btnCsv  = document.getElementById('btn-exportar-csv');
+            const btnJson = document.getElementById('btn-exportar-json');
+            const baseUrl = window.BASE_URL || '';
+            if (btnCsv)  btnCsv.href  = baseUrl + '/private/views/equipamentos/api/exportar_csv.php?id='  + id;
+            if (btnJson) btnJson.href = baseUrl + '/private/views/equipamentos/api/exportar_json.php?id=' + id;
+
+            // Guardar ID encriptado para o PDF
+            window._idEquipamentoEncriptado = id;
  
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
  
@@ -844,3 +888,275 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// ==========================================
+// ETIQUETA — Impressão de etiqueta com QR Code
+// ==========================================
+function gerarEtiqueta() {
+    const codigo     = document.getElementById('det-codigo')?.textContent?.trim()     || '—';
+    const designacao = document.getElementById('det-designacao')?.textContent?.trim() || '—';
+    const marca      = document.getElementById('det-marca')?.textContent?.trim()      || '—';
+    const modelo     = document.getElementById('det-modelo')?.textContent?.trim()     || '—';
+    const serie      = document.getElementById('det-serie')?.textContent?.trim()      || '—';
+    const servico    = document.getElementById('det-servico')?.textContent?.trim()    || '—';
+    const edificio   = document.getElementById('det-edificio')?.textContent?.trim()   || '—';
+    const criticidade = document.getElementById('det-badge-criticidade')?.textContent?.trim() || '—';
+    const estado     = document.getElementById('det-badge-estado')?.textContent?.trim() || '—';
+
+    // QR Code via API gratuita (sem instalar nada)
+    // Conteúdo: código interno + designação + localização
+    const qrContent  = encodeURIComponent(`${codigo} | ${designacao} | ${servico} | ${edificio}`);
+    const qrUrl      = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrContent}`;
+
+    // Cor da criticidade
+    const coresCrit  = { 'Suporte de Vida': '#dc2626', 'Alta': '#f97316', 'Média': '#eab308', 'Baixa': '#22c55e' };
+    const corCrit    = coresCrit[criticidade] || '#6b7280';
+
+    const html = `<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <title>Etiqueta — ${codigo}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        .etiqueta { background: white; border: 2px solid #e5e7eb; border-radius: 8px; width: 320px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .topo { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0d9488; padding-bottom: 10px; margin-bottom: 12px; }
+        .logo { font-size: 11px; font-weight: bold; color: #0d9488; letter-spacing: 0.5px; }
+        .logo span { display: block; font-size: 8px; color: #999; font-weight: normal; letter-spacing: 0; }
+        .criticidade-badge { font-size: 8px; font-weight: bold; padding: 2px 8px; border-radius: 4px; color: white; background: ${corCrit}; }
+        .corpo { display: flex; gap: 12px; align-items: flex-start; }
+        .qr img { display: block; }
+        .info { flex: 1; }
+        .codigo { font-size: 16px; font-weight: bold; color: #111; font-family: 'Courier New', monospace; margin-bottom: 4px; }
+        .designacao { font-size: 11px; font-weight: 600; color: #333; margin-bottom: 6px; line-height: 1.3; }
+        .detalhe { font-size: 9px; color: #666; margin-bottom: 2px; }
+        .detalhe strong { color: #444; }
+        .rodape { margin-top: 12px; border-top: 1px solid #e5e7eb; padding-top: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .rodape-texto { font-size: 8px; color: #aaa; }
+        .estado-badge { font-size: 8px; padding: 2px 6px; border-radius: 3px; background: #d1fae5; color: #065f46; font-weight: bold; }
+        @media print {
+            body { background: white; padding: 0; min-height: auto; }
+            .etiqueta { box-shadow: none; border: 1px solid #ccc; }
+            .btn-imprimir { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="etiqueta">
+            <div class="topo">
+                <div class="logo">
+                    MedStock Solutions
+                    <span>Sistema de Inventário Hospitalar</span>
+                </div>
+                <span class="criticidade-badge">${criticidade}</span>
+            </div>
+            <div class="corpo">
+                <div class="qr">
+                    <img src="${qrUrl}" width="110" height="110" alt="QR Code ${codigo}">
+                </div>
+                <div class="info">
+                    <div class="codigo">${codigo}</div>
+                    <div class="designacao">${designacao}</div>
+                    <div class="detalhe"><strong>Marca:</strong> ${marca}</div>
+                    <div class="detalhe"><strong>Modelo:</strong> ${modelo}</div>
+                    <div class="detalhe"><strong>Série:</strong> ${serie}</div>
+                    <div class="detalhe"><strong>Serviço:</strong> ${servico}</div>
+                    <div class="detalhe"><strong>Edifício:</strong> ${edificio}</div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top: 16px;">
+            <button class="btn-imprimir" onclick="window.print()"
+                style="background:#0d9488; color:white; border:none; padding:8px 24px; border-radius:6px; font-size:13px; cursor:pointer; font-family:Arial,sans-serif;">
+                🖨️ Imprimir Etiqueta
+            </button>
+        </div>
+    </div>
+</body>
+</html>`;
+
+    const janela = window.open('', '_blank', 'width=480,height=520');
+    janela.document.write(html);
+    janela.document.close();
+    janela.focus();
+}
+
+// ==========================================
+// EXPORTAÇÃO PDF — Impressão via window.print()
+// (Guia de Submissão - secção 3.3.5)
+// ==========================================
+function imprimirFichaEquipamento() {
+    // Recolher dados visíveis no modal — tab Geral
+    const designacao  = document.getElementById('det-designacao')?.textContent  || '—';
+    const codigo      = document.getElementById('det-codigo')?.textContent       || '—';
+    const estado      = document.getElementById('det-badge-estado')?.textContent || '—';
+    const criticidade = document.getElementById('det-badge-criticidade')?.textContent || '—';
+    const categoria   = document.getElementById('det-categoria')?.textContent    || '—';
+    const marca       = document.getElementById('det-marca')?.textContent        || '—';
+    const modelo      = document.getElementById('det-modelo')?.textContent       || '—';
+    const serie       = document.getElementById('det-serie')?.textContent        || '—';
+    const fabricante  = document.getElementById('det-fabricante')?.textContent   || '—';
+    const anoFabrico  = document.getElementById('det-ano-fabrico')?.textContent  || '—';
+    const tipoEntrada = document.getElementById('det-tipo-entrada')?.textContent || '—';
+    const dataAquis   = document.getElementById('det-data-aquisicao')?.textContent || '—';
+    const custo       = document.getElementById('det-custo')?.textContent        || '—';
+    const edificio    = document.getElementById('det-edificio')?.textContent     || '—';
+    const piso        = document.getElementById('det-piso')?.textContent         || '—';
+    const servico     = document.getElementById('det-servico')?.textContent      || '—';
+    const sala        = document.getElementById('det-sala')?.textContent         || '—';
+    const observacoes = document.getElementById('det-observacoes')?.textContent  || '—';
+    const dataRegisto = document.getElementById('det-data-registo')?.textContent || '—';
+
+    // Fornecedores
+    let fornHtml = '';
+    document.querySelectorAll('#det-fornecedores .list-box').forEach(el => {
+        const nome  = el.querySelector('.fw-semibold')?.textContent || '—';
+        const papel = el.querySelector('.badge')?.textContent || '—';
+        const tel   = el.querySelectorAll('p')[0]?.textContent?.trim() || '—';
+        const email = el.querySelectorAll('p')[1]?.textContent?.trim() || '—';
+        fornHtml += `<tr><td>${nome}</td><td>${papel}</td><td>${tel}</td><td>${email}</td></tr>`;
+    });
+
+    // Garantias
+    let garHtml = '';
+    document.querySelectorAll('#det-garantias .list-box').forEach(el => {
+        const tipo     = el.querySelector('.fw-bold')?.textContent || '—';
+        const ref      = el.querySelectorAll('p')[0]?.textContent?.trim() || '—';
+        const entidade = el.querySelectorAll('p')[1]?.textContent?.trim() || '—';
+        const datas    = el.querySelector('.text-end')?.textContent?.trim() || '—';
+        garHtml += `<tr><td>${tipo}</td><td>${ref}</td><td>${entidade}</td><td>${datas}</td></tr>`;
+    });
+
+    // Acessórios
+    let aceHtml = '';
+    document.querySelectorAll('#det-acessorios .list-box').forEach(el => {
+        const cod  = el.querySelector('.custom-monospace')?.textContent || '—';
+        const des  = el.querySelector('.fw-semibold')?.textContent || '—';
+        const ser  = el.querySelector('.text-muted')?.textContent?.trim() || '—';
+        aceHtml += `<tr><td>${cod}</td><td>${des}</td><td>${ser}</td></tr>`;
+    });
+
+    // Histórico
+    let histHtml = '';
+    document.querySelectorAll('#det-historico .list-box').forEach(el => {
+        const motivo  = el.querySelector('.fw-bold')?.textContent || '—';
+        const trajeto = el.querySelector('p.text-muted')?.textContent?.trim() || '—';
+        const data    = el.querySelector('.text-end p')?.textContent?.trim() || '—';
+        const user    = el.querySelectorAll('.text-end p')[1]?.textContent?.trim() || '—';
+        histHtml += `<tr><td>${motivo}</td><td>${trajeto}</td><td>${data}</td><td>${user}</td></tr>`;
+    });
+
+    const html = `<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <title>Ficha Técnica — ${codigo}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; font-size: 11px; color: #333; padding: 30px; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0d9488; padding-bottom: 14px; margin-bottom: 18px; }
+        .header h1 { font-size: 18px; color: #0d9488; margin-bottom: 3px; }
+        .header p { color: #666; font-size: 10px; }
+        .meta { font-size: 10px; color: #999; text-align: right; }
+        .section { margin-bottom: 16px; }
+        .section-title { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: #0d9488; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; margin-bottom: 8px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .field label { font-size: 8px; text-transform: uppercase; color: #999; letter-spacing: 0.3px; display: block; margin-bottom: 1px; }
+        .field span { font-size: 11px; font-weight: 500; color: #111; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        th { background: #f3f4f6; text-align: left; padding: 5px 8px; font-size: 9px; text-transform: uppercase; color: #666; border-bottom: 1px solid #e5e7eb; }
+        td { padding: 5px 8px; border-bottom: 1px solid #f3f4f6; color: #333; vertical-align: top; }
+        tr:last-child td { border-bottom: none; }
+        .obs { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; padding: 8px; font-size: 10px; color: #555; }
+        .empty { color: #aaa; font-style: italic; font-size: 10px; padding: 6px 0; }
+        .footer { margin-top: 24px; border-top: 1px solid #e5e7eb; padding-top: 8px; font-size: 8px; color: #aaa; text-align: center; }
+        @media print { body { padding: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>MedStock Solutions</h1>
+            <p>Ficha Técnica de Equipamento Médico</p>
+            <p style="margin-top:4px; font-size:13px; font-weight:bold; color:#111;">${designacao}</p>
+        </div>
+        <div class="meta">
+            <p><strong>${codigo}</strong></p>
+            <p>Estado: ${estado} | Criticidade: ${criticidade}</p>
+            <p style="margin-top:6px;">Gerado em: ${new Date().toLocaleDateString('pt-PT')} ${new Date().toLocaleTimeString('pt-PT')}</p>
+            <p>Registado em: ${dataRegisto}</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Identificação e Fabrico</div>
+        <div class="grid-3">
+            <div class="field"><label>Categoria</label><span>${categoria}</span></div>
+            <div class="field"><label>Marca</label><span>${marca}</span></div>
+            <div class="field"><label>Modelo</label><span>${modelo}</span></div>
+            <div class="field"><label>Número de Série</label><span>${serie}</span></div>
+            <div class="field"><label>Fabricante</label><span>${fabricante}</span></div>
+            <div class="field"><label>Ano de Fabrico</label><span>${anoFabrico}</span></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Receção e Aquisição</div>
+        <div class="grid-3">
+            <div class="field"><label>Tipo de Entrada</label><span>${tipoEntrada}</span></div>
+            <div class="field"><label>Data de Aquisição</label><span>${dataAquis}</span></div>
+            <div class="field"><label>Custo</label><span>${custo}</span></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Localização Atual</div>
+        <div class="grid">
+            <div class="field"><label>Edifício</label><span>${edificio}</span></div>
+            <div class="field"><label>Piso</label><span>${piso}</span></div>
+            <div class="field"><label>Serviço</label><span>${servico}</span></div>
+            <div class="field"><label>Sala</label><span>${sala}</span></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Fornecedores</div>
+        ${fornHtml ? `<table><thead><tr><th>Empresa</th><th>Papel</th><th>Telefone</th><th>Email</th></tr></thead><tbody>${fornHtml}</tbody></table>` : '<p class="empty">Sem fornecedores associados.</p>'}
+    </div>
+
+    <div class="section">
+        <div class="section-title">Garantias e Contratos</div>
+        ${garHtml ? `<table><thead><tr><th>Tipo</th><th>Referência</th><th>Entidade</th><th>Datas</th></tr></thead><tbody>${garHtml}</tbody></table>` : '<p class="empty">Sem garantias ou contratos registados.</p>'}
+    </div>
+
+    <div class="section">
+        <div class="section-title">Acessórios</div>
+        ${aceHtml ? `<table><thead><tr><th>Código</th><th>Designação</th><th>Nº Série</th></tr></thead><tbody>${aceHtml}</tbody></table>` : '<p class="empty">Sem acessórios registados.</p>'}
+    </div>
+
+    <div class="section">
+        <div class="section-title">Histórico de Movimentações</div>
+        ${histHtml ? `<table><thead><tr><th>Motivo</th><th>Trajeto</th><th>Data</th><th>Utilizador</th></tr></thead><tbody>${histHtml}</tbody></table>` : '<p class="empty">Sem histórico registado.</p>'}
+    </div>
+
+    ${observacoes && observacoes !== '—' && observacoes !== 'Sem observações.' ? `
+    <div class="section">
+        <div class="section-title">Observações</div>
+        <div class="obs">${observacoes}</div>
+    </div>` : ''}
+
+    <div class="footer">
+        MedStock Solutions — Sistema de Gestão de Inventário Hospitalar de Equipamentos Médicos • ISEP LEBIOM 2025/2026
+    </div>
+</body>
+</html>`;
+
+    const janela = window.open('', '_blank', 'width=950,height=750');
+    janela.document.write(html);
+    janela.document.close();
+    janela.focus();
+    setTimeout(() => janela.print(), 500);
+}

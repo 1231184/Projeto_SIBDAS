@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 }
 
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/includes/funcoes.php';
 
 // Inicia a sessão para poder usar $_SESSION
 session_start();
@@ -40,6 +41,8 @@ if (strlen($password) < 6) {
 if (!empty($validation_errors)) {
     $_SESSION['validation_errors'] = $validation_errors;
     $_SESSION['last_username'] = $username;
+    // Registo: tentativa com dados inválidos
+    registar_log('login_falhado', $username, null, 'Dados inválidos: ' . implode('; ', $validation_errors));
     header('Location: ../login/login.php');
     return;
 }
@@ -69,6 +72,7 @@ try {
 
     // Verificar se o email existe na BD
     if (!$utilizador) {
+        registar_log('login_falhado', $username, null, 'Email não registado na base de dados');
         $_SESSION['server_error'] = 'O email introduzido não está registado.';
         $_SESSION['last_username'] = $username;
         header('Location: ../login/login.php');
@@ -77,6 +81,7 @@ try {
 
     // Verificar se a password está correta (bcrypt)
     if (!password_verify($password, $utilizador->password_hash)) {
+        registar_log('login_falhado', $username, (int)$utilizador->id_utilizador, 'Password incorreta');
         $_SESSION['server_error'] = 'A password introduzida está incorreta.';
         $_SESSION['last_username'] = $username;
         header('Location: ../login/login.php');
@@ -86,7 +91,7 @@ try {
     // --------------------------------------------------------------------
     // LOGIN BEM-SUCEDIDO: Guardar dados na sessão (Ficha 14 - página 20)
     // --------------------------------------------------------------------
-    $_SESSION['utilizador']    = $utilizador->email_decrypted; // valor desencriptado
+    $_SESSION['utilizador']    = $utilizador->email_decrypted;
     $_SESSION['nome']          = $utilizador->nome;
     $_SESSION['perfil']        = $utilizador->perfil;
     $_SESSION['id_utilizador'] = $utilizador->id_utilizador;
@@ -94,9 +99,13 @@ try {
     // Limpar last_username da sessão após login bem-sucedido
     unset($_SESSION['last_username']);
 
+    // Registo: login bem-sucedido
+    registar_log('login_sucesso', $username, (int)$utilizador->id_utilizador, 'Login efetuado com sucesso — perfil: ' . $utilizador->perfil);
+
     $ligacao = null;
 
 } catch (PDOException $e) {
+    registar_log('login_falhado', $username, null, 'Erro na BD: ' . $e->getMessage());
     $_SESSION['server_error'] = 'Erro ao ligar à base de dados.';
     header('Location: ../login/login.php');
     return;

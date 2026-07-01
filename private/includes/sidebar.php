@@ -34,7 +34,7 @@ $iconContent   = '<i class="fa-regular fa-pen-to-square" style="width:20px; text
 
     <div class="p-4 sidebar-border-light border-bottom">
         <div class="d-flex align-items-center gap-2">
-            <img src="/projeto_SIBDAS/assets/img/logotipo.png" alt="MedStock Logo" style="height: 55px; width: auto;">
+            <img src="/sibdas/1231184/medstock-solutions/assets/img/logotipo.png" alt="MedStock Logo" style="height: 55px; width: auto;">
         </div>
     </div>
 
@@ -42,28 +42,28 @@ $iconContent   = '<i class="fa-regular fa-pen-to-square" style="width:20px; text
         <ul class="nav flex-column gap-1">
 
             <?php /* Dashboard — todos os perfis */ ?>
-            <?php sidebarLink('/projeto_SIBDAS/private/views/dashboard/dashboard.php', 'Dashboard', '/dashboard/', $iconDashboard); ?>
+            <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/dashboard/dashboard.php', 'Dashboard', '/dashboard/', $iconDashboard); ?>
 
             <?php /* Equipamentos — todos os perfis */ ?>
-            <?php sidebarLink('/projeto_SIBDAS/private/views/equipamentos/lista_equi.php', 'Equipamentos', '/equipamentos/', $iconEquip); ?>
+            <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/equipamentos/lista_equi.php', 'Equipamentos', '/equipamentos/', $iconEquip); ?>
 
             <?php /* Localizações — todos os perfis */ ?>
-            <?php sidebarLink('/projeto_SIBDAS/private/views/localizacoes/lista_loc.php', 'Localizações', '/localizacoes/', $iconLoc); ?>
+            <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/localizacoes/lista_loc.php', 'Localizações', '/localizacoes/', $iconLoc); ?>
 
             <?php /* Fornecedores — apenas Administrador */ ?>
             <?php if ($isAdmin): ?>
-                <?php sidebarLink('/projeto_SIBDAS/private/views/fornecedores/lista_fornecedores.php', 'Fornecedores', '/fornecedores/', $iconForn); ?>
+                <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/fornecedores/lista_fornecedores.php', 'Fornecedores', '/fornecedores/', $iconForn); ?>
             <?php endif; ?>
 
             <?php /* Documentação — todos os perfis */ ?>
-            <?php sidebarLink('/projeto_SIBDAS/private/views/documentacao/lista_docs.php', 'Documentação', '/documentacao/', $iconDoc); ?>
+            <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/documentacao/lista_docs.php', 'Documentação', '/documentacao/', $iconDoc); ?>
 
             <?php /* Garantias — todos os perfis */ ?>
-            <?php sidebarLink('/projeto_SIBDAS/private/views/garantias/lista_garantias.php', 'Garantias', '/garantias/', $iconGar); ?>
+            <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/garantias/lista_garantias.php', 'Garantias', '/garantias/', $iconGar); ?>
 
             <?php /* Conteúdo do site — apenas Administrador */ ?>
             <?php if ($isAdmin): ?>
-                <?php sidebarLink('/projeto_SIBDAS/private/views/conteudo/conteudo.php', 'Conteúdo', '/conteudo/', $iconContent); ?>
+                <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/conteudo/conteudo.php', 'Conteúdo', '/conteudo/', $iconContent); ?>
             <?php endif; ?>
 
         </ul>
@@ -80,7 +80,7 @@ $iconContent   = '<i class="fa-regular fa-pen-to-square" style="width:20px; text
                 <p class="mb-0 small text-white-50 text-truncate"><?= htmlspecialchars($_SESSION['utilizador'] ?? '') ?></p>
             </div>
         </div>
-        <a href="/projeto_SIBDAS/login/logout.php" class="btn btn-outline-light btn-sm w-100 rounded-3">
+        <a href="/sibdas/1231184/medstock-solutions/login/logout.php" class="btn btn-outline-light btn-sm w-100 rounded-3">
             <i class="fa-solid fa-sign-out-alt me-1"></i> Terminar Sessão
         </a>
     </div>

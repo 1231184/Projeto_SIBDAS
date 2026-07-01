@@ -437,10 +437,17 @@ try {
             style="width: 36px; height: 36px;">
             <i class="fa-solid fa-arrow-left"></i>
         </a>
-        <div>
+        <div class="flex-grow-1">
             <h1 class="h3 fw-bold text-dark mb-0">Novo Equipamento</h1>
             <p class="text-muted small mt-1 mb-0">Registe um novo equipamento no inventário</p>
         </div>
+        <!-- Botão de preenchimento automático (Fase de Testes) -->
+        <button type="button" id="btn-preencher-auto"
+            class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 shadow-sm"
+            title="Preenche os campos com dados de demonstração">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Preencher Demo</span>
+        </button>
     </div>
 
     <form action="#" method="POST" enctype="multipart/form-data" style="max-width: 1024px;" novalidate>
@@ -1183,19 +1190,19 @@ try {
                             <div class="d-flex flex-wrap gap-4">
                                 <div class="form-check">
                                     <input class="form-check-input border-warning" type="checkbox" id="faltaCE"
-                                        value="Declaração CE">
+                                        name="faltaCE" value="Declaração CE">
                                     <label class="form-check-label small fw-medium text-dark"
                                         for="faltaCE">Declaração CE</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input border-warning" type="checkbox" id="faltaManual"
-                                        value="Manual Utilizador">
+                                        name="faltaManual" value="Manual Utilizador">
                                     <label class="form-check-label small fw-medium text-dark"
                                         for="faltaManual">Manual de Utilizador</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input border-warning" type="checkbox" id="faltaFatura"
-                                        value="Fatura">
+                                        name="faltaFatura" value="Fatura">
                                     <label class="form-check-label small fw-medium text-dark"
                                         for="faltaFatura">Fatura / Guia</label>
                                 </div>
@@ -2361,5 +2368,62 @@ try {
     });
 </script>
 
+<!-- ============================================================ -->
+<!-- PREENCHIMENTO AUTOMÁTICO — Dados de demonstração             -->
+<!-- ============================================================ -->
+<script>
+document.getElementById('btn-preencher-auto').addEventListener('click', function() {
+
+    // --- STEP 1: Identificação ---
+    document.querySelector('input[name="name"]').value           = 'Desfibrilhador Automático Externo';
+    document.querySelector('input[name="brand"]').value          = 'Philips';
+    document.querySelector('input[name="model"]').value          = 'HeartStart FRx';
+
+    // Número de série único a cada clique
+    const anoAtual  = new Date().getFullYear();
+    const aleatorio = Math.floor(10000 + Math.random() * 90000);
+    document.querySelector('input[name="serialNumber"]').value   = `DAE-${anoAtual}-PH-${aleatorio}`;
+
+    document.querySelector('input[name="manufacturingYear"]').value = '2024';
+
+    // Categoria
+    selecionarDropdown('categoria', 'Suporte de Vida');
+
+    // Criticidade
+    selecionarDropdown('criticidade', 'Suporte de Vida');
+
+    // --- STEP 2: Receção e Localização ---
+    document.querySelector('input[name="acquisitionDate"]').value = '2024-03-15';
+    document.querySelector('input[name="cost"]').value            = '2850.00';
+
+    // Tipo de Entrada e Estado
+    selecionarDropdown('entryType', 'Compra');
+    selecionarDropdown('status',    'Ativo');
+
+    // --- STEP 4: Garantias (campos de texto simples) ---
+    const chkGarantia = document.getElementById('temGarantia');
+    if (chkGarantia && !chkGarantia.checked) chkGarantia.click();
+    setTimeout(() => {
+        const gIni = document.querySelector('input[name="garantiaInicio"]');
+        const gFim = document.querySelector('input[name="garantiaFim"]');
+        if (gIni) gIni.value = '2024-03-15';
+        if (gFim) gFim.value = '2027-03-15';
+    }, 300);
+
+    // --- STEP 6: Observações ---
+    const obsField = document.querySelector('textarea[name="observations"]');
+    if (obsField) obsField.value = 'Equipamento adquirido no âmbito do reforço do inventário de suporte de vida. Instalado na UCI com formação da equipa realizada em Abril de 2024.';
+
+    // Feedback visual
+    const btn = document.getElementById('btn-preencher-auto');
+    const textoOriginal = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Preenchido!</span>';
+    btn.classList.replace('btn-outline-secondary', 'btn-success');
+    setTimeout(() => {
+        btn.innerHTML = textoOriginal;
+        btn.classList.replace('btn-success', 'btn-outline-secondary');
+    }, 2500);
+});
+</script>
 
 <?php include '../../includes/footer.php'; ?>

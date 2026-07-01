@@ -129,7 +129,7 @@ $ligacao = null;
 
         <header class="d-md-none d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
             <div class="d-flex align-items-center gap-2">
-                <img src="/projeto_SIBDAS/assets/img/logotipo.png" alt="MedStock Logo" style="height: 45px; width: auto;">
+                <img src="/sibdas/1231184/medstock-solutions/assets/img/logotipo.png" alt="MedStock Logo" style="height: 45px; width: auto;">
             </div>
             <button class="btn btn-light border-0 shadow-sm"><i class="fa-solid fa-bars"></i></button>
         </header>
@@ -151,27 +151,36 @@ $ligacao = null;
                     </div>
                     <div class="d-flex justify-content-between text-center mt-3 pt-3 border-top">
                         <div>
-                            <div class="text-success fw-bold small"><?= $inv ? $inv->ativos : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Ativos</div>
+                            <a href="../equipamentos/lista_equi.php?filtro=estado:Ativo" class="text-decoration-none">
+                                <div class="text-success fw-bold small"><?= $inv ? $inv->ativos : '—' ?></div>
+                                <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Ativos</div>
+                            </a>
                         </div>
                         <div>
-                            <div class="text-warning text-darken fw-bold small"><?= $inv ? $inv->manutencao : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Manutenção</div>
+                            <a href="../equipamentos/lista_equi.php?filtro=estado:Em Manutenção" class="text-decoration-none">
+                                <div class="text-warning text-darken fw-bold small"><?= $inv ? $inv->manutencao : '—' ?></div>
+                                <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Manutenção</div>
+                            </a>
                         </div>
                         <div>
-                            <div class="text-info fw-bold small"><?= $inv ? $inv->calibracao : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Calibração</div>
+                            <a href="../equipamentos/lista_equi.php?filtro=estado:Em Calibração" class="text-decoration-none">
+                                <div class="text-info fw-bold small"><?= $inv ? $inv->calibracao : '—' ?></div>
+                                <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Calibração</div>
+                            </a>
                         </div>
                         <div>
-                            <div class="text-secondary fw-bold small"><?= $inv ? $inv->inativos : '—' ?></div>
-                            <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Inativos</div>
+                            <a href="../equipamentos/lista_equi.php?filtro=estado:Inativo" class="text-decoration-none">
+                                <div class="text-secondary fw-bold small"><?= $inv ? $inv->inativos : '—' ?></div>
+                                <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase;">Inativos</div>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-6 col-xl-3">
-                <div class="card dash-card h-100 border-0 shadow-sm p-4 border-bottom border-3 border-danger">
+                <a href="../equipamentos/lista_equi.php?filtro=criticidade:Suporte de Vida" class="text-decoration-none">
+                <div class="card dash-card h-100 border-0 shadow-sm p-4 border-bottom border-3 border-danger" style="cursor:pointer;">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <div>
                             <p class="text-muted small fw-bold text-uppercase mb-1">Suporte de Vida</p>
@@ -185,6 +194,7 @@ $ligacao = null;
                         <span class="text-dark small fw-medium">Equipamentos Críticos Ativos</span>
                     </div>
                 </div>
+                </a>
             </div>
 
             <div class="col-md-6 col-xl-3">
@@ -326,7 +336,16 @@ $ligacao = null;
                                 labels: { boxWidth: 12, padding: 15, font: { size: 11, family: "'Inter', sans-serif" } }
                             }
                         },
-                        cutout: '60%'
+                        cutout: '60%',
+                        onClick: (evt, elements) => {
+                            if (elements.length > 0) {
+                                const categoria = dadosCategorias[elements[0].index].label;
+                                window.location.href = '../equipamentos/lista_equi.php?filtro=categoria:' + encodeURIComponent(categoria);
+                            }
+                        },
+                        onHover: (evt, elements) => {
+                            evt.native.target.style.cursor = elements.length > 0 ? 'pointer' : 'default';
+                        }
                     }
                 });
             }
@@ -363,6 +382,23 @@ $ligacao = null;
                         },
                         plugins: {
                             legend: { position: 'top', labels: { boxWidth: 12, padding: 15, font: { size: 11, family: "'Inter', sans-serif" } } }
+                        },
+                        onClick: (evt, elements) => {
+                            if (elements.length > 0) {
+                                const idx = elements[0].index;
+                                const datasetIdx = elements[0].datasetIndex;
+                                const servico = dadosServicos[idx].label;
+                                if (datasetIdx === 0) {
+                                    // Barra vermelha: Suporte de Vida nesse serviço — dois filtros
+                                    window.location.href = '../equipamentos/lista_equi.php?filtro=criticidade:Suporte de Vida&filtro2=servico:' + encodeURIComponent(servico);
+                                } else {
+                                    // Barra azul: todos os equipamentos desse serviço
+                                    window.location.href = '../equipamentos/lista_equi.php?filtro=servico:' + encodeURIComponent(servico);
+                                }
+                            }
+                        },
+                        onHover: (evt, elements) => {
+                            evt.native.target.style.cursor = elements.length > 0 ? 'pointer' : 'default';
                         }
                     }
                 });

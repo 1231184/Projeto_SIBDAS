@@ -58,6 +58,36 @@ function aes_decrypt($value) {
     );
 }
 
+// ============================================================
+// Registo de eventos de autenticação na tabela log_acessos
+// (Guia de Submissão - secção 3.3.5)
+// ============================================================
+function registar_log(string $tipo_evento, ?string $email = null, ?int $id_utilizador = null, ?string $detalhe = null) {
+    try {
+        $ligacao = new PDO(
+            "mysql:host=" . MYSQL_HOST . ";port=" . MYSQL_PORT . ";dbname=" . MYSQL_DATABASE . ";charset=utf8mb4",
+            MYSQL_USERNAME,
+            MYSQL_PASSWORD,
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        );
+        $ip = $_SERVER['REMOTE_ADDR'] ?? null;
+        $stmt = $ligacao->prepare("
+            INSERT INTO log_acessos (email, id_utilizador, tipo_evento, ip_address, detalhe)
+            VALUES (:email, :id_utilizador, :tipo_evento, :ip, :detalhe)
+        ");
+        $stmt->execute([
+            ':email'        => $email,
+            ':id_utilizador' => $id_utilizador,
+            ':tipo_evento'  => $tipo_evento,
+            ':ip'           => $ip,
+            ':detalhe'      => $detalhe
+        ]);
+        $ligacao = null;
+    } catch (PDOException $e) {
+        // Silencioso — o log não deve interromper o fluxo principal
+    }
+}
+
 // Destrói a sessão e redireciona
 function logout_and_redirect($redirect_to = '/login/login.php') {
     start_session();

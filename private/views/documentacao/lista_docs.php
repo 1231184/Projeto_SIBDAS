@@ -162,7 +162,7 @@ $ligacao = null;
                                 <td class="px-3 py-3"><?= $emissaoHtml ?></td>
                                 <td class="px-3 py-3"><?= $validadeHtml ?></td>
                                 <td class="px-4 py-3 text-end">
-                                    <a href="<?= htmlspecialchars($doc->caminho_ficheiro) ?>"
+                                    <a href="<?= BASE_URL . '/' . htmlspecialchars($doc->caminho_ficheiro) ?>"
                                         download
                                         class="btn btn-sm btn-light border shadow-sm text-brand fw-medium">
                                         <i class="fa-solid fa-download me-1"></i> Descarregar

@@ -303,7 +303,6 @@ function c(string $chave, array $rows): string {
             </div>
 
             <div class="d-flex justify-content-end gap-3 mb-5">
-                <button type="button" class="btn btn-light border px-4 hover-elevate">Cancelar</button>
                 <button type="submit" class="btn btn-brand d-inline-flex align-items-center gap-2 px-4 shadow-sm fw-bold">
                     <i class="fa-solid fa-save"></i> Guardar Alterações
                 </button>

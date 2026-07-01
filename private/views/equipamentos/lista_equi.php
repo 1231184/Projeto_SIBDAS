@@ -443,9 +443,34 @@ try {
                         </a>
                     <?php endif; ?>
                     <button class="btn-action-custom bg-white border text-dark"
-                        onclick="alert('🖨️ Comando enviado! A etiqueta com o código de barras do equipamento EQ-2024-001 foi gerada com sucesso.')">
+                        onclick="gerarEtiqueta()">
                         <i class="fa-solid fa-barcode me-1"></i> Etiqueta
                     </button>
+                    <!-- Dropdown Exportar (Guia de Submissão - secção 3.3.5) -->
+                    <div class="dropdown">
+                        <button class="btn-action-custom bg-white border text-dark dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-download me-1"></i> Exportar
+                        </button>
+                        <ul class="dropdown-menu shadow border-0" style="min-width: 160px;">
+                            <li>
+                                <a id="btn-exportar-csv" href="#" class="dropdown-item py-2">
+                                    <i class="fa-solid fa-file-csv text-success me-2"></i> CSV
+                                </a>
+                            </li>
+                            <li>
+                                <a id="btn-exportar-json" href="#" class="dropdown-item py-2">
+                                    <i class="fa-solid fa-file-code text-warning me-2"></i> JSON
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li>
+                                <button id="btn-exportar-pdf" class="dropdown-item py-2" onclick="imprimirFichaEquipamento()">
+                                    <i class="fa-solid fa-file-pdf text-danger me-2"></i> PDF
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                     <button class="btn-action-custom py-2 px-3" data-bs-toggle="modal" data-bs-target="#modalEditar"
                         data-bs-dismiss="modal">
                         <i class="fa-solid fa-pencil me-2"></i> Editar
@@ -1557,6 +1582,8 @@ try {
     document.addEventListener('DOMContentLoaded', function() {
         // Script para permitir que os botões "Próximo" e "Anterior" mudem a aba selecionada no topo
         document.querySelectorAll('[data-bs-wizard-step]').forEach(button => {
+            // Excluir os botões do modal editar — esses têm validação própria
+            if (button.classList.contains('btn-edit-wizard')) return;
             button.addEventListener('click', function() {
                 const targetTabId = this.getAttribute('data-bs-wizard-step');
                 const targetTabElement = document.querySelector(targetTabId);
@@ -1881,7 +1908,7 @@ try {
                 if (painelAtual.id === 'edit-step4-pane') {
                     const alerta = document.getElementById('edit-alertaPasso4');
                     const texto = document.getElementById('edit-textoAlertaPasso4');
-                    const docsTabela = Array.from(painelAtual.querySelectorAll('.edit-tipo-doc-anexado')).map(span => span.innerText);
+                    const docsTabela = Array.from(painelAtual.querySelectorAll('.edit-tipo-doc-anexado')).map(span => span.innerText.trim());
                     let msg = "";
 
                     if (document.getElementById('edit-temContrato').checked && !docsTabela.includes('Contrato de manutenção')) {
