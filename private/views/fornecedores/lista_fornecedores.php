@@ -1064,24 +1064,24 @@ try {
             });
         });
 
-        // 3. Efeito Final de Submissão
+        
         const formNovoFornecedor = document.getElementById('formNovoFornecedor');
         if (formNovoFornecedor) {
             formNovoFornecedor.addEventListener('submit', function(e) {
-                // A linha "e.preventDefault();" foi removida para deixar o PHP receber os dados
+                
 
                 const btnSubmit = document.getElementById('btnCriarFornecedor');
                 btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> A criar...';
                 btnSubmit.disabled = true;
 
-                // O setTimeout também foi removido, porque o formulário vai mudar de página agora!
+                
             });
         }
     });
 </script>
 
 <script>
-    // Função para o dropdown de Editar
+    
     function selecionarDropdownEditFornecedor(campo, valor) {
         document.getElementById('edit-input' + campo).value = valor;
         const texto = document.getElementById('edit-text' + campo);
@@ -1098,7 +1098,7 @@ try {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^[0-9]{9}$/;
 
-        // 1. Navegação Passo-a-Passo
+       
         document.querySelectorAll('.btn-wizard-edit-nf').forEach(button => {
             button.addEventListener('click', function() {
                 const targetTabId = this.getAttribute('data-bs-wizard-step');
@@ -1160,14 +1160,14 @@ try {
             });
         }
 
-        // 2. Limpar erro visual
+       
         document.querySelectorAll('#formEditarFornecedor input, #formEditarFornecedor select').forEach(campo => {
             campo.addEventListener('input', function() {
                 this.classList.remove('is-invalid', 'border-danger');
             });
         });
 
-        // 3. Submissão
+        
         const formEditarFornecedor = document.getElementById('formEditarFornecedor');
         if (formEditarFornecedor) {
             formEditarFornecedor.addEventListener('submit', function() {
@@ -1188,12 +1188,12 @@ if (idFornAbrir) {
     const botaoVer = document.querySelector('.btn-ver-forn[data-id="' + idFornAbrir + '"]');
     if (botaoVer) {
         botaoVer.click();
-        // Limpar o parâmetro da URL sem recarregar a página
+        
         window.history.replaceState(null, null, window.location.pathname);
     }
 }
 
-        // Mapeamento de tipo de fornecedor para classe CSS do badge
+        
         const badgeClasses = {
             'Fabricante': 'badge-fabricante',
             'Distribuidor': 'badge-distribuidor',
@@ -1201,7 +1201,7 @@ if (idFornAbrir) {
             'Consumíveis': 'badge-consumiveis'
         };
 
-        // Mapeamento de estado do equipamento para classe CSS do badge
+        
         const estadoClasses = {
     'Ativo':           'st-ativo',
     'Em Manutenção':   'st-manutencao',
@@ -1211,26 +1211,22 @@ if (idFornAbrir) {
     'Abatido':         'st-abatido'
 };
 
-        // ----------------------------------------------------------
-        // BOTÕES "VER" NA TABELA
-        // Ao clicar, faz fetch ao get_fornecedor.php e preenche
-        // o modal com os dados reais da BD (Ficha 13 - Passo 2 e 3)
-        // ----------------------------------------------------------
+       
         document.querySelectorAll('.btn-ver-forn').forEach(function(botao) {
             botao.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
 
-                // Feedback visual no botão enquanto carrega
+                
                 const textoOriginal = this.innerHTML;
                 this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
                 const botaoAtual = this;
 
-                // Repor o tbody com mensagem de carregamento
+                
                 document.getElementById('detalhe-tbodyEquipamentos').innerHTML =
                     '<tr><td colspan="5" class="text-center py-4 text-muted small">' +
                     '<i class="fa-solid fa-spinner fa-spin me-2"></i> A carregar...</td></tr>';
 
-                // Ficha 13 - Passo 1: pedido GET à API com o ID do fornecedor
+                
                 fetch('api/get_fornecedor.php?id=' + id)
                     .then(function(response) {
                         return response.json();
@@ -1242,11 +1238,9 @@ if (idFornAbrir) {
                             const f = data.dados;
                             const equipamentos = data.equipamentos;
 
-                            // ------------------------------------------
-                            // Ficha 13 - Passo 3: preencher o modal
-                            // ------------------------------------------
+                          
 
-                            // Header: nome e badge de tipo
+                            
                             document.getElementById('detalhe-nomeEmpresa').textContent = f.nome_empresa;
 
                             const badgeEl = document.getElementById('detalhe-badgeTipo');
@@ -1254,19 +1248,17 @@ if (idFornAbrir) {
                             badgeEl.className = 'badge-tipo ' + classeBase + ' border';
                             document.getElementById('detalhe-tipoTexto').textContent = f.tipo_fornecedor;
 
-                            // Guardar o ID nos botões de ação do header do modal
-                            // para os listeners de Editar e Remover saberem qual fornecedor é
                             document.getElementById('detalhe-btnEditar').setAttribute('data-id', f.id_fornecedor);
                             document.getElementById('detalhe-btnRemover').setAttribute('data-id', f.id_fornecedor);
                             document.getElementById('detalhe-btnRemover').setAttribute('data-equipamentos', equipamentos.length);
 
-                            // Informação Geral
+                         
                             document.getElementById('detalhe-nif').textContent = f.nif || 'N/D';
                             document.getElementById('detalhe-telefoneGeral').textContent = f.telefone_geral || '—';
                             document.getElementById('detalhe-emailGeral').textContent = f.email_geral || '—';
                             document.getElementById('detalhe-morada').textContent = f.morada || '—';
 
-                            // Website: só mostra link clicável se existir
+                           
                             const websiteEl = document.getElementById('detalhe-websiteLink');
                             if (f.website && f.website.trim() !== '') {
                                 websiteEl.textContent = f.website;
@@ -1276,11 +1268,10 @@ if (idFornAbrir) {
                                 websiteEl.href = '#';
                             }
 
-                            // Observações
                             document.getElementById('detalhe-observacoes').textContent =
                                 (f.observacoes && f.observacoes.trim() !== '') ? f.observacoes : 'Sem observações registadas.';
 
-                            // Responsável: mostra o card só se existir nome
+                          
                             const secaoResp = document.getElementById('detalhe-secaoResponsavel');
                             if (f.nome_responsavel && f.nome_responsavel.trim() !== '') {
                                 secaoResp.classList.remove('d-none');
@@ -1292,10 +1283,7 @@ if (idFornAbrir) {
                                 secaoResp.classList.add('d-none');
                             }
 
-                            // ------------------------------------------
-                            // Tabela de equipamentos associados
-                            // O JS constrói as linhas <tr> dinamicamente
-                            // ------------------------------------------
+                        
                             document.getElementById('detalhe-totalEquipamentos').textContent = equipamentos.filter(function(eq) { return eq.estado !== 'Abatido'; }).length;
 
                             const tbody = document.getElementById('detalhe-tbodyEquipamentos');
@@ -1305,7 +1293,7 @@ if (idFornAbrir) {
         '<tr><td colspan="6" class="text-center py-4 text-muted small">' +
         'Sem equipamentos associados.</td></tr>';
 } else {
-    // Filtrar os equipamentos Abatidos — já saíram do inventário
+ 
     const equipamentosAtivos = equipamentos.filter(function(eq) {
         return eq.estado !== 'Abatido';
     });
@@ -1385,16 +1373,11 @@ if (idFornAbrir) {
             });
         });
 
-        // ----------------------------------------------------------
-        // BOTÃO "EDITAR" dentro do modal de detalhes
-        // Por agora só fecha o modal de detalhes e abre o de editar.
-        // O preenchimento do formulário de edição será implementado
-        // na fase seguinte (modal de editar).
-        // ----------------------------------------------------------
+
         document.getElementById('detalhe-btnEditar').addEventListener('click', function() {
             const id = this.getAttribute('data-id');
 
-            // Ficha 13: segundo fetch para garantir dados mais recentes (suporte multi-utilizador)
+
             fetch('api/get_fornecedor.php?id=' + id)
                 .then(function(r) {
                     return r.json();
@@ -1403,27 +1386,27 @@ if (idFornAbrir) {
                     if (data.sucesso) {
                         const f = data.dados;
 
-                        // Preencher o ID oculto para o PHP saber qual fornecedor atualizar
+                        
                         document.getElementById('edit-idFornecedor').value = f.id_fornecedor;
 
-                        // Step 1
+                        
                         document.getElementById('edit-nomeEmpresa').value = f.nome_empresa;
                         document.getElementById('edit-nifFornecedor').value = f.nif || '';
                         document.getElementById('edit-morada').value = f.morada || '';
                         document.getElementById('edit-website').value = f.website || '';
                         selecionarDropdownEditFornecedor('TipoFornecedor', f.tipo_fornecedor);
 
-                        // Step 2
+                       
                         document.getElementById('edit-telefoneGeral').value = f.telefone_geral || '';
                         document.getElementById('edit-emailGeral').value = f.email_geral || '';
                         document.getElementById('edit-nomeResponsavel').value = f.nome_responsavel || '';
                         document.getElementById('edit-telefoneResponsavel').value = f.telefone_responsavel || '';
                         document.getElementById('edit-emailResponsavel').value = f.email_responsavel || '';
 
-                        // Step 3
+                       
                         document.getElementById('edit-observacoes').value = f.observacoes || '';
 
-                        // Repor o wizard no Step 1 antes de abrir
+                        
                         new bootstrap.Tab(document.getElementById('edit-nf-step1-tab')).show();
                         document.querySelectorAll('#editarFornecedorTabs .nav-link').forEach(function(tab) {
                             tab.classList.add('text-muted');
@@ -1435,7 +1418,7 @@ if (idFornAbrir) {
                         step1Tab.classList.add('active', 'text-dark');
                         step1Tab.querySelector('.badge').className = 'badge bg-brand text-white me-1 rounded-pill';
 
-                        // Fechar o modal de detalhes e abrir o de editar
+                        
                         bootstrap.Modal.getInstance(document.getElementById('modalDetalheFornecedor')).hide();
                         new bootstrap.Modal(document.getElementById('modalEditarFornecedor')).show();
                     } else {
@@ -1448,16 +1431,13 @@ if (idFornAbrir) {
                 });
         });
 
-        // ----------------------------------------------------------
-        // BOTÃO "REMOVER" dentro do modal de detalhes
-        // Será implementado na fase seguinte (modal de remover).
-        // ----------------------------------------------------------
+
         document.getElementById('detalhe-btnRemover').addEventListener('click', function() {
             const id = this.getAttribute('data-id');
             const totalEquipamentos = parseInt(this.getAttribute('data-equipamentos') || '0');
             const nomeEmpresa = document.getElementById('detalhe-nomeEmpresa').textContent;
 
-            // Preencher o modal de remover com os dados que já temos
+           
             document.getElementById('remover-idFornecedor').value = id;
             document.getElementById('remover-nomeEmpresa').textContent = '"' + nomeEmpresa + '"';
             document.getElementById('remover-totalEquipamentos').textContent = totalEquipamentos;

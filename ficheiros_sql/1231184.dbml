@@ -1,0 +1,158 @@
+// ==========================================
+// SIBDAS 2025/2026 - MEDSTOCK SOLUTIONS
+// Modelo Relacional (3NF)
+// Diogo Almeida - 1231184 - LEBIOM ISEP
+// ==========================================
+
+Table utilizadores {
+  id_utilizador int [pk, increment]
+  nome varchar(100) [not null]
+  email blob [not null, note: 'Encriptado com AES_ENCRYPT (Ficha 14)']
+  password_hash varchar(255) [not null]
+  perfil varchar(50) [not null, note: 'Administrador, Tecnico']
+  data_criacao datetime [default: `now()`]
+}
+
+Table conteudos_site {
+  id_conteudo int [pk, increment]
+  chave varchar(100) [unique, not null, note: 'Ex: hero_titulo, contacto_email']
+  valor text [null]
+  seccao varchar(50) [not null, note: 'Hero, Metricas, Sobre, Servicos, Contactos, Rodape']
+  data_atualizacao datetime [default: `now()`]
+  id_utilizador int [null, ref: > utilizadores.id_utilizador]
+}
+
+Table edificios {
+  id_edificio int [pk, increment]
+  nome varchar(100) [not null]
+  descricao text [null]
+  observacoes text [null]
+}
+
+Table pisos {
+  id_piso int [pk, increment]
+  id_edificio int [not null, ref: > edificios.id_edificio]
+  designacao varchar(50) [not null, note: 'Ex: Piso 2, Cave -1']
+  observacoes text [null]
+
+  indexes {
+    (id_edificio, designacao) [unique]
+  }
+}
+
+Table servicos {
+  id_servico int [pk, increment]
+  id_piso int [not null, ref: > pisos.id_piso]
+  nome varchar(100) [not null, note: 'Ex: Cardiologia, Consultas Externas']
+  centro_custo varchar(50) [null]
+  diretor_responsavel varchar(100) [null]
+  observacoes text [null]
+}
+
+Table salas {
+  id_sala int [pk, increment]
+  id_servico int [not null, ref: > servicos.id_servico]
+  identificacao varchar(100) [not null, note: 'Ex: Gabinete 3, BO-1, Enfermaria A']
+  observacoes text [null]
+}
+
+Table fornecedores {
+  id_fornecedor int [pk, increment]
+  nome_empresa varchar(150) [not null]
+  nif varchar(20) [unique, null]
+  tipo_fornecedor varchar(50) [not null, note: 'Fabricante, Distribuidor, Assistencia Tecnica, Consumiveis']
+  telefone_geral varchar(20) [not null]
+  email_geral varchar(100) [not null]
+  morada varchar(255) [null]
+  website varchar(100) [null]
+  nome_responsavel varchar(100) [null]
+  telefone_responsavel varchar(20) [null]
+  email_responsavel varchar(100) [null]
+  observacoes text [null]
+}
+
+Table equipamentos {
+  id_equipamento int [pk, increment]
+  codigo_interno varchar(50) [unique, not null]
+  designacao varchar(150) [not null]
+  marca varchar(100) [not null]
+  modelo varchar(100) [not null]
+  numero_serie varchar(100) [unique, not null]
+  ano_fabrico int [null]
+  categoria varchar(100) [not null]
+  criticidade varchar(50) [not null, note: 'Baixa, Media, Alta, Suporte de Vida']
+  data_aquisicao date [null]
+  custo_aquisicao decimal(10,2) [null]
+  tipo_entrada varchar(50) [not null, note: 'Compra, Doacao, Aluguer, Emprestimo']
+  estado varchar(50) [not null, note: 'Ativo, Em Manutencao, Em Calibracao, Inativo, Em Quarentena, Abatido']
+  falta_declaracao_ce boolean [default: false]
+  falta_manual_utilizador boolean [default: false]
+  falta_fatura_guia boolean [default: false]
+  observacoes text [null]
+  data_registo datetime [default: `now()`]
+  id_sala int [null, ref: > salas.id_sala]
+  id_servico int [null, ref: > servicos.id_servico]
+  id_fabricante int [null, ref: > fornecedores.id_fornecedor]
+}
+
+Table acessorios {
+  id_acessorio int [pk, increment]
+  id_equipamento int [not null, ref: > equipamentos.id_equipamento]
+  codigo_componente varchar(50) [null]
+  designacao varchar(150) [not null]
+  numero_serie varchar(100) [null]
+}
+
+Table equipamento_fornecedor {
+  id_equipamento int [not null, ref: > equipamentos.id_equipamento]
+  id_fornecedor int [not null, ref: > fornecedores.id_fornecedor]
+  papel varchar(50) [not null, note: 'Comercial, Assistencia, Consumiveis']
+
+  indexes {
+    (id_equipamento, id_fornecedor, papel) [pk]
+  }
+}
+
+Table documentos {
+  id_documento int [pk, increment]
+  id_equipamento int [not null, ref: > equipamentos.id_equipamento]
+  id_fornecedor int [null, ref: > fornecedores.id_fornecedor]
+  tipo_documento varchar(100) [not null]
+  titulo varchar(150) [null]
+  data_emissao date [null]
+  data_validade date [null, note: 'So gera alerta para Certificado de Calibracao']
+  caminho_ficheiro varchar(255) [not null]
+  data_upload datetime [default: `now()`]
+}
+
+Table garantias_contratos {
+  id_contrato int [pk, increment]
+  id_equipamento int [not null, ref: > equipamentos.id_equipamento]
+  tipo_cobertura varchar(50) [not null, note: 'Garantia ou Contrato Manutencao']
+  referencia varchar(100) [null]
+  id_entidade_responsavel int [null, ref: > fornecedores.id_fornecedor]
+  tipo_contrato varchar(50) [null]
+  periodicidade varchar(50) [null]
+  data_inicio date [not null]
+  data_fim date [not null]
+}
+
+Table historico_movimentacoes {
+  id_movimentacao int [pk, increment]
+  id_equipamento int [not null, ref: > equipamentos.id_equipamento]
+  id_servico_origem int [null, ref: > servicos.id_servico]
+  id_servico_destino int [not null, ref: > servicos.id_servico]
+  data_movimento datetime [default: `now()`]
+  motivo varchar(255) [null]
+  id_utilizador int [null, ref: > utilizadores.id_utilizador]
+}
+
+Table log_acessos {
+  id_log int [pk, increment]
+  email varchar(255) [null, note: 'Email introduzido na tentativa de login']
+  id_utilizador int [null, ref: > utilizadores.id_utilizador]
+  tipo_evento varchar(50) [not null, note: 'login_sucesso, login_falhado, logout']
+  ip_address varchar(45) [null]
+  data_evento datetime [not null, default: `now()`]
+  detalhe varchar(255) [null]
+}

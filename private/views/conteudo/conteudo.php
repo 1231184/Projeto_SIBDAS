@@ -15,7 +15,7 @@ try {
     );
     $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // --- GUARDAR (POST) ---
+  
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $campos = [
             'hero_titulo', 'hero_subtitulo',
@@ -53,7 +53,7 @@ try {
         $sucesso = 'Conteúdo guardado com sucesso!';
     }
 
-    // --- LER CONTEÚDOS ---
+  
     $rows = $ligacao->query("SELECT chave, valor FROM conteudos_site")->fetchAll(PDO::FETCH_KEY_PAIR);
 
 } catch (PDOException $err) {
@@ -62,7 +62,7 @@ try {
 }
 $ligacao = null;
 
-// Helper para imprimir valor com segurança
+
 function c(string $chave, array $rows): string {
     return htmlspecialchars($rows[$chave] ?? '', ENT_QUOTES);
 }
@@ -408,7 +408,7 @@ function c(string $chave, array $rows): string {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Mapa: name do input -> id do elemento no preview
+   
     const mapaPreview = {
         'hero_titulo':           'preview-hero-titulo',
         'hero_subtitulo':        'preview-hero-subtitulo',
@@ -454,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (campo && alvo) alvo.textContent = campo.value || '—';
         }
 
-        // Tópicos (lista separada por vírgulas)
+       
         const campoTopicos = document.querySelector('[name="sobre_topicos"]');
         const listaTopicos = document.getElementById('preview-sobre-topicos');
         if (campoTopicos && listaTopicos) {
@@ -465,14 +465,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Links do rodapé (actualiza href em vez de textContent)
+    
         ['linkedin', 'github', 'twitter'].forEach(rede => {
             const campo = document.querySelector(`[name="rodape_${rede}"]`);
             const link  = document.getElementById(`preview-rodape-${rede}`);
             if (campo && link) link.href = campo.value || '#';
         });
 
-        // Funcionalidades (8 itens individuais)
+      
         for (let i = 1; i <= 8; i++) {
             const campoFunc = document.querySelector(`[name="func${i}"]`);
             const liFunc    = document.getElementById(`preview-func${i}`);
@@ -481,7 +481,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Liga o evento 'input' a todos os campos mapeados + tópicos
+   
         const funcNomes = Array.from({length: 8}, (_, i) => `func${i+1}`);
         const nomesParaOuvir = [...Object.keys(mapaPreview), 'sobre_topicos', ...funcNomes];
     nomesParaOuvir.forEach(nome => {
@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (campo) campo.addEventListener('input', atualizarPreview);
     });
 
-    // Preencher o preview com os valores actuais assim que a página carrega
+
     atualizarPreview();
 });
 </script>

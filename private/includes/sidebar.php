@@ -41,27 +41,27 @@ $iconContent   = '<i class="fa-regular fa-pen-to-square" style="width:20px; text
     <nav class="flex-grow-1 overflow-auto sidebar-scroll py-4 px-3">
         <ul class="nav flex-column gap-1">
 
-            <?php /* Dashboard — todos os perfis */ ?>
+            <?php  ?>
             <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/dashboard/dashboard.php', 'Dashboard', '/dashboard/', $iconDashboard); ?>
 
-            <?php /* Equipamentos — todos os perfis */ ?>
+            <?php  ?>
             <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/equipamentos/lista_equi.php', 'Equipamentos', '/equipamentos/', $iconEquip); ?>
 
-            <?php /* Localizações — todos os perfis */ ?>
+            <?php  ?>
             <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/localizacoes/lista_loc.php', 'Localizações', '/localizacoes/', $iconLoc); ?>
 
-            <?php /* Fornecedores — apenas Administrador */ ?>
+            <?php ?>
             <?php if ($isAdmin): ?>
                 <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/fornecedores/lista_fornecedores.php', 'Fornecedores', '/fornecedores/', $iconForn); ?>
             <?php endif; ?>
 
-            <?php /* Documentação — todos os perfis */ ?>
+            <?php  ?>
             <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/documentacao/lista_docs.php', 'Documentação', '/documentacao/', $iconDoc); ?>
 
-            <?php /* Garantias — todos os perfis */ ?>
+            <?php  ?>
             <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/garantias/lista_garantias.php', 'Garantias', '/garantias/', $iconGar); ?>
 
-            <?php /* Conteúdo do site — apenas Administrador */ ?>
+            <?php  ?>
             <?php if ($isAdmin): ?>
                 <?php sidebarLink('/sibdas/1231184/medstock-solutions/private/views/conteudo/conteudo.php', 'Conteúdo', '/conteudo/', $iconContent); ?>
             <?php endif; ?>
@@ -86,9 +86,7 @@ $iconContent   = '<i class="fa-regular fa-pen-to-square" style="width:20px; text
     </div>
 </aside>
 
-<!-- ============================================================
-     MOBILE: Offcanvas (só em mobile)
-     ============================================================ --><div class="offcanvas offcanvas-start sidebar-backend text-white d-md-none"
+<div class="offcanvas offcanvas-start sidebar-backend text-white d-md-none"
     tabindex="-1" id="sidebarMobile" style="width: 256px;">
     <div class="offcanvas-header border-bottom sidebar-border-light">
         <img src="/sibdas/1231184/medstock-solutions/assets/img/logotipo.png"

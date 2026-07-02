@@ -28,21 +28,21 @@ try {
         ORDER BY nome ASC
     ")->fetchAll(PDO::FETCH_ASSOC);
 
-    // --- PISOS (com id do edifício pai para filtrar no frontend) ---
+    // --- PISOS  ---
     $pisos = $ligacao->query("
         SELECT id_piso, id_edificio, designacao
         FROM pisos
         ORDER BY id_edificio ASC, designacao ASC
     ")->fetchAll(PDO::FETCH_ASSOC);
 
-    // --- SERVIÇOS (com id do piso pai para filtrar no frontend) ---
+    // --- SERVIÇOS  ---
     $servicos = $ligacao->query("
         SELECT id_servico, id_piso, nome
         FROM servicos
         ORDER BY id_piso ASC, nome ASC
     ")->fetchAll(PDO::FETCH_ASSOC);
 
-    // --- SALAS (com id do serviço pai para filtrar no frontend) ---
+    // --- SALAS  ---
     $salas = $ligacao->query("
         SELECT id_sala, id_servico, identificacao
         FROM salas

@@ -21,7 +21,7 @@ function ligacaoBD()
 // EDIFÍCIOS
 // -------------------------------------------------------
 
-// FICHA 13: NOVO EDIFÍCIO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'novo_edificio') {
     $nome      = trim($_POST['nome'] ?? '');
     $descricao = trim($_POST['descricao'] ?? '');
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'novo_ed
     }
 }
 
-// FICHA 13: EDITAR EDIFÍCIO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_edificio') {
     $id        = (int)($_POST['id_edificio'] ?? 0);
     $nome      = trim($_POST['nome'] ?? '');
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_
     }
 }
 
-// FICHA 13: REMOVER EDIFÍCIO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover_edificio') {
     $id = (int)($_POST['id_edificio'] ?? 0);
 
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover
 // PISOS
 // -------------------------------------------------------
 
-// FICHA 13: NOVO PISO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'novo_piso') {
     $id_edificio = (int)($_POST['id_edificio'] ?? 0);
     $designacao  = trim($_POST['designacao'] ?? '');
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'novo_pi
     }
 }
 
-// FICHA 13: EDITAR PISO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_piso') {
     $id          = (int)($_POST['id_piso'] ?? 0);
     $designacao  = trim($_POST['designacao'] ?? '');
@@ -163,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_
     }
 }
 
-// FICHA 13: REMOVER PISO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover_piso') {
     $id = (int)($_POST['id_piso'] ?? 0);
 
@@ -194,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover
 // SERVIÇOS
 // -------------------------------------------------------
 
-// FICHA 13: NOVO SERVIÇO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'novo_servico') {
     $id_piso             = (int)($_POST['id_piso'] ?? 0);
     $nome                = trim($_POST['nome'] ?? '');
@@ -222,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'novo_se
     }
 }
 
-// FICHA 13: EDITAR SERVIÇO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_servico') {
     $id                  = (int)($_POST['id_servico'] ?? 0);
     $nome                = trim($_POST['nome'] ?? '');
@@ -254,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_
     }
 }
 
-// FICHA 13: REMOVER SERVIÇO
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover_servico') {
     $id = (int)($_POST['id_servico'] ?? 0);
 
@@ -285,7 +285,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover
 // SALAS
 // -------------------------------------------------------
 
-// FICHA 13: NOVA SALA
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'nova_sala') {
     $id_servico    = (int)($_POST['id_servico'] ?? 0);
     $identificacao = trim($_POST['identificacao'] ?? '');
@@ -311,7 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'nova_sa
     }
 }
 
-// FICHA 13: EDITAR SALA
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_sala') {
     $id            = (int)($_POST['id_sala'] ?? 0);
     $identificacao = trim($_POST['identificacao'] ?? '');
@@ -341,7 +341,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'editar_
     }
 }
 
-// FICHA 13: REMOVER SALA
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'remover_sala') {
     $id = (int)($_POST['id_sala'] ?? 0);
 
@@ -1568,7 +1568,7 @@ form.querySelectorAll('input[required]').forEach(campo => {
             });
         });
 
-        // Verificar se há nível de retorno na URL após uma operação
+   
         const params = new URLSearchParams(window.location.search);
         const nivel = params.get('nivel');
         const idRetorno = parseInt(params.get('id') || '0');

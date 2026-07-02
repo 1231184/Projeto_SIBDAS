@@ -304,7 +304,7 @@ $ligacao = null;
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Dados da BD passados via PHP para JS
+
         const dadosCategorias = <?= json_encode(array_map(fn($c) => ['label' => $c->categoria, 'valor' => (int)$c->total], $categorias)) ?>;
         const dadosServicos   = <?= json_encode(array_map(fn($s) => ['label' => $s->servico, 'sv' => (int)$s->suporte_vida, 'outros' => (int)$s->outros], $servicos)) ?>;
 
@@ -389,10 +389,10 @@ $ligacao = null;
                                 const datasetIdx = elements[0].datasetIndex;
                                 const servico = dadosServicos[idx].label;
                                 if (datasetIdx === 0) {
-                                    // Barra vermelha: Suporte de Vida nesse serviço — dois filtros
+                                   
                                     window.location.href = '../equipamentos/lista_equi.php?filtro=criticidade:Suporte de Vida&filtro2=servico:' + encodeURIComponent(servico);
                                 } else {
-                                    // Barra azul: todos os equipamentos desse serviço
+                                    
                                     window.location.href = '../equipamentos/lista_equi.php?filtro=servico:' + encodeURIComponent(servico);
                                 }
                             }

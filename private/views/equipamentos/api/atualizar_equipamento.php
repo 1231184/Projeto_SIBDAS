@@ -27,9 +27,7 @@ try {
     $ligacao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $ligacao->beginTransaction();
 
-    // -------------------------------------------------------
-    // A) Resolver id_servico, id_sala e id_fabricante
-    // -------------------------------------------------------
+
     $nome_servico  = trim($_POST['servico']      ?? '');
     $nome_sala     = trim($_POST['sala']         ?? '');
     $nome_fabricante = trim($_POST['manufacturer'] ?? '');
@@ -59,9 +57,7 @@ try {
         if ($row) $id_fabricante = $row->id_fornecedor;
     }
 
-    // -------------------------------------------------------
-    // B) UPDATE principal na tabela equipamentos
-    // -------------------------------------------------------
+
     $designacao   = trim($_POST['name']              ?? '');
     $marca        = trim($_POST['brand']             ?? '');
     $modelo       = trim($_POST['model']             ?? '');
@@ -123,9 +119,7 @@ try {
         ':id'            => $id_equipamento,
     ]);
 
-    // -------------------------------------------------------
-    // C) equipamento_fornecedor — DELETE + INSERT
-    // -------------------------------------------------------
+
     $ligacao->prepare("DELETE FROM equipamento_fornecedor WHERE id_equipamento = :id")
         ->execute([':id' => $id_equipamento]);
 
@@ -148,9 +142,7 @@ try {
         }
     }
 
-    // -------------------------------------------------------
-    // D) garantias_contratos — DELETE + INSERT
-    // -------------------------------------------------------
+
     $ligacao->prepare("DELETE FROM garantias_contratos WHERE id_equipamento = :id")
         ->execute([':id' => $id_equipamento]);
 
@@ -202,9 +194,7 @@ try {
         }
     }
 
-    // -------------------------------------------------------
-    // E) acessorios — DELETE + INSERT
-    // -------------------------------------------------------
+
     $ligacao->prepare("DELETE FROM acessorios WHERE id_equipamento = :id")
         ->execute([':id' => $id_equipamento]);
 
@@ -226,11 +216,7 @@ try {
         ]);
     }
 
-    // -------------------------------------------------------
-    // F) documentos — apenas os novos (upload de novos ficheiros)
-    //    Os documentos removidos pelo utilizador são assinalados
-    //    via ids_docs_remover[] no POST
-    // -------------------------------------------------------
+
     $docs_remover = $_POST['ids_docs_remover'] ?? [];
     foreach ($docs_remover as $id_doc) {
         $id_doc = (int)$id_doc;
@@ -240,7 +226,7 @@ try {
         }
     }
 
-    // Inserir novos documentos anexados no modal
+
     $docs_post = $_POST['docs'] ?? [];
     $pastas = [
         'Manual de utilizador'        => 'manuais',
@@ -305,15 +291,12 @@ try {
         $doc_index++;
     }
 
-    // -------------------------------------------------------
-    // G) historico_movimentacoes — registo da edição
-    // -------------------------------------------------------
+
     $id_utilizador = $_SESSION['id_utilizador'] ?? null;
     if ($id_servico) {
-        // Verificar se o serviço mudou
+       
         $stmtServ = $ligacao->prepare("SELECT id_servico FROM equipamentos WHERE id_equipamento = :id");
-        // Nota: o UPDATE já foi feito, por isso comparamos com o valor anterior guardado antes
-        // Como já fizemos o UPDATE, registamos sempre a movimentação se há serviço
+        
         $ligacao->prepare("
             INSERT INTO historico_movimentacoes (id_equipamento, id_servico_origem, id_servico_destino, motivo, id_utilizador)
             VALUES (:id_eq, NULL, :id_serv, 'Atualização de registo', :id_util)
@@ -332,7 +315,7 @@ try {
     if (isset($ligacao)) $ligacao->rollBack();
     $ligacao = null;
 
-    // Detetar número de série duplicado
+    
     if ($err->getCode() == 23000 && strpos($err->getMessage(), 'numero_serie') !== false) {
         echo json_encode(['sucesso' => false, 'erro' => 'Este número de série já existe noutro equipamento.']);
     } else {

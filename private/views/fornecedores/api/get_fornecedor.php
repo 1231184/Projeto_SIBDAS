@@ -4,10 +4,10 @@ require_once __DIR__ . '/../../../includes/funcoes.php';
 
 header('Content-Type: application/json');
 
-// Ficha 13 - Passo 1: proteger o acesso com sessão ativa
+
 redirect_if_not_logged();
 
-// Ficha 13 - Passo 3: obter e validar o ID enviado via GET
+
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo json_encode(['sucesso' => false, 'erro' => 'ID não fornecido ou inválido.']);
     exit;

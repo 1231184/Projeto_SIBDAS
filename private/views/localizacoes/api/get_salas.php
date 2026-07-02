@@ -19,7 +19,7 @@ try {
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Para cada sala, conta equipamentos
+   
     $sql = "
         SELECT
             sl.id_sala,

@@ -1,5 +1,4 @@
 <?php
-// API: Exportar ficha de equipamento em CSV
 require_once __DIR__ . '/../../../includes/funcoes.php';
 require_once __DIR__ . '/../../../../config/config.php';
 
@@ -68,7 +67,7 @@ header('Content-Disposition: attachment; filename="' . $nome_ficheiro . '"');
 
 $out = fopen('php://output', 'w');
 
-// BOM UTF-8 para Excel abrir corretamente
+
 fprintf($out, chr(0xEF).chr(0xBB).chr(0xBF));
 
 // --- DADOS GERAIS ---

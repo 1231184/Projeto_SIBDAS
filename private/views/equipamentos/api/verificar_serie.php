@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../../../includes/funcoes.php';
 redirect_if_not_logged();
 
-// Só aceita pedidos GET
+
 if ($_SERVER["REQUEST_METHOD"] !== "GET" || empty($_GET["serie"])) {
     echo json_encode(["existe" => false]);
     exit;

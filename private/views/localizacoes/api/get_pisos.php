@@ -19,7 +19,7 @@ try {
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Para cada piso, conta serviços e equipamentos
+    
     $sql = "
         SELECT
             p.id_piso,

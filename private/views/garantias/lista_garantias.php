@@ -99,7 +99,7 @@ $ligacao = null;
                         <tbody>
                             <?php foreach ($resultados as $gc): ?>
                                 <?php
-                                // Estado calculado em PHP
+                                
                                 $hoje     = new DateTime();
                                 $dataFim  = new DateTime($gc->data_fim);
                                 $diff     = $hoje->diff($dataFim);
